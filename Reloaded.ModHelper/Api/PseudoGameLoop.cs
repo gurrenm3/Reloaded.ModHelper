@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reloaded.ModHelper
@@ -9,10 +10,13 @@ namespace Reloaded.ModHelper
     /// To have a <see cref="GameLoop"/> that is syncronized with the game you will need to create a class
     /// that impliments <see cref="GameLoop"/> and hooks the Game's update loop.
     /// </summary>
-    public class PseudoGameLoop : GameLoop
+    public class PseudoGameLoop : GameLoop, IDisposable
     {
+        private CancellationTokenSource loopCancellation;
+        private Task loopTask;
         private int timeBetweenLoops;
         private bool isLoopCreated;
+        private bool disposedValue;
 
         /// <summary>
         /// Creates a default instance of a pseudo-GameLoop.
@@ -31,17 +35,42 @@ namespace Reloaded.ModHelper
             if (isLoopCreated) return this;
 
             Time.Initialize(this);
-            Task.Factory.StartNew(() =>
+
+            loopCancellation = new CancellationTokenSource();
+            loopTask = new Task(() =>
             {
                 while (true)
                 {
                     OnUpdate.Invoke();
                     Thread.Sleep(timeBetweenLoops);
                 }
-            });
+            }, loopCancellation.Token);
 
+            
+            loopTask.Start();
             isLoopCreated = true;
             return this;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    
+                }
+
+                loopCancellation.Cancel();
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
