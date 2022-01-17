@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,6 +15,7 @@ namespace Reloaded.ModHelper
     /// </summary>
     public class PseudoGameLoop : GameLoop, IDisposable
     {
+        private Dictionary<Assembly, ModEvent> onUpdate = new Dictionary<Assembly, ModEvent>();
         private CancellationTokenSource loopCancellation;
         private Task loopTask;
         private int timeBetweenLoops;
@@ -35,13 +39,12 @@ namespace Reloaded.ModHelper
             if (isLoopCreated) return this;
 
             Time.Initialize(this);
-
             loopCancellation = new CancellationTokenSource();
             loopTask = new Task(() =>
             {
                 while (true)
                 {
-                    OnUpdate.Invoke();
+                    RunLoop();
                     Thread.Sleep(timeBetweenLoops);
                 }
             }, loopCancellation.Token);
@@ -52,18 +55,48 @@ namespace Reloaded.ModHelper
             return this;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="codeToRun"></param>
+        public override void Add(Action codeToRun)
+        {
+            var assembly = AssemblyUtils.GetCallingAssembly();
+            if (assembly == null)
+                return;
+
+            if (onUpdate.TryGetValue(assembly, out var modEvent))
+                modEvent.AddListener(codeToRun);
+            else
+                onUpdate.Add(assembly, new ModEvent(codeToRun));
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="codeToRun"></param>
+        /// <returns></returns>
+        public override bool Remove(Action codeToRun)
+        {
+            
+        }
+
+        private void RunLoop()
+        {
+            for (int i = 0; i < onUpdate.Count; i++)
+            {
+                onUpdate.ElementAt(i).Value.Invoke();
+            }
+        }
+
+
+        #region IDisposable
+
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    
-                }
-
-                loopCancellation.Cancel();
-                disposedValue = true;
-            }
+            if (disposedValue) return;
+            loopCancellation.Cancel();
+            disposedValue = true;
         }
 
         public void Dispose()
@@ -72,5 +105,7 @@ namespace Reloaded.ModHelper
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
+        #endregion
     }
 }
