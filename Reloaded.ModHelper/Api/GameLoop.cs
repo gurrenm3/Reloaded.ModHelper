@@ -8,7 +8,13 @@
         /// <summary>
         /// Mod event for the Game Loop. Allows for code to subscribe to this loop.
         /// </summary>
-        public ModEvent OnUpdate = new ModEvent();
+        public ModEvent OnUpdate { get; protected set; } = new ModEvent();
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public Time Time { get; protected set; } = new Time();
+
 
         /// <summary>
         /// Creates a <see cref="GameLoop"/> with default implementation.
@@ -22,14 +28,6 @@
         /// Used to create the actual loop. If you are hooking the game's actual loop than you would
         /// do that here.
         /// </summary>
-        protected abstract void CreateLoop();
-
-        /// <summary>
-        /// Used to fire the update loop.
-        /// </summary>
-        protected virtual void TriggerUpdate()
-        {
-            OnUpdate?.Invoke();
-        }
+        public abstract GameLoop Create();
     }
 }

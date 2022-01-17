@@ -1,4 +1,7 @@
-﻿namespace Reloaded.ModHelper
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace Reloaded.ModHelper
 {
     /// <summary>
     /// A <see cref="GameLoop"/> that isn't connected to the Game's actual loop.
@@ -8,20 +11,37 @@
     /// </summary>
     public class PseudoGameLoop : GameLoop
     {
+        private int timeBetweenLoops;
+        private bool isLoopCreated;
+
         /// <summary>
         /// Creates a default instance of a pseudo-GameLoop.
         /// </summary>
-        public PseudoGameLoop() : base()
+        /// <param name="timeBetweenLoops">How many milliseconds should pass between each loop iteration.</param>
+        public PseudoGameLoop(int timeBetweenLoops = 1) : base()
         {
-
+            this.timeBetweenLoops = timeBetweenLoops;
         }
 
         /// <summary>
         /// Used to create the actual loop.
         /// </summary>
-        protected override void CreateLoop()
+        public override GameLoop Create()
         {
-            
+            if (isLoopCreated) return this;
+
+            Time.Initialize(this);
+            Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    OnUpdate.Invoke();
+                    Thread.Sleep(timeBetweenLoops);
+                }
+            });
+
+            isLoopCreated = true;
+            return this;
         }
     }
 }

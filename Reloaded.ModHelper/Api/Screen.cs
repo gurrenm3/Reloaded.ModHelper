@@ -8,7 +8,7 @@
         /// <summary>
         /// The Screen Dimensions of this computer.
         /// </summary>
-        public static Rect screenDimensions;
+        public static Rect screenRect;
 
         /// <summary>
         /// The position of the center of the screen.
@@ -18,8 +18,8 @@
         
         static Screen()
         {
-            User32.GetWindowRect(User32.GetDesktopWindow(), out screenDimensions);
-            centerScreen = screenDimensions.Center;
+            User32.GetWindowRect(User32.GetDesktopWindow(), out screenRect);
+            centerScreen = screenRect.Center;
         }
     }
 }

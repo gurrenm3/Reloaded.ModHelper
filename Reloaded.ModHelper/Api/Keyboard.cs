@@ -16,8 +16,8 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Returns true while the Keyboard button associated with <paramref name="keyToCheck"/> 
-        /// is pressed.
+        /// Returns true while the Keyboard button associated with <paramref name="keyToCheck"/> is pressed.
+        /// <br/><br/>NOTE: Best if used in an Update method.
         /// </summary>
         /// <param name="keyToCheck"></param>
         /// <returns>True if the key is currently pressed, otherwise false.</returns>

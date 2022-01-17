@@ -3,6 +3,12 @@ using Reloaded.Mod.Interfaces.Internal;
 
 namespace Reloaded.ModHelper
 {
+    /// Is this necessary? It seems like it could be too much extra stuff just so the
+    /// mod's name can get logged to the console.
+
+
+
+
     /// <summary>
     /// A Logger that automatically adds a mod's name to each message.
     /// </summary>
@@ -115,55 +121,6 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="message">Message to write.</param>
         /// <param name="logType">The LogType for this message, like whether or not this is an error.</param>
-        void WriteLine(bool message, LogType logType = LogType.Normal);
-
-        /// <summary>
-        /// Writes a new line to the Console.
-        /// </summary>
-        /// <param name="message">Message to write.</param>
-        /// <param name="logType">The LogType for this message, like whether or not this is an error.</param>
-        void WriteLine(int message, LogType logType = LogType.Normal);
-
-        /// <summary>
-        /// Writes a new line to the Console.
-        /// </summary>
-        /// <param name="message">Message to write.</param>
-        /// <param name="logType">The LogType for this message, like whether or not this is an error.</param>
-        void WriteLine(long message, LogType logType = LogType.Normal);
-
-        /// <summary>
-        /// Writes a new line to the Console.
-        /// </summary>
-        /// <param name="message">Message to write.</param>
-        /// <param name="logType">The LogType for this message, like whether or not this is an error.</param>
-        void WriteLine(float message, LogType logType = LogType.Normal);
-
-        /// <summary>
-        /// Writes a new line to the Console.
-        /// </summary>
-        /// <param name="message">Message to write.</param>
-        /// <param name="logType">The LogType for this message, like whether or not this is an error.</param>
-        void WriteLine(double message, LogType logType = LogType.Normal);
-
-        /// <summary>
-        /// Writes a new line to the Console.
-        /// </summary>
-        /// <param name="message">Message to write.</param>
-        /// <param name="logType">The LogType for this message, like whether or not this is an error.</param>
-        void WriteLine(decimal message, LogType logType = LogType.Normal);
-
-        /// <summary>
-        /// Writes a new line to the Console.
-        /// </summary>
-        /// <param name="message">Message to write.</param>
-        /// <param name="logType">The LogType for this message, like whether or not this is an error.</param>
-        void WriteLine(byte message, LogType logType = LogType.Normal);
-
-        /// <summary>
-        /// Writes a new line to the Console.
-        /// </summary>
-        /// <param name="message">Message to write.</param>
-        /// <param name="logType">The LogType for this message, like whether or not this is an error.</param>
         void WriteLine(byte[] message, LogType logType = LogType.Normal);
 
         /// <summary>
@@ -171,14 +128,14 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="message">Message to write.</param>
         /// <param name="logType">The LogType for this message, like whether or not this is an error.</param>
-        void WriteLine(char message, LogType logType = LogType.Normal);
+        void WriteLine(char[] message, LogType logType = LogType.Normal);
 
         /// <summary>
         /// Writes a new line to the Console.
         /// </summary>
-        /// <param name="message">Message to write.</param>
+        /// <param name="message">Object to write.</param>
         /// <param name="logType">The LogType for this message, like whether or not this is an error.</param>
-        void WriteLine(char[] message, LogType logType = LogType.Normal);
+        void WriteLine(object message, LogType logType = LogType.Normal);
 
         #endregion
 

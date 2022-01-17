@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Reloaded.ModHelper
 {
-    /// TODO:
-    /// • Add ability to remove a listener when it's first invoked or when a condition is true
-    ///     (so it can be invoked multiple times until it's good to be removed)
-    ///
-
-
 
     #region Mod Event (No Parameters)
 
     /// <summary>
-    /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
+    /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once. 
+    /// <br/>Unlike the traditional <see cref="ModEvent"/> this one doesn't support removing listeners.
     /// </summary>
-    public class ModEvent
+    public class ReadOnlyModEvent
     {
         /// <summary>
         /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
@@ -36,26 +30,6 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(Action action)
-        {
-            return (Listeners != null) ?  Listeners.Remove(action) : false;
-        }
-
-        /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(int index)
-        {
-            return (Listeners != null) ? Listeners.Remove(Listeners.ElementAt(index)) : false;
-        }
-
-        /// <summary>
         /// Invoke this event, causing all Listeners to execute.
         /// </summary>
         public void Invoke()
@@ -72,8 +46,9 @@ namespace Reloaded.ModHelper
 
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
+    /// <br/>Unlike the traditional <see cref="ModEvent"/> this one doesn't support removing listeners.
     /// </summary>
-    public class ModEvent<T>
+    public class ReadOnlyModEvent<T>
     {
         /// <summary>
         /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
@@ -93,26 +68,6 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(Action<T> action)
-        {
-            return (Listeners != null) ? Listeners.Remove(action) : false;
-        }
-
-        /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(int index)
-        {
-            return (Listeners != null) ? Listeners.Remove(Listeners.ElementAt(index)) : false;
-        }
-
-        /// <summary>
         /// Invoke this event, causing all Listeners to execute.
         /// </summary>
         public void Invoke(T value)
@@ -129,8 +84,9 @@ namespace Reloaded.ModHelper
 
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
+    /// <br/>Unlike the traditional <see cref="ModEvent"/> this one doesn't support removing listeners.
     /// </summary>
-    public class ModEvent<T1, T2>
+    public class ReadOnlyModEvent<T1, T2>
     {
         /// <summary>
         /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
@@ -150,26 +106,6 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(Action<T1, T2> action)
-        {
-            return (Listeners != null) ? Listeners.Remove(action) : false;
-        }
-
-        /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(int index)
-        {
-            return (Listeners != null) ? Listeners.Remove(Listeners.ElementAt(index)) : false;
-        }
-
-        /// <summary>
         /// Invoke this event, causing all Listeners to execute.
         /// </summary>
         public void Invoke(T1 value1, T2 value2)
@@ -186,8 +122,9 @@ namespace Reloaded.ModHelper
 
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
+    /// <br/>Unlike the traditional <see cref="ModEvent"/> this one doesn't support removing listeners.
     /// </summary>
-    public class ModEvent<T1, T2, T3>
+    public class ReadOnlyModEvent<T1, T2, T3>
     {
         /// <summary>
         /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
@@ -207,26 +144,6 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(Action<T1, T2, T3> action)
-        {
-            return (Listeners != null) ? Listeners.Remove(action) : false;
-        }
-
-        /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(int index)
-        {
-            return (Listeners != null) ? Listeners.Remove(Listeners.ElementAt(index)) : false;
-        }
-
-        /// <summary>
         /// Invoke this event, causing all Listeners to execute.
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3)
@@ -243,8 +160,9 @@ namespace Reloaded.ModHelper
 
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
+    /// <br/>Unlike the traditional <see cref="ModEvent"/> this one doesn't support removing listeners.
     /// </summary>
-    public class ModEvent<T1, T2, T3, T4>
+    public class ReadOnlyModEvent<T1, T2, T3, T4>
     {
         /// <summary>
         /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
@@ -264,26 +182,6 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(Action<T1, T2, T3, T4> action)
-        {
-            return (Listeners != null) ? Listeners.Remove(action) : false;
-        }
-
-        /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(int index)
-        {
-            return (Listeners != null) ? Listeners.Remove(Listeners.ElementAt(index)) : false;
-        }
-
-        /// <summary>
         /// Invoke this event, causing all Listeners to execute.
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4)
@@ -300,8 +198,9 @@ namespace Reloaded.ModHelper
 
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
+    /// <br/>Unlike the traditional <see cref="ModEvent"/> this one doesn't support removing listeners.
     /// </summary>
-    public class ModEvent<T1, T2, T3, T4, T5>
+    public class ReadOnlyModEvent<T1, T2, T3, T4, T5>
     {
         /// <summary>
         /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
@@ -318,26 +217,6 @@ namespace Reloaded.ModHelper
                 Listeners = new List<Action<T1, T2, T3, T4, T5>>();
 
             Listeners.Add(action);
-        }
-
-        /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(Action<T1, T2, T3, T4, T5> action)
-        {
-            return (Listeners != null) ? Listeners.Remove(action) : false;
-        }
-
-        /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
-        /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(int index)
-        {
-            return (Listeners != null) ? Listeners.Remove(Listeners.ElementAt(index)) : false;
         }
 
         /// <summary>

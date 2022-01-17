@@ -1,4 +1,13 @@
-﻿using System.Drawing;
+﻿/// This has been removed for now. Not sure if I should use System.Numerics.Vector3
+/// or make my own based off of Unity. Using System.Numerics.Vector3 is better in that it's
+/// already created and it's hardware accelerated (ask Sewer for more info). Remaking could 
+/// be better since then it's more familiar and everything needed would be 
+/// under one namespace "Reloaded.ModHelper". Some more experienced programmers may dislike
+/// making my own Vector3 because they'd wonder why I didn't just use the existing one. 
+/// 
+/// Think more on this.
+
+/*using System.Drawing;
 
 namespace Reloaded.ModHelper
 {
@@ -62,3 +71,4 @@ namespace Reloaded.ModHelper
         #endregion
     }
 }
+*/

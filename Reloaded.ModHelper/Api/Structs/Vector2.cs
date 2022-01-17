@@ -1,4 +1,14 @@
-﻿using System;
+﻿/// This has been removed for now. Not sure if I should use System.Numerics.Vector2 
+/// or make my own based off of Unity. Using System.Numerics.Vector2 is better in that it's
+/// already created and it's hardware accelerated (ask Sewer for more info). Remaking could 
+/// be better since then it's more familiar and everything needed would be 
+/// under one namespace "Reloaded.ModHelper". Some more experienced programmers may dislike
+/// making my own Vector2 because they'd wonder why I didn't just use the existing one. 
+/// 
+/// Think more on this.
+
+
+/*using System;
 using System.Drawing;
 
 namespace Reloaded.ModHelper
@@ -6,7 +16,7 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// Used to represent a 2D position. Heavily based off of Unity's Vector2 struct.
     /// </summary>
-    public struct Vector2
+    public struct Vector2 : IEquatable<Vector2>
     {
 
         #region Static Properties
@@ -128,6 +138,11 @@ namespace Reloaded.ModHelper
             SqrMagnitude = 0;
         }
 
+        public bool Equals(Vector2 other)
+        {
+            return this.X == other.X && this.Y == other.Y;
+        }
+
         #endregion
 
 
@@ -151,10 +166,17 @@ namespace Reloaded.ModHelper
         /// both X and Y values are equal, otherwise false.</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is Vector2 vectorToCompare))
-                return false;
+            bool isVector = obj is Vector2;
+            return isVector ? this.Equals((Vector2)obj) : false;
+        }
 
-            return X == vectorToCompare.X && Y == vectorToCompare.Y;
+        /// <summary>
+        /// An override of the default GetHashCode method. Taken straigt from Unity.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return this.X.GetHashCode() ^ this.Y.GetHashCode() << 2;
         }
 
         #endregion
@@ -220,12 +242,10 @@ namespace Reloaded.ModHelper
         /// <returns>The distance between both points.</returns>
         public static double GetDistance(Vector2 point1, Vector2 point2)
         {
-            return (point1 - point2).magnitude;
-        }
-
-        private static double CalcSqrMagnitude(double x, double y)
-        {
-            return (x * x) + (y * y);
+            double x = point1.X - point2.X;
+            double y = point1.Y - point2.Y;
+            double sqrMagnitude = (x * x + y * y);
+            return Math.Sqrt(sqrMagnitude);
         }
 
         #endregion
@@ -363,4 +383,4 @@ namespace Reloaded.ModHelper
 
         #endregion
     }
-}
+}*/
