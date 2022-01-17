@@ -7,7 +7,7 @@ namespace Reloaded.ModHelper
     /// </summary>
     public static class ModActionExtensions
     {
-        /// <summary>
+        /*/// <summary>
         /// Invoke all actions in the list.
         /// </summary>
         /// <param name="actions">list of actions to invoke</param>
@@ -89,6 +89,6 @@ namespace Reloaded.ModHelper
         public static void InvokeAll<T1, T2, T3, T4, T5>(this List<ModAction<T1, T2, T3, T4, T5>> actions, T1 argument1, T2 argument2, T3 argument3, T4 argument4, T5 argument5)
         {
             actions.ForEach(action => action.Invoke(argument1, argument2, argument3, argument4, argument5));
-        }
+        }*/
     }
 }

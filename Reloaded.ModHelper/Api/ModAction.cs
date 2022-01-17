@@ -2,9 +2,14 @@
 
 namespace Reloaded.ModHelper
 {
+    /// TODO:
+    /// Add support for up to 5 generic parameters
+
+
     /// <summary>
     /// A wrapper class for <see cref="Action"/> that provides extra control for how the Action gets invoked.
     /// </summary>
+    /// <remarks>TODO: Add support for up to 5 generic parameters</remarks>
     public class ModAction
     {
         /// <summary>

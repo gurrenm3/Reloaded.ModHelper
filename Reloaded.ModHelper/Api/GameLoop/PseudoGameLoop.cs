@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,9 +10,8 @@ namespace Reloaded.ModHelper
     /// To have a <see cref="GameLoop"/> that is syncronized with the game you will need to create a class
     /// that impliments <see cref="GameLoop"/> and hooks the Game's update loop.
     /// </summary>
-    public class PseudoGameLoop : GameLoop, IDisposable
+    public abstract class PseudoGameLoop : GameLoop, IDisposable
     {
-        private Dictionary<Assembly, ModEvent> onUpdate = new Dictionary<Assembly, ModEvent>();
         private CancellationTokenSource loopCancellation;
         private Task loopTask;
         private int timeBetweenLoops;
@@ -56,39 +52,31 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// <inheritdoc/>
+        /// Get's the mod event associated with the mod that called this method.
         /// </summary>
-        /// <param name="codeToRun"></param>
-        public override void Add(Action codeToRun)
-        {
-            var assembly = AssemblyUtils.GetCallingAssembly();
-            if (assembly == null)
-                return;
-
-            if (onUpdate.TryGetValue(assembly, out var modEvent))
-                modEvent.AddListener(codeToRun);
-            else
-                onUpdate.Add(assembly, new ModEvent(codeToRun));
-        }
+        /// <returns></returns>
+        public abstract ModEvent GetModEvent();
 
         /// <summary>
-        /// <inheritdoc/>
+        /// Used to set what happens when the loop is suppose to run. 
         /// </summary>
-        /// <param name="codeToRun"></param>
+        protected abstract void RunLoop();
+
+        /// <summary>
+        /// Use this to create a <see cref="PseudoGameLoop"/> instance. Using this provides
+        /// extra control as to how the loop stores update events. 
+        /// <br/><br/>If <paramref name="isSharedInstance"/> is true
+        /// then a game loop that can be shared between multiple mods will be created. If false then one will be created
+        /// that can only be used for a single mod. This is done to help separate code from multiple mods.
+        /// </summary>
+        /// <param name="isSharedInstance">Will this game loop be shared between more than one mod? 
+        /// Used to determine how the loop will store update events.</param>
+        /// <param name="timeBetweenLoops">How many milliseconds should pass between each loop iteration.</param>
         /// <returns></returns>
-        public override bool Remove(Action codeToRun)
+        public static PseudoGameLoop CreateLoop(bool isSharedInstance, int timeBetweenLoops = 1)
         {
-            
+            return isSharedInstance ? new MultiModPseudoGameLoop(timeBetweenLoops) : new SingleModPseudoGameLoop(timeBetweenLoops);
         }
-
-        private void RunLoop()
-        {
-            for (int i = 0; i < onUpdate.Count; i++)
-            {
-                onUpdate.ElementAt(i).Value.Invoke();
-            }
-        }
-
 
         #region IDisposable
 
