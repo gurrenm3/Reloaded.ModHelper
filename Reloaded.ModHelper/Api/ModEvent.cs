@@ -74,7 +74,17 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke()
         {
-            Listeners.InvokeAll();
+            for (int i = 0; i < Listeners.Count; i++)
+            {
+                var listener = Listeners[i];
+                if (listener == null)
+                    continue;
+
+                if (listener.Invoke() && listener.OnlyRunOnce)
+                {
+                    Listeners.RemoveAt(i);
+                }                
+            }
         }
     }
 

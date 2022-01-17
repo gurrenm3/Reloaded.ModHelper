@@ -16,7 +16,17 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// The code to run when this ModAction is invoked.
         /// </summary>
-        public Action CodeToRun { get; set; }
+        public Action CodeToRun
+        {
+            get { return codeToRun; }
+            set 
+            { 
+                codeToRun = value;
+                InvokeCount = 0;
+            }
+        }
+        private Action codeToRun;
+
 
         /// <summary>
         /// Specifies a condition that must be true for this ModAction to invoke.
@@ -40,7 +50,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         public ModAction() 
         {
-            InvokeCount = 0;
+            
         }
 
         /// <summary>
@@ -57,13 +67,14 @@ namespace Reloaded.ModHelper
         /// provided then it will only run if the condition is true. If 
         /// <see cref="OnlyRunOnce"/> is true and this has already run, it will not run.
         /// </summary>
-        public void Invoke()
+        public bool Invoke()
         {
             if ((OnlyRunOnce && InvokeCount >= 1) || (InvokeCondition != null && !InvokeCondition()))
-                return;
+                return false;
 
             CodeToRun.Invoke();
             InvokeCount++;
+            return true;
         }
     }
 }
