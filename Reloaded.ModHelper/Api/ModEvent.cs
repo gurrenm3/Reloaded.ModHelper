@@ -4,12 +4,6 @@ using System.Linq;
 
 namespace Reloaded.ModHelper
 {
-    /// TODO:
-    /// • Add ability to remove a listener when it's first invoked or when a condition is true
-    ///     (so it can be invoked multiple times until it's good to be removed)
-    ///
-
-
 
     #region Mod Event (No Parameters)
 
@@ -21,7 +15,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
         /// </summary>
-        public List<ModAction> Listeners { get; private set; } = new List<ModAction>();
+        public List<Action> Listeners { get; private set; } = new List<Action>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
@@ -35,7 +29,7 @@ namespace Reloaded.ModHelper
         /// Creates an instance of <see cref="ModEvent"/> and adds a listener to it.
         /// </summary>
         /// <param name="action">Listener to add.</param>
-        public ModEvent(ModAction action)
+        public ModEvent(Action action)
         {
             AddListener(action);
         }
@@ -44,7 +38,7 @@ namespace Reloaded.ModHelper
         /// Add a new listener to this event. It will be activated whenever <see cref="Invoke"/> is called.
         /// </summary>
         /// <param name="action">Action to add as a listener.</param>
-        public void AddListener(ModAction action)
+        public void AddListener(Action action)
         {
             Listeners.Add(action);
         }
@@ -54,7 +48,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="action">Action to remove</param>
         /// <returns>If removal is successful this will return true, otherwise false.</returns>
-        public bool RemoveListener(ModAction action)
+        public bool RemoveListener(Action action)
         {
             return Listeners.Remove(action);
         }
@@ -74,17 +68,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke()
         {
-            for (int i = 0; i < Listeners.Count; i++)
-            {
-                var listener = Listeners[i];
-                if (listener == null)
-                    continue;
-
-                if (listener.Invoke() && listener.OnlyRunOnce)
-                {
-                    Listeners.RemoveAt(i);
-                }                
-            }
+            Listeners.InvokeAll();
         }
     }
 
