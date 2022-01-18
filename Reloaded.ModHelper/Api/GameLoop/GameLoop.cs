@@ -10,7 +10,13 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Contains information about the Time of this Game Loop, for example the time between frames.
         /// </summary>
-        public Time Time { get; protected set; } = new Time();
+        public Time Time { get; protected set; }
+
+
+        /// <summary>
+        /// The total number of times the loop has run.
+        /// </summary>
+        public abstract long LoopCount { get; protected set; }
 
 
         /// <summary>
@@ -25,7 +31,7 @@ namespace Reloaded.ModHelper
         /// Used to create the actual loop. If you are hooking the game's actual loop than you would
         /// do that here.
         /// </summary>
-        public abstract GameLoop Create();
+        public abstract GameLoop Initialize();
 
         /// <summary>
         /// Adds an Action to run each time the loop runs.

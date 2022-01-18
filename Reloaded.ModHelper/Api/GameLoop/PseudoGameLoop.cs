@@ -12,6 +12,11 @@ namespace Reloaded.ModHelper
     /// </summary>
     public abstract class PseudoGameLoop : GameLoop, IDisposable
     {
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override long LoopCount { get; protected set; }
+
         private CancellationTokenSource loopCancellation;
         private Task loopTask;
         private int timeBetweenLoops;
@@ -28,18 +33,19 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Used to create the actual loop.
+        /// Used to create the actual loop. Should only be called once when the loop is first started.
         /// </summary>
-        public override GameLoop Create()
+        public override GameLoop Initialize()
         {
             if (isLoopCreated) return this;
 
-            Time.Initialize(this);
+            Time = new Time(this);
             loopCancellation = new CancellationTokenSource();
             loopTask = new Task(() =>
             {
                 while (true)
                 {
+                    RunLoopInternal();
                     RunLoop();
                     Thread.Sleep(timeBetweenLoops);
                 }
@@ -52,31 +58,37 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Get's the mod event associated with the mod that called this method.
+        /// Executes the code that is suppose to happen each time the loop runs. Used to set 
+        /// variables and other important info that keeps the loop functioning correctly. Should not
+        /// be used or overrided unless you want to change the base functionality of the class.
         /// </summary>
-        /// <returns></returns>
-        public abstract ModEvent GetModEvent();
+        protected virtual void RunLoopInternal()
+        {
+            LoopCount++;
+        }
 
         /// <summary>
-        /// Used to set what happens when the loop is suppose to run. 
+        /// Executes the code that is suppose to happen each time the loop runs.
         /// </summary>
         protected abstract void RunLoop();
 
         /// <summary>
         /// Use this to create a <see cref="PseudoGameLoop"/> instance. Using this provides
-        /// extra control as to how the loop stores update events. 
-        /// <br/><br/>If <paramref name="isSharedInstance"/> is true
-        /// then a game loop that can be shared between multiple mods will be created. If false then one will be created
-        /// that can only be used for a single mod. This is done to help separate code from multiple mods.
+        /// extra control as to how loop events are stored. 
+        /// <br/><br/>If <paramref name="isSharedInstance"/> is true then a game loop
+        /// that can be shared between multiple mods will be created. It will separate loop events by calling assembly.
+        /// If false then one will be created that stores all loop events together, which is best for a loop used by a single mod
+        /// The whole purpose of this is to help separate code from multiple mods.
         /// </summary>
         /// <param name="isSharedInstance">Will this game loop be shared between more than one mod? 
-        /// Used to determine how the loop will store update events.</param>
+        /// Used to determine how the loop will store loop events.</param>
         /// <param name="timeBetweenLoops">How many milliseconds should pass between each loop iteration.</param>
         /// <returns></returns>
-        public static PseudoGameLoop CreateLoop(bool isSharedInstance, int timeBetweenLoops = 1)
+        public static PseudoGameLoop CreateNew(bool isSharedInstance, int timeBetweenLoops = 1)
         {
             return isSharedInstance ? new MultiModPseudoGameLoop(timeBetweenLoops) : new SingleModPseudoGameLoop(timeBetweenLoops);
         }
+
 
         #region IDisposable
 

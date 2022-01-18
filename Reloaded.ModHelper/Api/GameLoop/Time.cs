@@ -8,52 +8,61 @@ namespace Reloaded.ModHelper
     public class Time
     {
         /// <summary>
-        /// The interval in seconds from the last frame to the current one.
+        /// How much time has passed, in seconds, between the last GameLoop iteration and the current one.
         /// </summary>
-        public double DeltaTime { get; private set; } = -1;
-
-        /// <summary>
-        /// The total number of frames since the start of the game.
-        /// </summary>
-        public long FrameCount { get; private set; } = -1;
+        public double DeltaTime { get; protected set; }
 
         /// <summary>
         /// The total number of milliseconds that have passed since initialization.
         /// </summary>
-        public double TotalMilliseconds { get; private set; } = -1;
+        public double TotalMilliseconds { get; protected set; }
 
         /// <summary>
         /// The total number of seconds that have passed since initialization.
         /// </summary>
-        public double TotalSeconds { get; private set; } = -1;
-
-        private Stopwatch stopwatch; // used to track time between update calls
-        private long lastElapsedTime; // the last time the stopwatch was used for checking time. Stores the total elapsed time.
-        private bool isInitialized;
+        public double TotalSeconds { get => TotalMilliseconds * 1000; }
 
         /// <summary>
-        /// Initializes this Time object with a Gameloop, allowing it to update properly.
+        /// Used to track time between update calls.
         /// </summary>
-        /// <param name="gameLoop"></param>
-        public void Initialize(GameLoop gameLoop)
+        protected Stopwatch stopwatch;
+
+        /// <summary>
+        /// The last time the stopwatch was used for checking time. Stores the total elapsed time.
+        /// </summary>
+        protected long lastElapsedTime;
+
+        /// <summary>
+        /// Has this object already been initialized?
+        /// </summary>
+        protected bool isInitialized;
+
+        /// <summary>
+        /// Creates an instance of this class with a Gameloop, allowing it to update properly.
+        /// </summary>
+        /// <param name="gameLoop">The game loop to initialize with, allowing access to Time info about the loop.</param>
+        public Time(GameLoop gameLoop)
         {
-            if (isInitialized) return;
-            
             stopwatch = new Stopwatch();
             stopwatch.Start();
             gameLoop.Add(Update);
             isInitialized = true;
         }
 
-        private void Update()
+        /// <summary>
+        /// Method that actually updates all Time info.
+        /// </summary>
+        protected virtual void Update()
         {
             TotalMilliseconds = stopwatch.ElapsedMilliseconds;
-            TotalSeconds = TotalMilliseconds * 1000;
             DeltaTime = CalcDeltaTime();
-            FrameCount++;
         }
 
-        private double CalcDeltaTime()
+        /// <summary>
+        /// Used to calculate the time since the last loop iteration, otherwise known as delta time.
+        /// </summary>
+        /// <returns>The time since the last loop iteration, known as delta time.</returns>
+        protected virtual double CalcDeltaTime()
         {
             double deltaTime = (TotalMilliseconds - (double)lastElapsedTime) / 1000; // dividing by 1000 because ther are 1000 ms in 1 second
             lastElapsedTime = stopwatch.ElapsedMilliseconds;

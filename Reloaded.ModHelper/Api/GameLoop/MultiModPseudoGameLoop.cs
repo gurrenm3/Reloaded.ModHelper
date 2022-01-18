@@ -5,6 +5,12 @@ using System.Reflection;
 
 namespace Reloaded.ModHelper
 {
+    /// <summary>
+    /// A <see cref="PseudoGameLoop"/> thats better for being shared amongst multiple mods.
+    /// Separates Loop Events by mod assembly, which is why it's better for multiple mods.
+    /// If you intend for this loop to only be used by a single mod then use
+    /// <see cref="SingleModPseudoGameLoop"/> instead.
+    /// </summary>
     internal class MultiModPseudoGameLoop : PseudoGameLoop
     {
         // using a dictionary to allow for one shared instance of the game loop with a
@@ -47,19 +53,6 @@ namespace Reloaded.ModHelper
                 return modEvent.RemoveListener(codeToRun);
 
             return false;
-        }
-
-        /// <summary>
-        /// Get's the mod event associated with the mod that called this method.
-        /// </summary>
-        /// <returns></returns>
-        public override ModEvent GetModEvent()
-        {
-            var asm = AssemblyUtils.GetCallingAssembly();
-            if (asm == null)
-                return null;
-
-            return loopEvents.TryGetValue(asm, out var modEvent) ? modEvent : null;
         }
 
         /// <summary>
