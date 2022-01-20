@@ -86,7 +86,7 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public static PseudoGameLoop CreateNew(bool isSharedInstance, int timeBetweenLoops = 1)
         {
-            return isSharedInstance ? new MultiModPseudoGameLoop(timeBetweenLoops) : new SingleModPseudoGameLoop(timeBetweenLoops);
+            return isSharedInstance ? new SharedPseudoGameLoop(timeBetweenLoops) : new SingleModPseudoGameLoop(timeBetweenLoops);
         }
 
 
