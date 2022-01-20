@@ -9,10 +9,10 @@ namespace Reloaded.ModHelper.Testing
 
         public Mod(IReloadedHooks hooks, ILogger logger) : base(hooks, logger)
         {
-            gameLoop = PseudoGameLoop.CreateNew(false).Initialize();
+            gameLoop = PseudoGameLoop.CreateNew(true).Initialize();
             gameLoop.Run(() =>
             {
-                if(Keyboard.IsKeyPressed(KeyCode.UpArrow))
+                if(Keyboard.IsKeyPressed(Key.UpArrow))
                 {
                     logger.WriteLine("Key Pressed");
                 }

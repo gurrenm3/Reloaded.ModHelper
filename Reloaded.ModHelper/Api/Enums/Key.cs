@@ -4,7 +4,7 @@
     /// <summary>
     /// KeyCodes for User32 Key Press methods
     /// </summary>
-    public enum KeyCode : ushort
+    public enum Key : ushort
     {
         /// <Summary>
         /// Backspace Key
