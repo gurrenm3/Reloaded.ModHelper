@@ -15,7 +15,7 @@ namespace Reloaded.ModHelper
     {
         // using a dictionary to allow for one shared instance of the game loop with a
         // separate mod event for each mod using the shared instance.
-        private Dictionary<Assembly, ModEvent> loopEvents = new Dictionary<Assembly, ModEvent>();
+        protected Dictionary<Assembly, ModEvent> loopEvents = new Dictionary<Assembly, ModEvent>();
 
         public MultiModPseudoGameLoop(int timeBetweenLoops) : base(timeBetweenLoops)
         {
@@ -26,7 +26,7 @@ namespace Reloaded.ModHelper
         /// <inheritdoc/>
         /// </summary>
         /// <param name="codeToRun"></param>
-        public override void Add(Action codeToRun)
+        public override void Run(Action codeToRun)
         {
             var assembly = AssemblyUtils.GetCallingAssembly();
             if (assembly == null)

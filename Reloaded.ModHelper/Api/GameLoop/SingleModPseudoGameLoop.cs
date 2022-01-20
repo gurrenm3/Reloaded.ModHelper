@@ -10,14 +10,14 @@ namespace Reloaded.ModHelper
     /// </summary>
     internal class SingleModPseudoGameLoop : PseudoGameLoop
     {
-        private ModEvent loopEvent = new ModEvent();
+        protected ModEvent loopEvent = new ModEvent();
 
         public SingleModPseudoGameLoop(int timeBetweenLoops) : base(timeBetweenLoops)
         {
 
         }
 
-        public override void Add(Action codeToRun)
+        public override void Run(Action codeToRun)
         {
             loopEvent.AddListener(codeToRun);
         }

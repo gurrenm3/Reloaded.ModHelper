@@ -8,7 +8,7 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// A Logger that automatically adds a mod's name to each message.
     /// </summary>
-    public class ModLogger : IModLogger
+    /*public class ModLogger : IModLogger
     {
         /// <summary>
         /// <inheritdoc/>
@@ -236,5 +236,5 @@ namespace Reloaded.ModHelper
             }
             return logColor;
         }
-    }
+    }*/
 }

@@ -7,7 +7,7 @@
 /// 
 /// Think more on this.
 
-/*using System.Drawing;
+using System.Drawing;
 
 namespace Reloaded.ModHelper
 {
@@ -19,7 +19,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// A default vector with no values. Used for comparisson.
         /// </summary>
-        public static Vector3 Zero { get; } = new Vector3(0,0,0);
+        public static Vector3 Zero { get; } = new Vector3(0, 0, 0);
 
         /// <summary>
         /// The X coordinate of this position.
@@ -71,4 +71,3 @@ namespace Reloaded.ModHelper
         #endregion
     }
 }
-*/

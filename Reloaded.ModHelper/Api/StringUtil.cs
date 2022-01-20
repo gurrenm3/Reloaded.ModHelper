@@ -6,28 +6,28 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// Utility methods for Strings
     /// </summary>
-    public static unsafe class StringUtil
+    public static unsafe class Strings
     {
         /// <summary>
         /// Attempt to convert a void pointer to a string. Will only work if the void pointer already represents a string
         /// </summary>
         /// <param name="pointer"></param>
-        /// <returns></returns>
-        public static string TryToString(void* pointer) => pointer != null ? TryToString((IntPtr)pointer) : null;
+        /// <returns>The string stored at the address if there is one, otherwise null.</returns>
+        public static string ToString(void* pointer) => pointer != null ? ToString((IntPtr)pointer) : null;
 
         /// <summary>
         /// Attempt to convert the value stored at an address to a string. Will only work if address already holds a string
         /// </summary>
         /// <param name="address"></param>
-        /// <returns></returns>
-        public static string TryToString(long address) => TryToString((IntPtr)address);
+        /// <returns>The string stored at the address if there is one, otherwise null.</returns>
+        public static string ToString(long address) => ToString((IntPtr)address);
 
         /// <summary>
         /// Attempt to convert an IntPtr to a string. Will only work if the IntPtr already holds a string
         /// </summary>
         /// <param name="address"></param>
-        /// <returns></returns>
-        public static string TryToString(IntPtr address)
+        /// <returns>The string stored at the address if there is one, otherwise null.</returns>
+        public static string ToString(IntPtr address)
         {
             if (address != IntPtr.Zero)
             {

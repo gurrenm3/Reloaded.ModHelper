@@ -8,7 +8,7 @@
 /// Think more on this.
 
 
-/*using System;
+using System;
 using System.Drawing;
 
 namespace Reloaded.ModHelper
@@ -24,32 +24,32 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// A default vector with no values. Used for comparisson only.
         /// </summary>
-        public static Vector2 Zero { get; } = new Vector2(0,0);
+        public static Vector2 Zero { get; } = new Vector2(0, 0);
 
         /// <summary>
         /// Shorthand for writing Vector2(0, -1).
         /// </summary>
-        public static Vector2 Down { get; } = new Vector2(0,-1);
+        public static Vector2 Down { get; } = new Vector2(0, -1);
 
         /// <summary>
         /// 	Shorthand for writing Vector2(-1, 0).
         /// </summary>
-        public static Vector2 Left { get; } = new Vector2(-1,0);
+        public static Vector2 Left { get; } = new Vector2(-1, 0);
 
         /// <summary>
         /// Shorthand for writing Vector2(0, 1).
         /// </summary>
-        public static Vector2 Up { get; } = new Vector2(0,1);
+        public static Vector2 Up { get; } = new Vector2(0, 1);
 
         /// <summary>
         /// Shorthand for writing Vector2(1, 0).
         /// </summary>
-        public static Vector2 Right { get; } = new Vector2(1,0);
+        public static Vector2 Right { get; } = new Vector2(1, 0);
 
         /// <summary>
         /// Shorthand for writing Vector2(1, 1).
         /// </summary>
-        public static Vector2 One { get; } = new Vector2(1,1);
+        public static Vector2 One { get; } = new Vector2(1, 1);
 
         #endregion
 
@@ -85,7 +85,7 @@ namespace Reloaded.ModHelper
         /// <remarks>Taken from Unity Documentation.</remarks>
         public double SqrMagnitude
         {
-            get { return sqrMagnitude == 0 ? sqrMagnitude = CalcSqrMagnitude(X, Y) : sqrMagnitude; }
+            get { return sqrMagnitude == 0 ? sqrMagnitude = (X * X) + (Y * Y) : sqrMagnitude; }
             private set { sqrMagnitude = value; }
         }
         private double sqrMagnitude;
@@ -383,4 +383,4 @@ namespace Reloaded.ModHelper
 
         #endregion
     }
-}*/
+}

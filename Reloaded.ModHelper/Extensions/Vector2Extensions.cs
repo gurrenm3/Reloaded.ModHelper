@@ -13,7 +13,7 @@ namespace Reloaded.ModHelper
     /// </summary>
     public static class Vector2Extensions
     {
-        public static float GetAngle(this Vector2 from, Vector2 to)
+        /*public static float GetAngle(this Vector2 from, Vector2 to)
         {
 			float num = (float)Math.Sqrt((double)(from.sqrMagnitude * to.sqrMagnitude));
 			bool flag = num < 1E-15f;
@@ -28,6 +28,6 @@ namespace Reloaded.ModHelper
 				result = (float)Math.Acos((double)num2) * 57.29578f;
 			}
 			return result;
-		}
+		}*/
     }
 }

@@ -37,7 +37,7 @@ namespace Reloaded.ModHelper
         /// Adds an Action to run each time the loop runs.
         /// </summary>
         /// <param name="codeToRun"></param>
-        public abstract void Add(Action codeToRun);
+        public abstract void Run(Action codeToRun);
 
         /// <summary>
         /// Removes an Action from the game loop so it no longer runs when the loop does.

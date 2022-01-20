@@ -58,7 +58,7 @@ namespace Reloaded.ModHelper
         {
             mod.ModLoader = ModLoader;
             mod.ModInfo = modInfo;
-            mod.Logger = new ModLogger(Logger, modInfo);
+            //mod.Logger = new ModLogger(Logger, modInfo);
             mod.GameProcess = GameProcess;
             LoadedMods.Add(mod);
 

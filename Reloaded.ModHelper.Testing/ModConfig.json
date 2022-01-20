@@ -1,0 +1,16 @@
+{
+  "ModId": "Reloaded.ModHelper.Testing",
+  "ModName": "Reloaded.ModHelper.Testing",
+  "ModAuthor": "Gurrenm3",
+  "ModVersion": "1.0.0",
+  "ModDescription": "A mod used for testing Reloaded.ModHelper features.",
+  "ModDll": "Reloaded.ModHelper.Testing.dll",
+  "ModIcon": "Preview.png",
+  "ModR2RManagedDll32": "x86/Reloaded.ModHelper.Testing.dll",
+  "ModR2RManagedDll64": "x64/Reloaded.ModHelper.Testing.dll",
+  "ModNativeDll32": "",
+  "ModNativeDll64": "",
+  "ModDependencies": [ "reloaded.sharedlib.hooks" ],
+  "OptionalDependencies": null,
+  "SupportedAppId": []
+}
