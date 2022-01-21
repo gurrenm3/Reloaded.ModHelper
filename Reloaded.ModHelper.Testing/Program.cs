@@ -5,67 +5,85 @@ using Reloaded.ModHelper.Testing.Configuration;
 using Reloaded.ModHelper.Testing.Configuration.Implementation;
 using System;
 
+#if DEBUG
+using System.Diagnostics;
+#endif
+
 namespace Reloaded.ModHelper.Testing
 {
     public class Program : IMod
     {
         /// <summary>
-        /// Your mod if from ModConfig.json, used during initialization.
+        /// Used for writing text to the Reloaded log.
         /// </summary>
-        private const string MyModId = "Reloaded.ModHelper.Testing";
-
-        /// <summary>
-        /// Used for writing text to the console window.
-        /// </summary>
-        private ILogger _logger;
+        private ILogger _logger = null!;
 
         /// <summary>
         /// Provides access to the mod loader API.
         /// </summary>
-        private IModLoader _modLoader;
+        private IModLoader _modLoader = null!;
 
         /// <summary>
         /// Stores the contents of your mod's configuration. Automatically updated by template.
         /// </summary>
-        private Config _configuration;
+        private Config _configuration = null!;
 
         /// <summary>
         /// An interface to Reloaded's the function hooks/detours library.
         /// See: https://github.com/Reloaded-Project/Reloaded.Hooks
         ///      for documentation and samples. 
         /// </summary>
-        private IReloadedHooks _hooks;
+        private IReloadedHooks _hooks = null!;
+
+        /// <summary>
+        /// Configuration of the current mod.
+        /// </summary>
+        private IModConfig _modConfig = null!;
+
+        /// <summary>
+        /// Encapsulates your mod logic.
+        /// </summary>
+        private Mod _mod = null!;
 
         /// <summary>
         /// Entry point for your mod.
         /// </summary>
-        public void Start(IModLoaderV1 loader)
+        public void StartEx(IModLoaderV1 loaderApi, IModConfigV1 modConfig)
         {
-            _modLoader = (IModLoader)loader;
+#if DEBUG
+        // Attaches debugger in debug mode; ignored in release.
+        Debugger.Launch();
+#endif
+
+            _modLoader = (IModLoader)loaderApi;
+            _modConfig = (IModConfig)modConfig;
             _logger = (ILogger)_modLoader.GetLogger();
-            _modLoader.GetController<IReloadedHooks>().TryGetTarget(out _hooks);
+            _modLoader.GetController<IReloadedHooks>().TryGetTarget(out _hooks!);
 
             // Your config file is in Config.json.
             // Need a different name, format or more configurations? Modify the `Configurator`.
             // If you do not want a config, remove Configuration folder and Config class.
-            var configurator = new Configurator(_modLoader.GetDirectoryForModId(MyModId));
+            var configurator = new Configurator(_modLoader.GetModConfigDirectory(_modConfig.ModId));
             _configuration = configurator.GetConfiguration<Config>(0);
             _configuration.ConfigurationUpdated += OnConfigurationUpdated;
 
-            /* Your mod code starts here. */
-            Mod mod = new Mod(_hooks, _logger);
+            /*
+                Your mod code starts below.
+                Visit https://github.com/Reloaded-Project for additional optional libraries.
+            */
+            _mod = new Mod(_hooks, _logger);
         }
 
         private void OnConfigurationUpdated(IConfigurable obj)
         {
             /*
-                This is executed when the configuration file gets updated by the user
-                at runtime.
+                This is executed when the configuration file gets 
+                updated by the user at runtime.
             */
 
             // Replace configuration with new.
             _configuration = (Config)obj;
-            _logger.WriteLine($"[{MyModId}] Config Updated: Applying");
+            _logger.WriteLine($"[{_modConfig.ModId}] Config Updated: Applying");
 
             // Apply settings from configuration.
             // ... your code here.
@@ -75,7 +93,7 @@ namespace Reloaded.ModHelper.Testing
         public void Suspend()
         {
             /*  Some tips if you wish to support this (CanSuspend == true)
-             
+
                 A. Undo memory modifications.
                 B. Deactivate hooks. (Reloaded.Hooks Supports This!)
             */
@@ -84,7 +102,7 @@ namespace Reloaded.ModHelper.Testing
         public void Resume()
         {
             /*  Some tips if you wish to support this (CanSuspend == true)
-             
+
                 A. Redo memory modifications.
                 B. Re-activate hooks. (Reloaded.Hooks Supports This!)
             */
@@ -93,7 +111,7 @@ namespace Reloaded.ModHelper.Testing
         public void Unload()
         {
             /*  Some tips if you wish to support this (CanUnload == true).
-             
+
                 A. Execute Suspend(). [Suspend should be reusable in this method]
                 B. Release any unmanaged resources, e.g. Native memory.
             */
@@ -106,19 +124,6 @@ namespace Reloaded.ModHelper.Testing
         public bool CanSuspend() => false;
 
         /* Automatically called by the mod loader when the mod is about to be unloaded. */
-        public Action Disposing { get; }
-
-        /* Contains the Types you would like to share with other mods.
-           If you do not want to share any types, please remove this method and the
-           IExports interface.
-        
-           Inter Mod Communication: https://github.com/Reloaded-Project/Reloaded-II/blob/master/Docs/InterModCommunication.md
-        */
-        public Type[] GetTypes() => new Type[0];
-
-        /* This is a dummy for R2R (ReadyToRun) deployment.
-           For more details see: https://github.com/Reloaded-Project/Reloaded-II/blob/master/Docs/ReadyToRun.md
-        */
-        public static void Main() { }
+        public Action Disposing { get; } = null!;
     }
 }

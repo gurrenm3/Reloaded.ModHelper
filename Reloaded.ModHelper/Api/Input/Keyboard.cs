@@ -21,7 +21,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="keyToCheck"></param>
         /// <returns>True if the key is currently pressed, otherwise false.</returns>
-        public static bool IsKeyPressed(Key keyToCheck)
+        public static bool IsPressed(Key keyToCheck)
         {
             return keyToCheck.IsPressed();
         }
@@ -30,7 +30,7 @@ namespace Reloaded.ModHelper
         /// TODO: Once implemented will simulate a keypress to the program.
         /// </summary>
         /// <param name="keyToSimulate"></param>
-        public static void SimulateKey(Key keyToSimulate)
+        public static void SimulatePress(Key keyToSimulate)
         {
             throw new NotImplementedException();
             //User32.PostMessage(Process.GetCurrentProcess().MainWindowHandle, )

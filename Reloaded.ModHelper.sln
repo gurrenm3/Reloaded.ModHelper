@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32002.185
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reloaded.ModHelper", "Reloaded.ModHelper\Reloaded.ModHelper.csproj", "{4C93D68B-4417-48F0-AAC8-B0E38B7F3ED7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reloaded.ModHelper.Testing", "Reloaded.ModHelper.Testing\Reloaded.ModHelper.Testing.csproj", "{41B10C0A-F3DB-4961-93CA-7840CD44C509}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reloaded.ModHelper.Testing", "Reloaded.ModHelper.Testing\Reloaded.ModHelper.Testing.csproj", "{9FFA8455-F9ED-4C71-B5E9-33B07BFF0E1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{4C93D68B-4417-48F0-AAC8-B0E38B7F3ED7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C93D68B-4417-48F0-AAC8-B0E38B7F3ED7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C93D68B-4417-48F0-AAC8-B0E38B7F3ED7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{41B10C0A-F3DB-4961-93CA-7840CD44C509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{41B10C0A-F3DB-4961-93CA-7840CD44C509}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{41B10C0A-F3DB-4961-93CA-7840CD44C509}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{41B10C0A-F3DB-4961-93CA-7840CD44C509}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FFA8455-F9ED-4C71-B5E9-33B07BFF0E1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FFA8455-F9ED-4C71-B5E9-33B07BFF0E1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FFA8455-F9ED-4C71-B5E9-33B07BFF0E1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FFA8455-F9ED-4C71-B5E9-33B07BFF0E1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

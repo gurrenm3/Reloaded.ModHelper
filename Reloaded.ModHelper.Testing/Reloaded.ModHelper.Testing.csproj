@@ -4,16 +4,11 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <OutputType>WinExe</OutputType>
-    <BaseOutputPath>F:\Users\Mrclone2\Documents\Reloaded II Mod Manager\Mods\Reloaded.ModHelper.Testing</BaseOutputPath>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <OutputPath>$(RELOADEDIIMODS)\Reloaded.ModHelper.Testing</OutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="bin\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <None Remove="bin\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Remove="ModConfig.json" />
@@ -28,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Reloaded.Memory" Version="4.1.3" />
     <PackageReference Include="Reloaded.Mod.Interfaces" Version="2.0.0" />
     <PackageReference Include="Reloaded.SharedLib.Hooks" Version="1.9.0" />
   </ItemGroup>
