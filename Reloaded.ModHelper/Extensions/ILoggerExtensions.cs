@@ -13,6 +13,28 @@ namespace Reloaded.ModHelper
 		/// </summary>
 		/// <param name="iLogger"></param>
 		/// <param name="message">Message to print</param>
+		public static void WriteLine(this ILogger iLogger, int message)
+		{
+			iLogger.WriteLine(message.ToString());
+		}
+
+		/// <summary>
+		/// Writes a new line to the console output
+		/// </summary>
+		/// <param name="iLogger"></param>
+		/// <param name="message">Message to print</param>
+		/// <param name="color">The color to print the message in</param>
+		public static void WriteLine(this ILogger iLogger, int message, Color color)
+		{
+			iLogger.WriteLine(message.ToString(), color);
+		}
+
+
+		/// <summary>
+		/// Writes a new line to the console output
+		/// </summary>
+		/// <param name="iLogger"></param>
+		/// <param name="message">Message to print</param>
 		public static void WriteLine(this ILogger iLogger, bool message)
 		{
 			iLogger.WriteLine(message.ToString());

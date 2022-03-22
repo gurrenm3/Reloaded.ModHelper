@@ -3,21 +3,28 @@ using Reloaded.Mod.Interfaces;
 
 namespace Reloaded.ModHelper
 {
-    public class ReloadedMod
+    /// <summary>
+    /// A base class for reloaded2 mods
+    /// </summary>
+    public class ReloadedMod : IRegisterHooks
     {
-        public ReloadedMod()
+        /// <summary>
+        /// The instance of the logger.
+        /// </summary>
+        public ILogger Logger { get; set; }
+
+        /// <summary>
+        /// Creates an instance of this class.
+        /// </summary>
+        public ReloadedMod(ILogger _logger)
         {
-
-        }
-
-        public ReloadedMod(IReloadedHooks hooks, ILogger logger) : this()
-        {
-
+            Logger = _logger;
         }
 
         /// <summary>
-        /// Called when the game is exited.
+        /// Call this to easily register hooks into the game.
         /// </summary>
-        public virtual void OnExit() { }
+        /// <param name="hooksInstance"></param>
+        public virtual void RegisterHooks(IReloadedHooks hooksInstance) { }
     }
 }

@@ -17,12 +17,12 @@ namespace Reloaded.ModHelper
 
         }
 
-        public override void Run(Action codeToRun)
+        public override void AddListener(Action codeToRun)
         {
             loopEvent.AddListener(codeToRun);
         }
 
-        public override bool Remove(Action codeToRun)
+        public override bool RemoveListener(Action codeToRun)
         {
             return loopEvent.RemoveListener(codeToRun);
         }

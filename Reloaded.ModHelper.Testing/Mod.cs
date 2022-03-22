@@ -1,5 +1,4 @@
-﻿using Reloaded.Hooks.ReloadedII.Interfaces;
-using Reloaded.Mod.Interfaces;
+﻿using Reloaded.Mod.Interfaces;
 
 namespace Reloaded.ModHelper.Testing
 {
@@ -8,7 +7,7 @@ namespace Reloaded.ModHelper.Testing
     /// </summary>
     public class Mod : ReloadedMod
     {
-        public Mod(IReloadedHooks hooks, ILogger logger) : base(hooks, logger)
+        public Mod(ILogger logger) : base(logger)
         {
             
         }

@@ -21,7 +21,7 @@ namespace Reloaded.ModHelper
         /// <inheritdoc/>
         /// </summary>
         /// <param name="codeToRun"></param>
-        public override void Run(Action codeToRun)
+        public override void AddListener(Action codeToRun)
         {
             ModEvents.AddListener(codeToRun);
         }        
@@ -31,7 +31,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="codeToRun"></param>
         /// <returns></returns>
-        public override bool Remove(Action codeToRun)
+        public override bool RemoveListener(Action codeToRun)
         {
             return ModEvents.RemoveListener(codeToRun);
         }

@@ -51,7 +51,6 @@ namespace Reloaded.ModHelper
                 }
             }, loopCancellation.Token);
 
-            
             loopTask.Start();
             isLoopCreated = true;
             return this;

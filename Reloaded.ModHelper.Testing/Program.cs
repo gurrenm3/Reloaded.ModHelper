@@ -71,7 +71,8 @@ namespace Reloaded.ModHelper.Testing
                 Your mod code starts below.
                 Visit https://github.com/Reloaded-Project for additional optional libraries.
             */
-            _mod = new Mod(_hooks, _logger);
+            _mod = new Mod(_logger);
+            _mod.RegisterHooks(_hooks);
         }
 
         private void OnConfigurationUpdated(IConfigurable obj)

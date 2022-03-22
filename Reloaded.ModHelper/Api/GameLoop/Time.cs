@@ -45,7 +45,7 @@ namespace Reloaded.ModHelper
         {
             stopwatch = new Stopwatch();
             stopwatch.Start();
-            gameLoop.Run(Update);
+            gameLoop.AddListener(Update);
             isInitialized = true;
         }
 
