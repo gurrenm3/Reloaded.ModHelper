@@ -1,16 +1,17 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Reloaded.ModHelper
 {
     /// <summary>
-    /// A screen Rectangle.
+    /// Represents a Rectangle.
     /// </summary>
-    public struct Rect
+    public struct Rectangle : IShape2D
     {
         /// <summary>
         /// An empty rect with all values set to zero. Used for comparisson
         /// </summary>
-        public static Rect Zero { get; set; } = new Rect(0, 0, 0, 0);
+        public static Rectangle Zero { get; set; } = new Rectangle(0, 0, 0, 0);
 
         /// <summary>
         /// Left coordinate.
@@ -55,7 +56,7 @@ namespace Reloaded.ModHelper
         /// <param name="top">Top coordinate.</param>
         /// <param name="right">Right coordinate.</param>
         /// <param name="bottom">Bottom coordinate.</param>
-        public Rect(int left, int top, int right, int bottom)
+        public Rectangle(int left, int top, int right, int bottom)
         {
             Left = left;
             Top = top;
@@ -71,10 +72,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Creates a <see cref="Rect"/> from a <see cref="System.Drawing.Rectangle"/>
+        /// Creates a <see cref="Rectangle"/> from a <see cref="System.Drawing.Rectangle"/>
         /// </summary>
         /// <param name="rectangle"></param>
-        public Rect(Rectangle rectangle)
+        public Rectangle(System.Drawing.Rectangle rectangle)
         {
             Left = rectangle.Left;
             Top = rectangle.Top;
@@ -111,11 +112,20 @@ namespace Reloaded.ModHelper
         /// <param name="x">X Coord.</param>
         /// <param name="y">Y Coord.</param>
         /// <returns>True if the provided points are contained within the rect, otherwise false.</returns>
-        public bool Contains(double x, double y)
+        public bool Contains(float x, float y)
         {
             bool containsX = x >= Left && x <= Right;
             bool containsY = y >= Bottom && y <= Top;
             return containsX && containsY;
+        }
+
+        /// <summary>
+        /// Returns a random point from this Rectangle.
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 GetRandomPoint()
+        {
+            return Random.GetRandomPoint(this);
         }
 
         /// <summary>
@@ -129,12 +139,12 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Creates a <see cref="Rectangle"/> from a <see cref="Rect"/>
+        /// Creates a <see cref="System.Drawing.Rectangle"/> from a <see cref="Rectangle"/>
         /// </summary>
         /// <param name="rect"></param>
-        public static implicit operator Rectangle(Rect rect)
+        public static implicit operator System.Drawing.Rectangle(Rectangle rect)
         {
-            return new Rectangle(rect.Left, rect.Top, rect.Right, rect.Bottom);
+            return new System.Drawing.Rectangle(rect.Left, rect.Top, rect.Right, rect.Bottom);
         }
     }
 }

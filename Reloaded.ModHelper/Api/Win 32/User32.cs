@@ -75,13 +75,13 @@ namespace Reloaded.ModHelper
         /// Retrieves the dimensions of the bounding rectangle of the specified window. The dimensions are given in screen coordinates that are relative to the upper-left corner of the screen.
         /// </summary>
         /// <param name="hwnd">A handle to the window.</param>
-        /// <param name="lpRect">A pointer to a <see cref="Rect"/> structure that receives the screen coordinates of the upper-left and lower-right corners of the window.</param>
+        /// <param name="lpRect">A pointer to a <see cref="Rectangle"/> structure that receives the screen coordinates of the upper-left and lower-right corners of the window.</param>
         /// <returns>If the function succeeds, the return value is nonzero.
         /// <br/>If the function fails, the return value is zero.To get extended error information, call <see cref="Kernel32.GetLastError"/></returns>
         /// <remarks>Documentation: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowrect </remarks>
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetWindowRect(IntPtr hwnd, out Rect lpRect);
+        public static extern bool GetWindowRect(IntPtr hwnd, out Rectangle lpRect);
 
         /// <summary>
         /// Retrieves a handle to the desktop window. The desktop window covers the entire screen. The desktop window is the area on top of which other windows are painted.

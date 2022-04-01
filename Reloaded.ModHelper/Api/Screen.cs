@@ -8,7 +8,7 @@
         /// <summary>
         /// The Screen Dimensions of this computer.
         /// </summary>
-        public static Rect screenRect;
+        public static Rectangle screenRect;
 
         /// <summary>
         /// The position of the center of the screen.
