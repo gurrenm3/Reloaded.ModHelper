@@ -10,12 +10,13 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
     /// </summary>
-    public class ModEvent
+    public class ModEvent : IModEvent
     {
         /// <summary>
-        /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        public List<Action> Listeners { get; private set; } = new List<Action>();
+        public List<Action> Listeners => _listeners;
+        private List<Action> _listeners = new List<Action>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
@@ -35,36 +36,36 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a new listener to this event. It will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to add as a listener.</param>
+        /// <param name="action"><inheritdoc/></param>
         public void AddListener(Action action)
         {
             Listeners.Add(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="action"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action action)
         {
             return Listeners.Remove(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(int index)
         {
             return Listeners.Remove(Listeners.ElementAt(index));
         }
 
         /// <summary>
-        /// Invoke this event, causing all Listeners to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void Invoke()
         {
@@ -81,12 +82,13 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
     /// </summary>
-    public class ModEvent<T>
+    public class ModEvent<T> : IModEvent<T>
     {
         /// <summary>
-        /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        public List<Action<T>> Listeners { get; private set; } = new List<Action<T>>();
+        public List<Action<T>> Listeners => _listeners;
+        private List<Action<T>> _listeners = new List<Action<T>>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
@@ -106,38 +108,48 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a new listener to this event. It will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to add as a listener.</param>
+        /// <param name="action"><inheritdoc/></param>
         public void AddListener(Action<T> action)
         {
             Listeners.Add(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="action"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action<T> action)
         {
             return Listeners.Remove(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(int index)
         {
             return Listeners.Remove(Listeners.ElementAt(index));
         }
 
         /// <summary>
-        /// Invoke this event, causing all Listeners to execute.
+        /// <inheritdoc/>
         /// </summary>
+        /// <param name="value"><inheritdoc/></param>
         public void Invoke(T value)
+        {
+            Listeners.InvokeAll(value);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="value"><inheritdoc/></param>
+        public void Invoke(ref T value)
         {
             Listeners.InvokeAll(value);
         }
@@ -152,12 +164,13 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
     /// </summary>
-    public class ModEvent<T1, T2>
+    public class ModEvent<T1, T2> : IModEvent<T1, T2>
     {
         /// <summary>
-        /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        public List<Action<T1, T2>> Listeners { get; private set; } = new List<Action<T1, T2>>();
+        public List<Action<T1, T2>> Listeners => _listeners;
+        private List<Action<T1, T2>> _listeners = new List<Action<T1,T2>>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
@@ -177,36 +190,36 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a new listener to this event. It will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to add as a listener.</param>
+        /// <param name="action"><inheritdoc/></param>
         public void AddListener(Action<T1, T2> action)
         {
             Listeners.Add(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="action"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action<T1, T2> action)
         {
             return Listeners.Remove(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(int index)
         {
             return Listeners.Remove(Listeners.ElementAt(index));
         }
 
         /// <summary>
-        /// Invoke this event, causing all Listeners to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void Invoke(T1 value1, T2 value2)
         {
@@ -223,12 +236,13 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
     /// </summary>
-    public class ModEvent<T1, T2, T3>
+    public class ModEvent<T1, T2, T3> : IModEvent<T1, T2, T3>
     {
         /// <summary>
-        /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        public List<Action<T1, T2, T3>> Listeners { get; private set; } = new List<Action<T1, T2, T3>>();
+        public List<Action<T1, T2, T3>> Listeners => _listeners;
+        private List<Action<T1, T2, T3>> _listeners = new List<Action<T1, T2, T3>>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
@@ -248,36 +262,36 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a new listener to this event. It will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to add as a listener.</param>
+        /// <param name="action"><inheritdoc/></param>
         public void AddListener(Action<T1, T2, T3> action)
         {
             Listeners.Add(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="action"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action<T1, T2, T3> action)
         {
             return Listeners.Remove(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(int index)
         {
             return Listeners.Remove(Listeners.ElementAt(index));
         }
 
         /// <summary>
-        /// Invoke this event, causing all Listeners to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3)
         {
@@ -294,12 +308,14 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
     /// </summary>
-    public class ModEvent<T1, T2, T3, T4>
+    public class ModEvent<T1, T2, T3, T4> : IModEvent<T1, T2, T3, T4>
     {
         /// <summary>
-        /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        public List<Action<T1, T2, T3, T4>> Listeners { get; private set; } = new List<Action<T1, T2, T3, T4>>();
+        public List<Action<T1, T2, T3, T4>> Listeners => _listeners;
+        private List<Action<T1, T2, T3, T4>> _listeners = new List<Action<T1, T2, T3, T4>>();
+
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
@@ -319,36 +335,36 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a new listener to this event. It will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to add as a listener.</param>
+        /// <param name="action"><inheritdoc/></param>
         public void AddListener(Action<T1, T2, T3, T4> action)
         {
             Listeners.Add(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="action"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action<T1, T2, T3, T4> action)
         {
             return Listeners.Remove(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(int index)
         {
             return Listeners.Remove(Listeners.ElementAt(index));
         }
 
         /// <summary>
-        /// Invoke this event, causing all Listeners to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4)
         {
@@ -365,12 +381,13 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
     /// </summary>
-    public class ModEvent<T1, T2, T3, T4, T5>
+    public class ModEvent<T1, T2, T3, T4, T5> : IModEvent<T1, T2, T3, T4, T5>
     {
         /// <summary>
-        /// All of the current listeners on this event. Each will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        public List<Action<T1, T2, T3, T4, T5>> Listeners { get; private set; } = new List<Action<T1, T2, T3, T4, T5>>();
+        public List<Action<T1, T2, T3, T4, T5>> Listeners => _listeners;
+        private List<Action<T1, T2, T3, T4, T5>> _listeners = new List<Action<T1, T2, T3, T4, T5>>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
@@ -390,36 +407,36 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a new listener to this event. It will be activated whenever <see cref="Invoke"/> is called.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to add as a listener.</param>
+        /// <param name="action"><inheritdoc/></param>
         public void AddListener(Action<T1, T2, T3, T4, T5> action)
         {
             Listeners.Add(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="action">Action to remove</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="action"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action<T1, T2, T3, T4, T5> action)
         {
             return Listeners.Remove(action);
         }
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="index">The index of the Action to remove.</param>
-        /// <returns>If removal is successful this will return true, otherwise false.</returns>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(int index)
         {
             return Listeners.Remove(Listeners.ElementAt(index));
         }
 
         /// <summary>
-        /// Invoke this event, causing all Listeners to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
         {

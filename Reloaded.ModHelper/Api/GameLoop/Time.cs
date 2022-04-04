@@ -5,22 +5,24 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// Provides information about Time. Must be connected to a <see cref="GameLoop"/> to function properly.
     /// </summary>
-    public class Time
+    public class Time : ITime
     {
         /// <summary>
-        /// How much time has passed, in seconds, between the last GameLoop iteration and the current one.
+        /// <inheritdoc/>
         /// </summary>
-        public double DeltaTime { get; protected set; }
+        public double DeltaTime => _deltaTime;
+        private double _deltaTime;
 
         /// <summary>
-        /// The total number of milliseconds that have passed since initialization.
+        /// <inheritdoc/>
         /// </summary>
-        public double TotalMilliseconds { get; protected set; }
+        public double TotalMilliseconds => _totalMilliseconds;
+        private double _totalMilliseconds;
 
         /// <summary>
-        /// The total number of seconds that have passed since initialization.
+        /// <inheritdoc/>
         /// </summary>
-        public double TotalSeconds { get => TotalMilliseconds * 1000; }
+        public double TotalSeconds => TotalMilliseconds * 1000;
 
         /// <summary>
         /// Used to track time between update calls.
@@ -41,7 +43,7 @@ namespace Reloaded.ModHelper
         /// Creates an instance of this class with a Gameloop, allowing it to update properly.
         /// </summary>
         /// <param name="gameLoop">The game loop to initialize with, allowing access to Time info about the loop.</param>
-        public Time(GameLoop gameLoop)
+        public Time(IGameLoop gameLoop)
         {
             stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -54,8 +56,8 @@ namespace Reloaded.ModHelper
         /// </summary>
         protected virtual void Update()
         {
-            TotalMilliseconds = stopwatch.ElapsedMilliseconds;
-            DeltaTime = CalcDeltaTime();
+            _totalMilliseconds = stopwatch.ElapsedMilliseconds;
+            _deltaTime = CalcDeltaTime();
         }
 
         /// <summary>

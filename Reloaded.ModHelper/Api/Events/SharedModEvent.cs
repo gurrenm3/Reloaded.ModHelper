@@ -11,12 +11,12 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent
+    public class SharedModEvent : ISharedModEvent
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
-        protected Dictionary<Assembly, ModEvent> modEvents = new Dictionary<Assembly, ModEvent>();
+        protected Dictionary<Assembly, IModEvent> modEvents = new Dictionary<Assembly, IModEvent>();
 
         /// <summary>
         /// Creates an instance of this class.
@@ -27,11 +27,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a Listener to the <see cref="ModEvent"/> associated with the mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to add to the event.</param>
-        /// <returns>True if it was successfully added, otherwise false. It would fail to add if 
-        /// the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool AddListener(Action listener)
         {
             var modEvent = GetModEvent();
@@ -43,11 +42,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Remove a Listener from the <see cref="ModEvent"/> associated with the mod that called the method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to remove from the event.</param>
-        /// <returns>True if it was successfully removed, otherwise false. It would fail to remove
-        /// if the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action listener)
         {
             var modEvent = GetModEvent();
@@ -55,7 +53,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this event, causing every Listeners from every mod to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void InvokeAll()
         {
@@ -66,7 +64,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this event, causing only the listeners from THIS MOD to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void Invoke()
         {
@@ -74,10 +72,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Returns the ModEvent associated with the Mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <returns></returns>
-        public ModEvent GetModEvent()
+        /// <returns><inheritdoc/></returns>
+        public IModEvent GetModEvent()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null)
@@ -111,12 +109,12 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent<T1>
+    public class SharedModEvent<T1> : ISharedModEvent<T1>
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
-        protected Dictionary<Assembly, ModEvent<T1>> modEvents = new Dictionary<Assembly, ModEvent<T1>>();
+        protected Dictionary<Assembly, IModEvent<T1>> modEvents = new Dictionary<Assembly, IModEvent<T1>>();
 
         /// <summary>
         /// Creates an instance of this class.
@@ -127,11 +125,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a Listener to the <see cref="ModEvent"/> associated with the mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to add to the event.</param>
-        /// <returns>True if it was successfully added, otherwise false. It would fail to add if 
-        /// the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool AddListener(Action<T1> listener)
         {
             var modEvent = GetModEvent();
@@ -143,11 +140,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Remove a Listener from the <see cref="ModEvent"/> associated with the mod that called the method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to remove from the event.</param>
-        /// <returns>True if it was successfully removed, otherwise false. It would fail to remove
-        /// if the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action<T1> listener)
         {
             var modEvent = GetModEvent();
@@ -155,7 +151,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this event, causing every Listeners from every mod to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void InvokeAll(T1 value)
         {
@@ -165,8 +161,16 @@ namespace Reloaded.ModHelper
             }
         }
 
+        public void InvokeAll(ref T1 value)
+        {
+            for (int i = 0; i < modEvents.Count; i++)
+            {
+                modEvents.ElementAt(i).Value?.Invoke(ref value);
+            }
+        }
+
         /// <summary>
-        /// Invoke this event, causing only the listeners from THIS MOD to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void Invoke(T1 value)
         {
@@ -174,10 +178,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Returns the ModEvent associated with the Mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <returns></returns>
-        public ModEvent<T1> GetModEvent()
+        /// <returns><inheritdoc/></returns>
+        public IModEvent<T1> GetModEvent()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null)
@@ -211,12 +215,12 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent<T1, T2>
+    public class SharedModEvent<T1, T2> : ISharedModEvent<T1, T2>
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
-        protected Dictionary<Assembly, ModEvent<T1, T2>> modEvents = new Dictionary<Assembly, ModEvent<T1, T2>>();
+        protected Dictionary<Assembly, IModEvent<T1, T2>> modEvents = new Dictionary<Assembly, IModEvent<T1, T2>>();
 
         /// <summary>
         /// Creates an instance of this class.
@@ -227,11 +231,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a Listener to the <see cref="ModEvent"/> associated with the mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to add to the event.</param>
-        /// <returns>True if it was successfully added, otherwise false. It would fail to add if 
-        /// the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool AddListener(Action<T1, T2> listener)
         {
             var modEvent = GetModEvent();
@@ -243,11 +246,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Remove a Listener from the <see cref="ModEvent"/> associated with the mod that called the method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to remove from the event.</param>
-        /// <returns>True if it was successfully removed, otherwise false. It would fail to remove
-        /// if the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action<T1, T2> listener)
         {
             var modEvent = GetModEvent();
@@ -255,7 +257,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this event, causing every Listeners from every mod to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void InvokeAll(T1 value1, T2 value2)
         {
@@ -266,7 +268,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this event, causing only the listeners from THIS MOD to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void Invoke(T1 value1, T2 value2)
         {
@@ -274,10 +276,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Returns the ModEvent associated with the Mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <returns></returns>
-        public ModEvent<T1, T2> GetModEvent()
+        /// <returns><inheritdoc/></returns>
+        public IModEvent<T1, T2> GetModEvent()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null)
@@ -311,12 +313,12 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent<T1, T2, T3>
+    public class SharedModEvent<T1, T2, T3> : ISharedModEvent<T1, T2, T3>
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
-        protected Dictionary<Assembly, ModEvent<T1, T2, T3>> modEvents = new Dictionary<Assembly, ModEvent<T1, T2, T3>>();
+        protected Dictionary<Assembly, IModEvent<T1, T2, T3>> modEvents = new Dictionary<Assembly, IModEvent<T1, T2, T3>>();
 
         /// <summary>
         /// Creates an instance of this class.
@@ -327,11 +329,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a Listener to the <see cref="ModEvent"/> associated with the mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to add to the event.</param>
-        /// <returns>True if it was successfully added, otherwise false. It would fail to add if 
-        /// the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool AddListener(Action<T1, T2, T3> listener)
         {
             var modEvent = GetModEvent();
@@ -343,11 +344,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Remove a Listener from the <see cref="ModEvent"/> associated with the mod that called the method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to remove from the event.</param>
-        /// <returns>True if it was successfully removed, otherwise false. It would fail to remove
-        /// if the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action<T1, T2, T3> listener)
         {
             var modEvent = GetModEvent();
@@ -355,7 +355,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this event, causing every Listeners from every mod to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void InvokeAll(T1 value1, T2 value2, T3 value3)
         {
@@ -366,7 +366,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this event, causing only the listeners from THIS MOD to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3)
         {
@@ -374,10 +374,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Returns the ModEvent associated with the Mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <returns></returns>
-        public ModEvent<T1, T2, T3> GetModEvent()
+        /// <returns><inheritdoc/></returns>
+        public IModEvent<T1, T2, T3> GetModEvent()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null)
@@ -411,12 +411,12 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent<T1, T2, T3, T4>
+    public class SharedModEvent<T1, T2, T3, T4> : ISharedModEvent<T1, T2, T3, T4>
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
-        protected Dictionary<Assembly, ModEvent<T1, T2, T3, T4>> modEvents = new Dictionary<Assembly, ModEvent<T1, T2, T3, T4>>();
+        protected Dictionary<Assembly, IModEvent<T1, T2, T3, T4>> modEvents = new Dictionary<Assembly, IModEvent<T1, T2, T3, T4>>();
 
         /// <summary>
         /// Creates an instance of this class.
@@ -427,11 +427,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a Listener to the <see cref="ModEvent"/> associated with the mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to add to the event.</param>
-        /// <returns>True if it was successfully added, otherwise false. It would fail to add if 
-        /// the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool AddListener(Action<T1, T2, T3, T4> listener)
         {
             var modEvent = GetModEvent();
@@ -443,11 +442,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Remove a Listener from the <see cref="ModEvent"/> associated with the mod that called the method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to remove from the event.</param>
-        /// <returns>True if it was successfully removed, otherwise false. It would fail to remove
-        /// if the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action<T1, T2, T3, T4> listener)
         {
             var modEvent = GetModEvent();
@@ -455,7 +453,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this event, causing every Listeners from every mod to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void InvokeAll(T1 value1, T2 value2, T3 value3, T4 value4)
         {
@@ -466,7 +464,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this event, causing only the listeners from THIS MOD to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4)
         {
@@ -474,10 +472,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Returns the ModEvent associated with the Mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <returns></returns>
-        public ModEvent<T1, T2, T3, T4> GetModEvent()
+        /// <returns><inheritdoc/></returns>
+        public IModEvent<T1, T2, T3, T4> GetModEvent()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null)
@@ -511,12 +509,12 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent<T1, T2, T3, T4, T5>
+    public class SharedModEvent<T1, T2, T3, T4, T5> : ISharedModEvent<T1, T2, T3, T4, T5>
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
-        protected Dictionary<Assembly, ModEvent<T1, T2, T3, T4, T5>> modEvents = new Dictionary<Assembly, ModEvent<T1, T2, T3, T4, T5>>();
+        protected Dictionary<Assembly, IModEvent<T1, T2, T3, T4, T5>> modEvents = new Dictionary<Assembly, IModEvent<T1, T2, T3, T4, T5>>();
 
         /// <summary>
         /// Creates an instance of this class.
@@ -527,11 +525,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Add a Listener to the <see cref="ModEvent"/> associated with the mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to add to the event.</param>
-        /// <returns>True if it was successfully added, otherwise false. It would fail to add if 
-        /// the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool AddListener(Action<T1, T2, T3, T4, T5> listener)
         {
             var modEvent = GetModEvent();
@@ -543,11 +540,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Remove a Listener from the <see cref="ModEvent"/> associated with the mod that called the method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener">The code to remove from the event.</param>
-        /// <returns>True if it was successfully removed, otherwise false. It would fail to remove
-        /// if the method failed to aquire the Assembly of the mod that called the method.</returns>
+        /// <param name="listener"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool RemoveListener(Action<T1, T2, T3, T4, T5> listener)
         {
             var modEvent = GetModEvent();
@@ -555,7 +551,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this event, causing every Listeners from every mod to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void InvokeAll(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
         {
@@ -566,7 +562,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this event, causing only the listeners from THIS MOD to execute.
+        /// <inheritdoc/>
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
         {
@@ -574,10 +570,10 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Returns the ModEvent associated with the Mod that called this method.
+        /// <inheritdoc/>
         /// </summary>
-        /// <returns></returns>
-        public ModEvent<T1, T2, T3, T4, T5> GetModEvent()
+        /// <returns><inheritdoc/></returns>
+        public IModEvent<T1, T2, T3, T4, T5> GetModEvent()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null)

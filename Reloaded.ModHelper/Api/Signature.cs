@@ -40,14 +40,14 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="cacheResult">Should the result be cached so it can be accessed later?</param>
         /// <returns></returns>
-        /// <remarks>Uses Uses to <see cref="Scanner.CompiledFindPattern(CompiledScanPattern, int)"/> to find the address
+        /// <remarks>Uses Uses to <see cref="Scanner.FindPattern_Compiled(string)"/> to find the address
         /// and combines it with the baseAddress of the game to get the final address.</remarks>
         public long Scan(bool cacheResult = true)
         {
             if (cachedScanAddress != -1 && cacheResult)
                 return cachedScanAddress;
 
-            var searchResult = scanner.CompiledFindPattern(sigPattern);
+            var searchResult = scanner.FindPattern_Compiled(sigPattern);
             var scanAddress = baseAddress + searchResult.Offset;
             return cacheResult ? cachedScanAddress = scanAddress : scanAddress;
         }

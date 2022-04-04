@@ -15,7 +15,15 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public override long LoopCount { get; protected set; }
+        public override long LoopCount => _loopCount;
+        private long _loopCount;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public override ITime Time => _time;
+        private ITime _time;
+
 
         private CancellationTokenSource loopCancellation;
         private Task loopTask;
@@ -35,11 +43,11 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Used to create the actual loop. Should only be called once when the loop is first started.
         /// </summary>
-        public override GameLoop Initialize()
+        public override IGameLoop Initialize()
         {
             if (isLoopCreated) return this;
-
-            Time = new Time(this);
+            
+            _time = new Time(this);
             loopCancellation = new CancellationTokenSource();
             loopTask = new Task(() =>
             {
@@ -63,7 +71,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         protected virtual void RunLoopInternal()
         {
-            LoopCount++;
+            _loopCount++;
         }
 
         /// <summary>

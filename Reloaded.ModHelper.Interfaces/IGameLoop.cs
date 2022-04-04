@@ -2,29 +2,17 @@
 
 namespace Reloaded.ModHelper
 {
-    /// <summary>
-    /// A class for creating and managing a Game's loop.
-    /// </summary>
-    public abstract class GameLoop : IGameLoop
+    public interface IGameLoop
     {
         /// <summary>
-        /// <inheritdoc/>
+        /// Contains information about the Time of this Game Loop, for example the time between frames.
         /// </summary>
         public abstract ITime Time { get; }
 
         /// <summary>
-        /// <inheritdoc/>
+        /// The total number of times the loop has run.
         /// </summary>
         public abstract long LoopCount { get; }
-
-
-        /// <summary>
-        /// Creates a <see cref="GameLoop"/> with default implementation.
-        /// </summary>
-        public GameLoop()
-        {
-            
-        }
 
         /// <summary>
         /// Used to create the actual loop. If you are hooking the game's actual loop than you would

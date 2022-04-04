@@ -16,12 +16,24 @@ namespace Reloaded.ModHelper
         /// Need to use this instead of Assembly.GetCallingAssembly() for API methods
         /// </summary>
         /// <returns></returns>
-        private static Assembly GetCallingAssemblyByStackTrace()
+        private static Assembly GetCallingAssemblyByStackTrace(int asmIndex)
         {
-            Assembly thisAssembly = Assembly.GetExecutingAssembly();
+            // this doesn't work when there's an API using the ModHelper API. 
+            //return stackAssemblies.FirstOrDefault(ownerAssembly => ownerAssembly != thisAssembly); 
+
+            var stackAssemblies = GetCallingAssembliesByStackTrace();
+            return stackAssemblies[asmIndex];
+        }
+
+        /// <summary>
+        /// Returns all of the assemblies that are involved in calling this method.
+        /// </summary>
+        /// <returns></returns>
+        public static List<Assembly> GetCallingAssembliesByStackTrace()
+        {
             List<Assembly> stackAssemblies = new List<Assembly>();
             new StackTrace().GetFrames().ForEach(frame => stackAssemblies.Add(frame.GetMethod().DeclaringType.Assembly));
-            return stackAssemblies.FirstOrDefault(ownerAssembly => ownerAssembly != thisAssembly);
+            return stackAssemblies;
         }
 
         /// <summary>
@@ -29,9 +41,10 @@ namespace Reloaded.ModHelper
         /// return the API assembly, otherwise it will return a mod's assembly
         /// </summary>
         /// <returns></returns>
-        public static Assembly GetCallingAssembly()
+        public static Assembly GetCallingAssembly(int asmIndex = 6)
         {
-            var callingAsm = GetCallingAssemblyByStackTrace();
+            var callingAsm = GetCallingAssemblyByStackTrace(asmIndex);
+
             return callingAsm.FullName.Contains("System.Private.CoreLib")
                 ? Assembly.GetExecutingAssembly() : callingAsm;
         }

@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Reloaded.Memory.Sigscan" Version="1.2.1" />
-    <PackageReference Include="Reloaded.Mod.Interfaces" Version="2.0.0" />
+    <PackageReference Include="Reloaded.Memory.Sigscan" Version="2.0.0" />
+    <PackageReference Include="Reloaded.Mod.Interfaces" Version="2.1.0" />
     <PackageReference Include="Reloaded.SharedLib.Hooks" Version="1.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Reloaded.ModHelper.Interfaces\Reloaded.ModHelper.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

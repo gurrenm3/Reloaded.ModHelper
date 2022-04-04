@@ -51,8 +51,8 @@ namespace Reloaded.ModHelper.Testing
         public void StartEx(IModLoaderV1 loaderApi, IModConfigV1 modConfig)
         {
 #if DEBUG
-        // Attaches debugger in debug mode; ignored in release.
-        Debugger.Launch();
+            // Attaches debugger in debug mode; ignored in release.
+            Debugger.Launch();
 #endif
 
             _modLoader = (IModLoader)loaderApi;
@@ -71,8 +71,7 @@ namespace Reloaded.ModHelper.Testing
                 Your mod code starts below.
                 Visit https://github.com/Reloaded-Project for additional optional libraries.
             */
-            _mod = new Mod(_logger);
-            _mod.RegisterHooks(_hooks);
+            _mod = new Mod(_modConfig, _hooks, _logger);
         }
 
         private void OnConfigurationUpdated(IConfigurable obj)
