@@ -9,7 +9,7 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// Represents a ModEvent that works best with Hooks.
     /// <br/>Can be used to fire a mod event before and after a hook runs.
-    /// </summary>
+    /// </summary
     public interface IModEventHook
     {
         /// <summary>
@@ -33,7 +33,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Use this before the hook executes.
         /// </summary>
-        public IModEvent<T1> Prefix { get; set; }
+        public IModEvent<EventParams<T1>> Prefix { get; set; }
 
         /// <summary>
         /// Use this after the hook executes.
@@ -52,7 +52,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Use this before the hook executes.
         /// </summary>
-        public IModEvent<T1, T2> Prefix { get; set; }
+        public IModEvent<EventParams<T1, T2>> Prefix { get; set; }
 
         /// <summary>
         /// Use this after the hook executes.
@@ -72,7 +72,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Use this before the hook executes.
         /// </summary>
-        public IModEvent<T1, T2, T3> Prefix { get; set; }
+        public IModEvent<EventParams<T1, T2, T3>> Prefix { get; set; }
 
         /// <summary>
         /// Use this after the hook executes.
@@ -91,7 +91,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Use this before the hook executes.
         /// </summary>
-        public IModEvent<T1, T2, T3, T4> Prefix { get; set; }
+        public IModEvent<EventParams<T1, T2, T3, T4>> Prefix { get; set; }
 
         /// <summary>
         /// Use this after the hook executes.
@@ -110,7 +110,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Use this before the hook executes.
         /// </summary>
-        public IModEvent<T1, T2, T3, T4, T5> Prefix { get; set; }
+        public IModEvent<EventParams<T1, T2, T3, T4, T5>> Prefix { get; set; }
 
         /// <summary>
         /// Use this after the hook executes.

@@ -32,7 +32,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<T1> Prefix { get; set; } = new ModEvent<T1>();
+        public IModEvent<EventParams<T1>> Prefix { get; set; } = new ModEvent<EventParams<T1>>();
 
         /// <summary>
         /// <inheritdoc/>
@@ -50,7 +50,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<T1, T2> Prefix { get; set; } = new ModEvent<T1, T2>();
+        public IModEvent<EventParams<T1, T2>> Prefix { get; set; } = new ModEvent<EventParams<T1, T2>>();
 
         /// <summary>
         /// <inheritdoc/>
@@ -68,7 +68,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<T1, T2, T3> Prefix { get; set; } = new ModEvent<T1, T2, T3>();
+        public IModEvent<EventParams<T1, T2, T3>> Prefix { get; set; } = new ModEvent<EventParams<T1, T2, T3>>();
 
         /// <summary>
         /// <inheritdoc/>
@@ -86,7 +86,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<T1, T2, T3, T4> Prefix { get; set; } = new ModEvent<T1, T2, T3, T4>();
+        public IModEvent<EventParams<T1, T2, T3, T4>> Prefix { get; set; } = new ModEvent<EventParams<T1, T2, T3, T4>>();
 
         /// <summary>
         /// <inheritdoc/>
@@ -104,7 +104,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<T1, T2, T3, T4, T5> Prefix { get; set; } = new ModEvent<T1, T2, T3, T4, T5>();
+        public IModEvent<EventParams<T1, T2, T3, T4, T5>> Prefix { get; set; } = new ModEvent<EventParams<T1, T2, T3, T4, T5>>();
 
         /// <summary>
         /// <inheritdoc/>

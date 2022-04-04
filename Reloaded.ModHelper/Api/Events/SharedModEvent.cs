@@ -206,17 +206,6 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(ref T1 value1)
-        {
-            for (int i = 0; i < modEvents.Count; i++)
-            {
-                modEvents.ElementAt(i).Value?.Invoke(ref value1);
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         /// <returns><inheritdoc/></returns>
         public IModEvent<T1> GetModEvent()
         {
@@ -327,17 +316,6 @@ namespace Reloaded.ModHelper
             for (int i = 0; i < modEvents.Count; i++)
             {
                 modEvents.ElementAt(i).Value?.Invoke(value1, value2);
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void Invoke(ref T1 value1, ref T2 value2)
-        {
-            for (int i = 0; i < modEvents.Count; i++)
-            {
-                modEvents.ElementAt(i).Value?.Invoke(ref value1, ref value2);
             }
         }
 
@@ -460,17 +438,6 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3)
-        {
-            for (int i = 0; i < modEvents.Count; i++)
-            {
-                modEvents.ElementAt(i).Value?.Invoke(ref value1, ref value2, ref value3);
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         /// <returns><inheritdoc/></returns>
         public IModEvent<T1, T2, T3> GetModEvent()
         {
@@ -587,17 +554,6 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3, ref T4 value4)
-        {
-            for (int i = 0; i < modEvents.Count; i++)
-            {
-                modEvents.ElementAt(i).Value?.Invoke(ref value1, ref value2, ref value3, ref value4);
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         /// <returns><inheritdoc/></returns>
         public IModEvent<T1, T2, T3, T4> GetModEvent()
         {
@@ -708,17 +664,6 @@ namespace Reloaded.ModHelper
             for (int i = 0; i < modEvents.Count; i++)
             {
                 modEvents.ElementAt(i).Value?.Invoke(value1, value2, value3, value4, value5);
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3, ref T4 value4, ref T5 value5)
-        {
-            for (int i = 0; i < modEvents.Count; i++)
-            {
-                modEvents.ElementAt(i).Value?.Invoke(ref value1, ref value2, ref value3, ref value4, ref value5);
             }
         }
 

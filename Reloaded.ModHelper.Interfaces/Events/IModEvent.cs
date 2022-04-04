@@ -20,14 +20,14 @@ namespace Reloaded.ModHelper
         public void AddListener(Action action);
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// Remove a listener from this ModEvent.
         /// </summary>
         /// <param name="index">The index of the Action to remove.</param>
         /// <returns>If removal is successful this will return true, otherwise false.</returns>
         public bool RemoveListener(int index);
 
         /// <summary>
-        /// Remove a listener from <see cref="Listeners"/>
+        /// Remove a listener from this ModEvent.
         /// </summary>
         /// <param name="action">Action to remove</param>
         /// <returns>If removal is successful this will return true, otherwise false.</returns>
@@ -102,11 +102,6 @@ namespace Reloaded.ModHelper
         public void Invoke(T1 value);
 
         /// <summary>
-        /// Invoke this event, causing all Listeners to execute.
-        /// </summary>
-        public void Invoke(ref T1 value);
-
-        /// <summary>
         /// Implicitly add a listener to this ModEvent.
         /// </summary>
         /// <param name="modEvent"></param>
@@ -169,10 +164,6 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1, T2 value2);
 
-        /// <summary>
-        /// Invoke this event, causing all Listeners to execute.
-        /// </summary>
-        public void Invoke(ref T1 value1, ref T2 value2);
 
         /// <summary>
         /// Implicitly add a listener to this ModEvent.
@@ -235,11 +226,7 @@ namespace Reloaded.ModHelper
         /// Invoke this event, causing all Listeners to execute.
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3);
-
-        /// <summary>
-        /// Invoke this event, causing all Listeners to execute.
-        /// </summary>
-        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3);
+        
 
         /// <summary>
         /// Implicitly add a listener to this ModEvent.
@@ -303,10 +290,6 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4);
 
-        /// <summary>
-        /// Invoke this event, causing all Listeners to execute.
-        /// </summary>
-        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3, ref T4 value4);
 
         /// <summary>
         /// Implicitly add a listener to this ModEvent.
@@ -370,10 +353,6 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5);
 
-        /// <summary>
-        /// Invoke this event, causing all Listeners to execute.
-        /// </summary>
-        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3, ref T4 value4, ref T5 value5);
 
         /// <summary>
         /// Implicitly add a listener to this ModEvent.
