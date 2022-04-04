@@ -9,17 +9,17 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public class SharedModEventHook : ISharedModEventHook
+    public class SharedModEventHook : IModEventHook
     {
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent Prefix { get; set; } = new SharedModEvent();
+        public IModEvent Prefix { get; set; } = new SharedModEvent();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent Postfix { get; set; } = new SharedModEvent();
+        public IModEvent Postfix { get; set; } = new SharedModEvent();
     }
 
 
@@ -27,17 +27,17 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public class SharedModEventHook<T1> : ISharedModEventHook<T1>
+    public class SharedModEventHook<T1> : IModEventHook<T1>
     {
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent<T1> Prefix { get; set; } = new SharedModEvent<T1>();
+        public IModEvent<T1> Prefix { get; set; } = new SharedModEvent<T1>();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent<T1> Postfix { get; set; } = new SharedModEvent<T1>();
+        public IModEvent<T1> Postfix { get; set; } = new SharedModEvent<T1>();
     }
 
 
@@ -45,17 +45,17 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public class SharedModEventHook<T1, T2> : ISharedModEventHook<T1, T2>
+    public class SharedModEventHook<T1, T2> : IModEventHook<T1, T2>
     {
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent<T1, T2> Prefix { get; set; } = new SharedModEvent<T1, T2>();
+        public IModEvent<T1, T2> Prefix { get; set; } = new SharedModEvent<T1, T2>();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent<T1, T2> Postfix { get; set; } = new SharedModEvent<T1, T2>();
+        public IModEvent<T1, T2> Postfix { get; set; } = new SharedModEvent<T1, T2>();
     }
 
 
@@ -63,17 +63,17 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public class SharedModEventHook<T1, T2, T3> : ISharedModEventHook<T1, T2, T3>
+    public class SharedModEventHook<T1, T2, T3> : IModEventHook<T1, T2, T3>
     {
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent<T1, T2, T3> Prefix { get; set; } = new SharedModEvent<T1, T2, T3>();
+        public IModEvent<T1, T2, T3> Prefix { get; set; } = new SharedModEvent<T1, T2, T3>();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent<T1, T2, T3> Postfix { get; set; } = new SharedModEvent<T1, T2, T3>();
+        public IModEvent<T1, T2, T3> Postfix { get; set; } = new SharedModEvent<T1, T2, T3>();
     }
 
 
@@ -81,17 +81,17 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public class SharedModEventHook<T1, T2, T3, T4> : ISharedModEventHook<T1, T2, T3, T4>
+    public class SharedModEventHook<T1, T2, T3, T4> : IModEventHook<T1, T2, T3, T4>
     {
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent<T1, T2, T3, T4> Prefix { get; set; } = new SharedModEvent<T1, T2, T3, T4>();
+        public IModEvent<T1, T2, T3, T4> Prefix { get; set; } = new SharedModEvent<T1, T2, T3, T4>();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent<T1, T2, T3, T4> Postfix { get; set; } = new SharedModEvent<T1, T2, T3, T4>();
+        public IModEvent<T1, T2, T3, T4> Postfix { get; set; } = new SharedModEvent<T1, T2, T3, T4>();
     }
 
 
@@ -99,16 +99,16 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public class SharedModEventHook<T1, T2, T3, T4, T5> : ISharedModEventHook<T1, T2, T3, T4, T5>
+    public class SharedModEventHook<T1, T2, T3, T4, T5> : IModEventHook<T1, T2, T3, T4, T5>
     {
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent<T1, T2, T3, T4, T5> Prefix { get; set; } = new SharedModEvent<T1, T2, T3, T4, T5>();
+        public IModEvent<T1, T2, T3, T4, T5> Prefix { get; set; } = new SharedModEvent<T1, T2, T3, T4, T5>();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ISharedModEvent<T1, T2, T3, T4, T5> Postfix { get; set; } = new SharedModEvent<T1, T2, T3, T4, T5>();
+        public IModEvent<T1, T2, T3, T4, T5> Postfix { get; set; } = new SharedModEvent<T1, T2, T3, T4, T5>();
     }
 }

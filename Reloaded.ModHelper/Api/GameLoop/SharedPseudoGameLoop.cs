@@ -41,7 +41,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         protected override void RunLoop()
         {
-            ModEvents.InvokeAll();
+            ModEvents.Invoke();
         }
     }
 }

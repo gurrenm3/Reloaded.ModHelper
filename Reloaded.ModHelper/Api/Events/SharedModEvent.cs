@@ -11,7 +11,7 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent : ISharedModEvent
+    public class SharedModEvent : IModEvent
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -27,18 +27,42 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
+        /// <inheritdoc/> Only returns listeners for this mod.
+        /// </summary>
+        /// <returns></returns>
+        public List<Action> GetListeners()
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
+                return null;
+
+            return modEvent.GetListeners();
+        }
+
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool AddListener(Action listener)
+        public void AddListener(Action listener)
         {
             var modEvent = GetModEvent();
-            if (modEvent == null)
+            if (modEvent != null)
+                modEvent.AddListener(listener);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        public bool RemoveListener(int index)
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return false;
 
-            modEvent.AddListener(listener);
-            return true;
+            return modEvent.RemoveListener(index);
         }
 
         /// <summary>
@@ -55,20 +79,12 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void InvokeAll()
+        public void Invoke()
         {
             for (int i = 0; i < modEvents.Count; i++)
             {
                 modEvents.ElementAt(i).Value?.Invoke();
             }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public void Invoke()
-        {
-            GetModEvent()?.Invoke();
         }
 
         /// <summary>
@@ -109,7 +125,7 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent<T1> : ISharedModEvent<T1>
+    public class SharedModEvent<T1> : IModEvent<T1>
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -125,18 +141,44 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
+        /// <inheritdoc/> Only returns listeners for this mod.
+        /// </summary>
+        /// <returns></returns>
+        public List<Action<T1>> GetListeners()
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
+                return null;
+
+            return modEvent.GetListeners();
+        }
+
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool AddListener(Action<T1> listener)
+        public void AddListener(Action<T1> listener)
         {
             var modEvent = GetModEvent();
             if (modEvent == null)
-                return false;
+                return;
 
             modEvent.AddListener(listener);
-            return true;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        public bool RemoveListener(int index)
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
+                return false;
+
+            return modEvent.RemoveListener(index);
         }
 
         /// <summary>
@@ -153,28 +195,23 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void InvokeAll(T1 value)
+        public void Invoke(T1 value1)
         {
             for (int i = 0; i < modEvents.Count; i++)
             {
-                modEvents.ElementAt(i).Value?.Invoke(value);
-            }
-        }
-
-        public void InvokeAll(ref T1 value)
-        {
-            for (int i = 0; i < modEvents.Count; i++)
-            {
-                modEvents.ElementAt(i).Value?.Invoke(ref value);
+                modEvents.ElementAt(i).Value?.Invoke(value1);
             }
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(T1 value)
+        public void Invoke(ref T1 value1)
         {
-            GetModEvent()?.Invoke(value);
+            for (int i = 0; i < modEvents.Count; i++)
+            {
+                modEvents.ElementAt(i).Value?.Invoke(ref value1);
+            }
         }
 
         /// <summary>
@@ -215,7 +252,7 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent<T1, T2> : ISharedModEvent<T1, T2>
+    public class SharedModEvent<T1, T2> : IModEvent<T1, T2>
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -231,18 +268,44 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
+        /// <inheritdoc/> Only returns listeners for this mod.
+        /// </summary>
+        /// <returns></returns>
+        public List<Action<T1, T2>> GetListeners()
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
+                return null;
+
+            return modEvent.GetListeners();
+        }
+
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool AddListener(Action<T1, T2> listener)
+        public void AddListener(Action<T1, T2> listener)
         {
             var modEvent = GetModEvent();
             if (modEvent == null)
-                return false;
+                return;
 
             modEvent.AddListener(listener);
-            return true;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        public bool RemoveListener(int index)
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
+                return false;
+
+            return modEvent.RemoveListener(index);
         }
 
         /// <summary>
@@ -259,7 +322,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void InvokeAll(T1 value1, T2 value2)
+        public void Invoke(T1 value1, T2 value2)
         {
             for (int i = 0; i < modEvents.Count; i++)
             {
@@ -270,9 +333,12 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(T1 value1, T2 value2)
+        public void Invoke(ref T1 value1, ref T2 value2)
         {
-            GetModEvent()?.Invoke(value1, value2);
+            for (int i = 0; i < modEvents.Count; i++)
+            {
+                modEvents.ElementAt(i).Value?.Invoke(ref value1, ref value2);
+            }
         }
 
         /// <summary>
@@ -313,7 +379,7 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent<T1, T2, T3> : ISharedModEvent<T1, T2, T3>
+    public class SharedModEvent<T1, T2, T3> : IModEvent<T1, T2, T3>
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -329,18 +395,44 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
+        /// <inheritdoc/> Only returns listeners for this mod.
+        /// </summary>
+        /// <returns></returns>
+        public List<Action<T1, T2, T3>> GetListeners()
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
+                return null;
+
+            return modEvent.GetListeners();
+        }
+
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool AddListener(Action<T1, T2, T3> listener)
+        public void AddListener(Action<T1, T2, T3> listener)
         {
             var modEvent = GetModEvent();
             if (modEvent == null)
-                return false;
+                return;
 
             modEvent.AddListener(listener);
-            return true;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        public bool RemoveListener(int index)
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
+                return false;
+
+            return modEvent.RemoveListener(index);
         }
 
         /// <summary>
@@ -357,7 +449,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void InvokeAll(T1 value1, T2 value2, T3 value3)
+        public void Invoke(T1 value1, T2 value2, T3 value3)
         {
             for (int i = 0; i < modEvents.Count; i++)
             {
@@ -368,9 +460,12 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(T1 value1, T2 value2, T3 value3)
+        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3)
         {
-            GetModEvent()?.Invoke(value1, value2, value3);
+            for (int i = 0; i < modEvents.Count; i++)
+            {
+                modEvents.ElementAt(i).Value?.Invoke(ref value1, ref value2, ref value3);
+            }
         }
 
         /// <summary>
@@ -411,7 +506,7 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent<T1, T2, T3, T4> : ISharedModEvent<T1, T2, T3, T4>
+    public class SharedModEvent<T1, T2, T3, T4> : IModEvent<T1, T2, T3, T4>
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -427,18 +522,44 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
+        /// <inheritdoc/> Only returns listeners for this mod.
+        /// </summary>
+        /// <returns></returns>
+        public List<Action<T1, T2, T3, T4>> GetListeners()
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
+                return null;
+
+            return modEvent.GetListeners();
+        }
+
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool AddListener(Action<T1, T2, T3, T4> listener)
+        public void AddListener(Action<T1, T2, T3, T4> listener)
         {
             var modEvent = GetModEvent();
             if (modEvent == null)
-                return false;
+                return;
 
             modEvent.AddListener(listener);
-            return true;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        public bool RemoveListener(int index)
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
+                return false;
+
+            return modEvent.RemoveListener(index);
         }
 
         /// <summary>
@@ -455,7 +576,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void InvokeAll(T1 value1, T2 value2, T3 value3, T4 value4)
+        public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4)
         {
             for (int i = 0; i < modEvents.Count; i++)
             {
@@ -466,9 +587,12 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4)
+        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3, ref T4 value4)
         {
-            GetModEvent()?.Invoke(value1, value2, value3, value4);
+            for (int i = 0; i < modEvents.Count; i++)
+            {
+                modEvents.ElementAt(i).Value?.Invoke(ref value1, ref value2, ref value3, ref value4);
+            }
         }
 
         /// <summary>
@@ -509,7 +633,7 @@ namespace Reloaded.ModHelper
     /// A <see cref="ModEvent"/> that separates listeners by mod assembly. Useful for 
     /// any <see cref="ModEvent"/> that will be shared between multiple mods.
     /// </summary>
-    public class SharedModEvent<T1, T2, T3, T4, T5> : ISharedModEvent<T1, T2, T3, T4, T5>
+    public class SharedModEvent<T1, T2, T3, T4, T5> : IModEvent<T1, T2, T3, T4, T5>
     {
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -525,18 +649,44 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
+        /// <inheritdoc/> Only returns listeners for this mod.
+        /// </summary>
+        /// <returns></returns>
+        public List<Action<T1, T2, T3, T4, T5>> GetListeners()
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
+                return null;
+
+            return modEvent.GetListeners();
+        }
+
+        /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool AddListener(Action<T1, T2, T3, T4, T5> listener)
+        public void AddListener(Action<T1, T2, T3, T4, T5> listener)
         {
             var modEvent = GetModEvent();
             if (modEvent == null)
-                return false;
+                return;
 
             modEvent.AddListener(listener);
-            return true;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="index"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        public bool RemoveListener(int index)
+        {
+            var callingMod = GetCallingMod();
+            if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
+                return false;
+
+            return modEvent.RemoveListener(index);
         }
 
         /// <summary>
@@ -553,7 +703,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void InvokeAll(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
+        public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
         {
             for (int i = 0; i < modEvents.Count; i++)
             {
@@ -564,9 +714,12 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
+        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3, ref T4 value4, ref T5 value5)
         {
-            GetModEvent()?.Invoke(value1, value2, value3, value4, value5);
+            for (int i = 0; i < modEvents.Count; i++)
+            {
+                modEvents.ElementAt(i).Value?.Invoke(ref value1, ref value2, ref value3, ref value4, ref value5);
+            }
         }
 
         /// <summary>

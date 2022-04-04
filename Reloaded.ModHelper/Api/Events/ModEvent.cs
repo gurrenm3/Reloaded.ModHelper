@@ -27,6 +27,15 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
+        public List<Action> GetListeners()
+        {
+            return Listeners;
+        }
+
+        /// <summary>
         /// Creates an instance of <see cref="ModEvent"/> and adds a listener to it.
         /// </summary>
         /// <param name="action">Listener to add.</param>
@@ -82,13 +91,13 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// A custom event type that allows for multiple "listeners" that can easily be invoked all at once.
     /// </summary>
-    public class ModEvent<T> : IModEvent<T>
+    public class ModEvent<T1> : IModEvent<T1>
     {
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public List<Action<T>> Listeners => _listeners;
-        private List<Action<T>> _listeners = new List<Action<T>>();
+        public List<Action<T1>> Listeners => _listeners;
+        private List<Action<T1>> _listeners = new List<Action<T1>>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
@@ -99,10 +108,19 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
+        public List<Action<T1>> GetListeners()
+        {
+            return Listeners;
+        }
+
+        /// <summary>
         /// Creates an instance of <see cref="ModEvent"/> and adds a listener to it.
         /// </summary>
         /// <param name="action">Listener to add.</param>
-        public ModEvent(Action<T> action)
+        public ModEvent(Action<T1> action)
         {
             AddListener(action);
         }
@@ -111,7 +129,7 @@ namespace Reloaded.ModHelper
         /// <inheritdoc/>
         /// </summary>
         /// <param name="action"><inheritdoc/></param>
-        public void AddListener(Action<T> action)
+        public void AddListener(Action<T1> action)
         {
             Listeners.Add(action);
         }
@@ -121,7 +139,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="action"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(Action<T> action)
+        public bool RemoveListener(Action<T1> action)
         {
             return Listeners.Remove(action);
         }
@@ -140,7 +158,7 @@ namespace Reloaded.ModHelper
         /// <inheritdoc/>
         /// </summary>
         /// <param name="value"><inheritdoc/></param>
-        public void Invoke(T value)
+        public void Invoke(T1 value)
         {
             Listeners.InvokeAll(value);
         }
@@ -148,10 +166,12 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="value"><inheritdoc/></param>
-        public void Invoke(ref T value)
+        public void Invoke(ref T1 value1)
         {
-            Listeners.InvokeAll(value);
+            foreach (var listener in GetListeners())
+            {
+                listener.Invoke(value1);
+            }
         }
     }
 
@@ -178,6 +198,15 @@ namespace Reloaded.ModHelper
         public ModEvent()
         {
 
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
+        public List<Action<T1, T2>> GetListeners()
+        {
+            return Listeners;
         }
 
         /// <summary>
@@ -225,6 +254,17 @@ namespace Reloaded.ModHelper
         {
             Listeners.InvokeAll(value1, value2);
         }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void Invoke(ref T1 value1, ref T2 value2)
+        {
+            foreach (var listener in GetListeners())
+            {
+                listener.Invoke(value1, value2);
+            }
+        }
     }
 
     #endregion
@@ -250,6 +290,15 @@ namespace Reloaded.ModHelper
         public ModEvent()
         {
 
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
+        public List<Action<T1, T2, T3>> GetListeners()
+        {
+            return Listeners;
         }
 
         /// <summary>
@@ -297,6 +346,17 @@ namespace Reloaded.ModHelper
         {
             Listeners.InvokeAll(value1, value2, value3);
         }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3)
+        {
+            foreach (var listener in GetListeners())
+            {
+                listener.Invoke(value1, value2, value3);
+            }
+        }
     }
 
     #endregion
@@ -323,6 +383,15 @@ namespace Reloaded.ModHelper
         public ModEvent()
         {
 
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
+        public List<Action<T1, T2, T3, T4>> GetListeners()
+        {
+            return Listeners;
         }
 
         /// <summary>
@@ -370,6 +439,17 @@ namespace Reloaded.ModHelper
         {
             Listeners.InvokeAll(value1, value2, value3, value4);
         }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3, ref T4 value4)
+        {
+            foreach (var listener in GetListeners())
+            {
+                listener.Invoke(value1, value2, value3, value4);
+            }
+        }
     }
 
     #endregion
@@ -395,6 +475,15 @@ namespace Reloaded.ModHelper
         public ModEvent()
         {
 
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <returns></returns>
+        public List<Action<T1, T2, T3, T4, T5>> GetListeners()
+        {
+            return Listeners;
         }
 
         /// <summary>
@@ -441,6 +530,17 @@ namespace Reloaded.ModHelper
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
         {
             Listeners.InvokeAll(value1, value2, value3, value4, value5);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void Invoke(ref T1 value1, ref T2 value2, ref T3 value3, ref T4 value4, ref T5 value5)
+        {
+            foreach (var listener in GetListeners())
+            {
+                listener.Invoke(value1, value2, value3, value4, value5);
+            }
         }
     }
 
