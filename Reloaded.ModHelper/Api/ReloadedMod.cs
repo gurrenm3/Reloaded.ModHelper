@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Reloaded.Hooks.Definitions;
 using Reloaded.Mod.Interfaces;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 
@@ -38,6 +39,12 @@ namespace Reloaded.ModHelper
         public Harmony HarmonyLib { get; protected set; }
 
         /// <summary>
+        /// A list of any <see cref="ModAttrAttribute"/> that were registered for this mod.
+        /// </summary>
+        public List<ModAttrAttribute> LoadedModAttributes => _loadedModAttributes;
+        private List<ModAttrAttribute> _loadedModAttributes;
+
+        /// <summary>
         /// Creates an instance of this class.
         /// </summary>
         public ReloadedMod(IModConfig _config, IReloadedHooks _hooks, ILogger _logger)
@@ -49,6 +56,7 @@ namespace Reloaded.ModHelper
             Logger.WriteLine("Initializing...");
 
             ModAssembly = AssemblyUtils.GetCallingAssembly();
+            ModAttributeLoader.LoadAllFromAssembly(ModAssembly, out _loadedModAttributes);
 
             InitHarmony();
             RegisterHooks();
@@ -73,10 +81,24 @@ namespace Reloaded.ModHelper
         {
             HarmonyLib = CreateHarmonyInstance();
 
-            HarmonyLib.PatchAll(this.ModAssembly);
-            Logger.Write("Harmony instance created with id:  ", insertModName: true);
-            Logger.Write($"\"{HarmonyLib.Id}\"", Color.RosyBrown);
-            Logger.Write($"\n");
+            try
+            {
+                HarmonyLib.PatchAll(this.ModAssembly);
+                Logger.Write("Harmony instance created with id:  ", insertModName: true);
+                Logger.Write($"\"{HarmonyLib.Id}\"", Color.RosyBrown);
+                Logger.Write($"\n");
+            }
+            catch (System.Exception ex)
+            {
+                if (ex.Message == "A non-collectible assembly may not reference a collectible assembly.")
+                {
+                    throw new System.Exception($"Failed to load Harmony. Cannot use Class Attributs with dependencies from other projects/Assemblies." +
+                        $" Check all of your Classes and make sure that none of them are using an Attribute or {nameof(ModAttrAttribute)} that" +
+                        $" references a Type from another mod/Assembly.");
+                }
+                throw;
+            }
+            
         }
 
         private void RegisterHooks()
@@ -84,7 +106,7 @@ namespace Reloaded.ModHelper
             var hookLoader = new HookLoader(this);
 
             bool foundHooks = hookLoader.RegisterHooks();
-            string message = foundHooks ? "Successfully registered hooks from this mod." : "This mod didn't have any hooks to register.";
+            string message = foundHooks ? "Successfully registered hooks from this mod." : "No new hooks were registered in this mod.";
             Logger.WriteLine(message);
         }
     }

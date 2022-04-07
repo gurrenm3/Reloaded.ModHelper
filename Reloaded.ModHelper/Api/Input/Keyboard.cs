@@ -10,6 +10,8 @@ namespace Reloaded.ModHelper
         /// </summary>
         const UInt32 WM_KEYDOWN = 0x0100;
 
+
+
         static Keyboard()
         {
 
