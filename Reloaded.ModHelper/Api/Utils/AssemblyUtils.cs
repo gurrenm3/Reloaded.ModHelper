@@ -12,41 +12,28 @@ namespace Reloaded.ModHelper
     {
         // taken from https://www.codeproject.com/tips/791878/get-calling-assembly-from-stacktrace
         /// <summary>
-        /// Get the assembly that called an API method, based on StackTrace. 
-        /// Need to use this instead of Assembly.GetCallingAssembly() for API methods
-        /// </summary>
-        /// <returns></returns>
-        private static Assembly GetCallingAssemblyByStackTrace(int asmIndex)
-        {
-            // this doesn't work when there's an API using the ModHelper API. 
-            //return stackAssemblies.FirstOrDefault(ownerAssembly => ownerAssembly != thisAssembly); 
-
-            var stackAssemblies = GetCallingAssembliesByStackTrace();
-            return stackAssemblies[asmIndex];
-        }
-
-        /// <summary>
         /// Returns all of the assemblies that are involved in calling this method.
         /// </summary>
         /// <returns></returns>
-        public static List<Assembly> GetCallingAssembliesByStackTrace()
+        public static HashSet<Assembly> GetCallingAssembliesByStackTrace()
         {
-            List<Assembly> stackAssemblies = new List<Assembly>();
+            HashSet<Assembly> stackAssemblies = new HashSet<Assembly>();
             new StackTrace().GetFrames().ForEach(frame => stackAssemblies.Add(frame.GetMethod().DeclaringType.Assembly));
             return stackAssemblies;
         }
 
         /// <summary>
-        /// Get the assembly that used this method. If the API used this method then it will
-        /// return the API assembly, otherwise it will return a mod's assembly
+        /// Get the Assembly that's directly responsible for calling this method.
+        /// <br/><br/><see cref="Assembly.GetCallingAssembly"/> doesn't work if one assembly calls another assembly.
+        /// This method will always return exactly which Assembly was responsible for the call, regardless of who called it
+        /// or how nested the function calls are.
         /// </summary>
         /// <returns></returns>
-        public static Assembly GetCallingAssembly(int asmIndex = 6)
+        public static Assembly GetCallingAssembly()
         {
-            var callingAsm = GetCallingAssemblyByStackTrace(asmIndex);
-
-            return callingAsm.FullName.Contains("System.Private.CoreLib")
-                ? Assembly.GetExecutingAssembly() : callingAsm;
+            var assemblies = GetCallingAssembliesByStackTrace();
+            var callingAsm = assemblies.ElementAt(assemblies.Count - 2); // offset of 2 because it's second from the end
+            return callingAsm;
         }
     }
 }
