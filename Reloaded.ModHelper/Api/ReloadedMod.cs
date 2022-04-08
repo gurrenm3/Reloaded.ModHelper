@@ -30,7 +30,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// The instance of the logger.
         /// </summary>
-        public ModLogger Logger { get; set; }
+        public IModLogger Logger { get; set; }
 
         /// <summary>
         /// An instance of Harmony, specifically for this mod. Used to HarmonyPatch.
@@ -53,7 +53,7 @@ namespace Reloaded.ModHelper
             Hooks = _hooks;
             Logger = new ModLogger(_config, _logger);
 
-            Logger.WriteLine("Initializing...");
+            Logger.WriteLineAsync("Initializing...");
 
             ModAssembly = AssemblyUtils.GetCallingAssembly();
             ModAttributeLoader.LoadAllFromAssembly(ModAssembly, out _loadedModAttributes);
@@ -84,9 +84,9 @@ namespace Reloaded.ModHelper
             try
             {
                 HarmonyLib.PatchAll(this.ModAssembly);
-                Logger.Write("Harmony instance created with id:  ", insertModName: true);
-                Logger.Write($"\"{HarmonyLib.Id}\"", Color.RosyBrown);
-                Logger.Write($"\n");
+                Logger.WriteAsync("Harmony instance created with id:  ", writeModName: true);
+                Logger.WriteAsync($"\"{HarmonyLib.Id}\"", Color.RosyBrown);
+                Logger.WriteAsync($"\n");
             }
             catch (System.Exception ex)
             {
@@ -106,8 +106,8 @@ namespace Reloaded.ModHelper
             var hookLoader = new HookLoader(this);
 
             bool foundHooks = hookLoader.RegisterHooks();
-            string message = foundHooks ? "Successfully registered hooks from this mod." : "No new hooks were registered in this mod.";
-            Logger.WriteLine(message);
+            string message = foundHooks ? "Successfully registered the hooks found in this mod." : "No new hooks were registered by this mod.";
+            Logger.WriteLineAsync(message);
         }
     }
 }

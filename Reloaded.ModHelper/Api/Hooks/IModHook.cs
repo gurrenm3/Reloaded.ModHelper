@@ -17,6 +17,6 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="_logger"></param>
         /// <param name="_hooks"></param>
-        public void InitHook(ModLogger _logger, IReloadedHooks _hooks);
+        public void InitHook(IModLogger _logger, IReloadedHooks _hooks);
     }
 }

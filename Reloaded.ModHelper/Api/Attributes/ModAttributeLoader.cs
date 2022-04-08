@@ -221,8 +221,7 @@ namespace Reloaded.ModHelper
         /// <br/>Will throw an exception if any of the custom attributes are referencing Types from another Assembly or project.
         /// </summary>
         /// <param name="targetMember">The target to try getting custom attributes from.</param>
-        /// <param name="customAttributes">Any custom attributes that were found</param>
-        /// <returns>If successful, true will be returned. Otherwise false.</returns>
+        /// <returns>If successful, the list of custom attributes will be returned, otherwise null..</returns>
         private IEnumerable<Attribute> TryGetCustomAttributes(MemberInfo targetMember)
         {
             try
@@ -241,7 +240,6 @@ namespace Reloaded.ModHelper
         /// <br/>Will throw an exception if any of the custom attributes are referencing Types from another Assembly or project.
         /// </summary>
         /// <param name="targetType"></param>
-        /// <param name="customAttributes"></param>
         /// <returns></returns>
         private IEnumerable<Attribute> TryGetCustomAttributes(Type targetType)
         {
@@ -256,6 +254,10 @@ namespace Reloaded.ModHelper
             }
         }
 
+        /// <summary>
+        /// Used to throw exceptions that occur from getting CustomAttribtues from seperate projects.
+        /// </summary>
+        /// <param name="ex"></param>
         private void HandleCustomAttrException(Exception ex)
         {
             if (ex.Message == "A non-collectible assembly may not reference a collectible assembly.")
