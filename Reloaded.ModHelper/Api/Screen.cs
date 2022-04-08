@@ -18,8 +18,9 @@
         
         static Screen()
         {
-            User32.GetWindowRect(User32.GetDesktopWindow(), out screenRect);
-            centerScreen = screenRect.Center;
+            User32.GetWindowRect(User32.GetDesktopWindow(), out var screenRect);
+            Screen.screenRect = screenRect;
+            centerScreen = Screen.screenRect.Center;
         }
     }
 }

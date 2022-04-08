@@ -3,7 +3,7 @@ namespace Reloaded.ModHelper
 	/// <summary>
 	/// Extension methods for <see cref="MouseButton"/>.
 	/// </summary>
-	internal static class MouseButtonExtensions
+	public static class MouseButtonExtensions
 	{
 		/// <summary>
 		/// Returns true while the user holds down this button.

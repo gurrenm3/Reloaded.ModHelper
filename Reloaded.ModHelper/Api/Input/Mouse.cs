@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Reloaded.ModHelper
@@ -8,13 +9,16 @@ namespace Reloaded.ModHelper
     /// </summary>
     public class Mouse
     {
+        private static HashSet<MouseButton> pressedButtons = new HashSet<MouseButton>();
+        private static HashSet<MouseButton> releasedButtons = new HashSet<MouseButton>();
+
         /// <summary>
         /// Get the position of the cursor in screen coordinates
         /// </summary>
         /// <returns></returns>
         public static Vector2 GetPosition()
         {
-            User32.GetCursorPos(out System.Drawing.Point position);
+            User32.GetCursorPos(out Point position);
             return new Vector2(position);
         }
 
@@ -54,23 +58,62 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-		/// Returns true while the mouse button associated with <paramref name="mouseButton"/> is pressed.
-        /// <br/><br/>NOTE: Best if used in an Update method.
-		/// </summary>
-		/// <param name="mouseButton">The Mouse Button to check for.</param>
-		/// <returns></returns>
-        public static bool IsPressed(MouseButton mouseButton)
-        {
-            return mouseButton.IsPressed();
-        }
-
-        /// <summary>
         /// TODO
         /// </summary>
         /// <param name="buttonToSimulate"></param>
         public static void SimulatePress(MouseButton buttonToSimulate)
         {
             throw new NotImplementedException();
+        }
+
+
+        /// <summary>
+        /// Returns whether or not a <see cref="MouseButton"/> was pressed on this frame.
+        /// <br/>Must be used in a GameLoop to work properly. Does not count if the key is being held.
+        /// </summary>
+        /// <param name="buttonToCheck"></param>
+        /// <returns></returns>
+        public static bool IsPressed(MouseButton buttonToCheck)
+        {
+            if (!buttonToCheck.IsPressed() || pressedButtons.Contains(buttonToCheck))
+                return false;
+
+            pressedButtons.Add(buttonToCheck);
+            return true;
+        }
+
+        /// <summary>
+        /// Returns whether or not a <see cref="MouseButton"/> is currently being held down.
+        /// <br/>Must be used in a GameLoop to work properly.
+        /// </summary>
+        /// <param name="buttonToCheck"></param>
+        /// <returns></returns>
+        public static bool IsHeld(MouseButton buttonToCheck)
+        {
+            if (buttonToCheck.IsPressed())
+                return true;
+
+            if (pressedButtons.Contains(buttonToCheck))
+                releasedButtons.Add(buttonToCheck);
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns whether or not a <see cref="MouseButton"/> was released on this frame.
+        /// <br/>Must be used in a GameLoop to work properly.
+        /// </summary>
+        /// <param name="buttonToCheck"></param>
+        /// <returns></returns>
+        public static bool IsReleased(MouseButton buttonToCheck)
+        {
+            if (!releasedButtons.Contains(buttonToCheck))
+                return false;
+
+            releasedButtons.Remove(buttonToCheck);
+            pressedButtons.Remove(buttonToCheck);
+
+            return true;
         }
     }
 }

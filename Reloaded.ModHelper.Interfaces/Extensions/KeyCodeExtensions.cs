@@ -3,7 +3,7 @@ namespace Reloaded.ModHelper
 	/// <summary>
 	/// Extension methods for <see cref="Key"/>.
 	/// </summary>
-	internal static class KeyCodeExtensions
+	public static class KeyCodeExtensions
 	{
 		/// <summary>
 		/// Returns true while the user holds down this key.

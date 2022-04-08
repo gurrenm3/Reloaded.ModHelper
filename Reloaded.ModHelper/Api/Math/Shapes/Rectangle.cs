@@ -146,5 +146,14 @@ namespace Reloaded.ModHelper
         {
             return new System.Drawing.Rectangle(rect.Left, rect.Top, rect.Right, rect.Bottom);
         }
+
+        /// <summary>
+        /// Creates a <see cref="Rectangle"/> from a <see cref="System.Drawing.Rectangle"/>.
+        /// </summary>
+        /// <param name="rect"></param>
+        public static implicit operator Rectangle(System.Drawing.Rectangle rect)
+        {
+            return new System.Drawing.Rectangle(rect.Left, rect.Top, rect.Right, rect.Bottom);
+        }
     }
 }

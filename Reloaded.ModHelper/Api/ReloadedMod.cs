@@ -8,7 +8,7 @@ using System.Reflection;
 namespace Reloaded.ModHelper
 {
     /// <summary>
-    /// A base class for reloaded2 mods
+    /// A base class for Reloaded2 mods
     /// </summary>
     public class ReloadedMod
     {
