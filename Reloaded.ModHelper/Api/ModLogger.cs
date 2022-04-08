@@ -40,15 +40,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         protected void WriteModName()
         {
-            Write($"[{_config.ModName}] ", modNameColor);
-        }
-
-        /// <summary>
-        /// Write's this mod's name to the console.
-        /// </summary>
-        protected void WriteModNameAsync()
-        {
-            WriteAsync($"[{_config.ModName}] ", modNameColor);
+            _logger.WriteAsync($"[{_config.ModName}] ", modNameColor);
         }
 
         /// <summary>
@@ -84,7 +76,7 @@ namespace Reloaded.ModHelper
             if (writeModName)
                 WriteModName();
 
-            _logger.Write(message, color);
+            _logger.WriteAsync(message, color);
         }
 
         /// <summary>
@@ -98,7 +90,7 @@ namespace Reloaded.ModHelper
             if (writeModName)
                 WriteModName();
 
-            _logger.Write(message.ToString(), color);
+            _logger.WriteAsync(message.ToString(), color);
         }
 
         /// <summary>
@@ -111,7 +103,7 @@ namespace Reloaded.ModHelper
             if (writeModName)
                 WriteModName();
 
-            _logger.Write(message);
+            _logger.WriteAsync(message);
         }
 
         /// <summary>
@@ -123,83 +115,6 @@ namespace Reloaded.ModHelper
         {
             if (writeModName)
                 WriteModName();
-
-            _logger.Write(message.ToString());
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="logLevel"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteAsync(string message, LogLevel logLevel, bool writeModName = false)
-        {
-            WriteAsync(message, GetColorFromLogLevel(logLevel), writeModName);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="logLevel"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteAsync(object message, LogLevel logLevel, bool writeModName = false)
-        {
-            WriteAsync(message, GetColorFromLogLevel(logLevel), writeModName);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="color"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteAsync(string message, Color color, bool writeModName = false)
-        {
-            if (writeModName)
-                WriteModNameAsync();
-
-            _logger.WriteAsync(message, color);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="color"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteAsync(object message, Color color, bool writeModName = false)
-        {
-            if (writeModName)
-                WriteModNameAsync();
-
-            WriteModNameAsync();
-            _logger.WriteAsync(message.ToString(), color);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteAsync(string message, bool writeModName = false)
-        {
-            if (writeModName)
-                WriteModNameAsync();
-
-            _logger.WriteAsync(message);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteAsync(object message, bool writeModName = false)
-        {
-            if (writeModName)
-                WriteModNameAsync();
 
             _logger.WriteAsync(message.ToString());
         }
@@ -237,7 +152,7 @@ namespace Reloaded.ModHelper
             if (writeModName)
                 WriteModName();
 
-            _logger.WriteLine(message, color);
+            _logger.WriteLineAsync(message, color);
         }
 
         /// <summary>
@@ -251,7 +166,7 @@ namespace Reloaded.ModHelper
             if (writeModName)
                 WriteModName();
 
-            _logger.WriteLine(message.ToString(), color);
+            _logger.WriteLineAsync(message.ToString(), color);
         }
 
         /// <summary>
@@ -264,7 +179,7 @@ namespace Reloaded.ModHelper
             if (writeModName)
                 WriteModName();
 
-            _logger.WriteLine(message);
+            _logger.WriteLineAsync(message);
         }
 
         /// <summary>
@@ -276,82 +191,6 @@ namespace Reloaded.ModHelper
         {
             if (writeModName)
                 WriteModName();
-
-            _logger.WriteLine(message.ToString());
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="logLevel"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteLineAsync(string message, LogLevel logLevel, bool writeModName = true)
-        {
-            WriteLineAsync(message, GetColorFromLogLevel(logLevel), writeModName);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="logLevel"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteLineAsync(object message, LogLevel logLevel, bool writeModName = true)
-        {
-            WriteLineAsync(message, GetColorFromLogLevel(logLevel), writeModName);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="color"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteLineAsync(string message, Color color, bool writeModName = true)
-        {
-            if (writeModName)
-                WriteModNameAsync();
-
-            _logger.WriteLineAsync(message, color);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="color"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteLineAsync(object message, Color color, bool writeModName = true)
-        {
-            if (writeModName)
-                WriteModNameAsync();
-
-            _logger.WriteLineAsync(message.ToString(), color);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteLineAsync(string message, bool writeModName = true)
-        {
-            if (writeModName)
-                WriteModNameAsync();
-
-            _logger.WriteLineAsync(message);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="message"><inheritdoc/></param>
-        /// <param name="writeModName"><inheritdoc/></param>
-        public void WriteLineAsync(object message, bool writeModName = true)
-        {
-            if (writeModName)
-                WriteModNameAsync();
 
             _logger.WriteLineAsync(message.ToString());
         }
