@@ -12,14 +12,20 @@ namespace Reloaded.ModHelper
     /// </summary>
     public class ModEvent : IModEvent
     {
+        /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; } 
+
         private List<Action> _listeners = new List<Action>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
         /// </summary>
-        public ModEvent()
+        public ModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new ModEvent(false);
         }
 
         /// <summary>
@@ -74,7 +80,16 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke()
         {
-            _listeners.InvokeAll();
+            if (_listeners.Any())
+            {
+                _listeners.InvokeAll();
+                OnFinishedInvoking?.Invoke();
+            }
+        }
+
+        List<Action> IModEvent.GetListeners()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -89,14 +104,20 @@ namespace Reloaded.ModHelper
     /// </summary>
     public class ModEvent<T1> : IModEvent<T1>
     {
+        /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
         private List<Action<T1>> _listeners = new List<Action<T1>>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
         /// </summary>
-        public ModEvent()
+        public ModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new ModEvent(false);
         }
 
         /// <summary>
@@ -152,7 +173,11 @@ namespace Reloaded.ModHelper
         /// <param name="value"><inheritdoc/></param>
         public void Invoke(T1 value)
         {
-            _listeners.InvokeAll(value);
+            if (_listeners.Any())
+            {
+                _listeners.InvokeAll(value);
+                OnFinishedInvoking?.Invoke();
+            }    
         }
     }
 
@@ -167,14 +192,20 @@ namespace Reloaded.ModHelper
     /// </summary>
     public class ModEvent<T1, T2> : IModEvent<T1, T2>
     {
+        /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
         private List<Action<T1, T2>> _listeners = new List<Action<T1, T2>>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
         /// </summary>
-        public ModEvent()
+        public ModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new ModEvent(false);
         }
 
         /// <summary>
@@ -229,7 +260,11 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1, T2 value2)
         {
-            _listeners.InvokeAll(value1, value2);
+            if (_listeners.Any())
+            {
+                _listeners.InvokeAll(value1, value2);
+                OnFinishedInvoking?.Invoke();
+            }
         }
     }
 
@@ -244,14 +279,20 @@ namespace Reloaded.ModHelper
     /// </summary>
     public class ModEvent<T1, T2, T3> : IModEvent<T1, T2, T3>
     {
+        /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
         private List<Action<T1, T2, T3>> _listeners = new List<Action<T1, T2, T3>>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
         /// </summary>
-        public ModEvent()
+        public ModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new ModEvent(false);
         }
 
         /// <summary>
@@ -306,7 +347,11 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3)
         {
-            _listeners.InvokeAll(value1, value2, value3);
+            if (_listeners.Any())
+            {
+                _listeners.InvokeAll(value1, value2, value3);
+                OnFinishedInvoking?.Invoke();
+            }
         }
     }
 
@@ -321,15 +366,21 @@ namespace Reloaded.ModHelper
     /// </summary>
     public class ModEvent<T1, T2, T3, T4> : IModEvent<T1, T2, T3, T4>
     {
+        /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
         private List<Action<T1, T2, T3, T4>> _listeners = new List<Action<T1, T2, T3, T4>>();
 
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
         /// </summary>
-        public ModEvent()
+        public ModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new ModEvent(false);
         }
 
         /// <summary>
@@ -384,7 +435,11 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4)
         {
-            _listeners.InvokeAll(value1, value2, value3, value4);
+            if (_listeners.Any())
+            {
+                _listeners.InvokeAll(value1, value2, value3, value4);
+                OnFinishedInvoking?.Invoke();
+            }
         }
     }
 
@@ -399,14 +454,20 @@ namespace Reloaded.ModHelper
     /// </summary>
     public class ModEvent<T1, T2, T3, T4, T5> : IModEvent<T1, T2, T3, T4, T5>
     {
+        /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
         private List<Action<T1, T2, T3, T4, T5>> _listeners = new List<Action<T1, T2, T3, T4, T5>>();
 
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
         /// </summary>
-        public ModEvent()
+        public ModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new ModEvent(false);
         }
 
         /// <summary>
@@ -461,7 +522,11 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
         {
-            _listeners.InvokeAll(value1, value2, value3, value4, value5);
+            if (_listeners.Any())
+            {
+                _listeners.InvokeAll(value1, value2, value3, value4, value5);
+                OnFinishedInvoking?.Invoke();
+            }
         }
     }
 

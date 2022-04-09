@@ -14,6 +14,11 @@ namespace Reloaded.ModHelper
     public class SharedModEvent : IModEvent
     {
         /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
+        /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
         protected Dictionary<Assembly, IModEvent> modEvents = new Dictionary<Assembly, IModEvent>();
@@ -21,9 +26,10 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Creates an instance of this class.
         /// </summary>
-        public SharedModEvent()
+        public SharedModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new SharedModEvent(false);
         }
 
         /// <summary>
@@ -81,10 +87,15 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke()
         {
+            if (!modEvents.Any())
+                return;
+
             for (int i = 0; i < modEvents.Count; i++)
             {
                 modEvents.ElementAt(i).Value?.Invoke();
             }
+
+            OnFinishedInvoking?.Invoke();
         }
 
         /// <summary>
@@ -128,6 +139,11 @@ namespace Reloaded.ModHelper
     public class SharedModEvent<T1> : IModEvent<T1>
     {
         /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
+        /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
         protected Dictionary<Assembly, IModEvent<T1>> modEvents = new Dictionary<Assembly, IModEvent<T1>>();
@@ -135,9 +151,10 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Creates an instance of this class.
         /// </summary>
-        public SharedModEvent()
+        public SharedModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new SharedModEvent(false);
         }
 
         /// <summary>
@@ -197,10 +214,15 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1)
         {
+            if (!modEvents.Any())
+                return;
+
             for (int i = 0; i < modEvents.Count; i++)
             {
                 modEvents.ElementAt(i).Value?.Invoke(value1);
             }
+
+            OnFinishedInvoking?.Invoke();
         }
 
         /// <summary>
@@ -244,6 +266,11 @@ namespace Reloaded.ModHelper
     public class SharedModEvent<T1, T2> : IModEvent<T1, T2>
     {
         /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
+        /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
         protected Dictionary<Assembly, IModEvent<T1, T2>> modEvents = new Dictionary<Assembly, IModEvent<T1, T2>>();
@@ -251,9 +278,10 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Creates an instance of this class.
         /// </summary>
-        public SharedModEvent()
+        public SharedModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new SharedModEvent(false);
         }
 
         /// <summary>
@@ -313,10 +341,15 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1, T2 value2)
         {
+            if (!modEvents.Any())
+                return;
+
             for (int i = 0; i < modEvents.Count; i++)
             {
                 modEvents.ElementAt(i).Value?.Invoke(value1, value2);
             }
+
+            OnFinishedInvoking?.Invoke();
         }
 
         /// <summary>
@@ -360,6 +393,11 @@ namespace Reloaded.ModHelper
     public class SharedModEvent<T1, T2, T3> : IModEvent<T1, T2, T3>
     {
         /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
+        /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
         protected Dictionary<Assembly, IModEvent<T1, T2, T3>> modEvents = new Dictionary<Assembly, IModEvent<T1, T2, T3>>();
@@ -367,9 +405,10 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Creates an instance of this class.
         /// </summary>
-        public SharedModEvent()
+        public SharedModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new SharedModEvent(false);
         }
 
         /// <summary>
@@ -429,10 +468,15 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3)
         {
+            if (!modEvents.Any())
+                return;
+
             for (int i = 0; i < modEvents.Count; i++)
             {
                 modEvents.ElementAt(i).Value?.Invoke(value1, value2, value3);
             }
+
+            OnFinishedInvoking?.Invoke();
         }
 
         /// <summary>
@@ -476,6 +520,11 @@ namespace Reloaded.ModHelper
     public class SharedModEvent<T1, T2, T3, T4> : IModEvent<T1, T2, T3, T4>
     {
         /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
+        /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
         protected Dictionary<Assembly, IModEvent<T1, T2, T3, T4>> modEvents = new Dictionary<Assembly, IModEvent<T1, T2, T3, T4>>();
@@ -483,9 +532,10 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Creates an instance of this class.
         /// </summary>
-        public SharedModEvent()
+        public SharedModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new SharedModEvent(false);
         }
 
         /// <summary>
@@ -545,10 +595,15 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4)
         {
+            if (!modEvents.Any())
+                return;
+
             for (int i = 0; i < modEvents.Count; i++)
             {
                 modEvents.ElementAt(i).Value?.Invoke(value1, value2, value3, value4);
             }
+
+            OnFinishedInvoking?.Invoke();
         }
 
         /// <summary>
@@ -592,6 +647,11 @@ namespace Reloaded.ModHelper
     public class SharedModEvent<T1, T2, T3, T4, T5> : IModEvent<T1, T2, T3, T4, T5>
     {
         /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
+        /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
         /// </summary>
         protected Dictionary<Assembly, IModEvent<T1, T2, T3, T4, T5>> modEvents = new Dictionary<Assembly, IModEvent<T1, T2, T3, T4, T5>>();
@@ -599,9 +659,10 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Creates an instance of this class.
         /// </summary>
-        public SharedModEvent()
+        public SharedModEvent(bool useOnFinishedInvoking = true)
         {
-
+            if (useOnFinishedInvoking)
+                OnFinishedInvoking = new SharedModEvent(false);
         }
 
         /// <summary>
@@ -661,10 +722,15 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
         {
+            if (!modEvents.Any())
+                return;
+
             for (int i = 0; i < modEvents.Count; i++)
             {
                 modEvents.ElementAt(i).Value?.Invoke(value1, value2, value3, value4, value5);
             }
+
+            OnFinishedInvoking?.Invoke();
         }
 
         /// <summary>

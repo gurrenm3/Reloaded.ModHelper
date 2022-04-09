@@ -9,6 +9,11 @@ namespace Reloaded.ModHelper
     public interface IModEvent
     {
         /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
+        /// <summary>
         /// Returns a list of all of the current listeners on this event.
         /// </summary>
         public List<Action> GetListeners();
@@ -71,6 +76,11 @@ namespace Reloaded.ModHelper
     /// </summary>
     public interface IModEvent<T1>
     {
+        /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
         /// <summary>
         /// Returns a list of all of the current listeners on this event.
         /// </summary>
@@ -135,6 +145,11 @@ namespace Reloaded.ModHelper
     public interface IModEvent<T1, T2>
     {
         /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
+        /// <summary>
         /// Returns a list of all of the current listeners on this event.
         /// </summary>
         public List<Action<T1, T2>> GetListeners();
@@ -197,6 +212,11 @@ namespace Reloaded.ModHelper
     /// </summary>
     public interface IModEvent<T1, T2, T3>
     {
+        /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
         /// <summary>
         /// Returns a list of all of the current listeners on this event.
         /// </summary>
@@ -261,6 +281,11 @@ namespace Reloaded.ModHelper
     public interface IModEvent<T1, T2, T3, T4>
     {
         /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
+        /// <summary>
         /// Returns a list of all of the current listeners on this event.
         /// </summary>
         public List<Action<T1, T2, T3, T4>> GetListeners();
@@ -323,6 +348,11 @@ namespace Reloaded.ModHelper
     /// </summary>
     public interface IModEvent<T1, T2, T3, T4, T5>
     {
+        /// <summary>
+        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// </summary>
+        public IModEvent OnFinishedInvoking { get; set; }
+
         /// <summary>
         /// Returns a list of all of the current listeners on this event.
         /// </summary>

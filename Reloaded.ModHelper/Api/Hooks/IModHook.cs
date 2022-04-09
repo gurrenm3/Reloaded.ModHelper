@@ -8,7 +8,8 @@ namespace Reloaded.ModHelper
     public interface IModHook
     {
         /// <summary>
-        /// The name of this hook. Meant to make it more obvious what this hook is.
+        /// The name of this hook. Meant to make it more obvious what this hook is. This does not actually affect 
+        /// the hook in any way and is purely for convenience.
         /// </summary>
         public abstract string HookName { get; }
 
