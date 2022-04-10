@@ -8,6 +8,7 @@ namespace Reloaded.ModHelper
     /// </summary>
     public class HookLoader
     {
+        private List<IModHook> loadedHookInstances = new List<IModHook>();
         private List<Type> loadedHooks = new List<Type>();
         private ReloadedMod thisMod;
 
@@ -20,9 +21,8 @@ namespace Reloaded.ModHelper
         /// Searches THIS assembly for all hooks using <see cref="IModHook"/> and automatically registers them.
         /// </summary>
         /// <returns>True if any hooks were registered, otherwise false.</returns>
-        public bool RegisterHooks()
+        public List<IModHook> RegisterHooks()
         {
-            bool foundHooks = false;
             var hooks = thisMod.ModAssembly.GetTypesWithInterface<IModHook>();
 
             foreach (var hook in hooks)
@@ -32,11 +32,11 @@ namespace Reloaded.ModHelper
 
                 IModHook hookInstance = (IModHook)Activator.CreateInstance(hook);
                 hookInstance.InitHook(thisMod.Logger, thisMod.Hooks);
+                loadedHookInstances.Add(hookInstance);
                 loadedHooks.Add(hook);
-                foundHooks = true;
             }
 
-            return foundHooks;
+            return loadedHookInstances;
         }
     }
 }

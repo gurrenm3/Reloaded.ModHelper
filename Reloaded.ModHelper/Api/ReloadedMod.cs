@@ -3,6 +3,7 @@ using Reloaded.Hooks.Definitions;
 using Reloaded.Mod.Interfaces;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 
 namespace Reloaded.ModHelper
@@ -45,13 +46,42 @@ namespace Reloaded.ModHelper
         private List<ModAttrAttribute> _loadedModAttributes;
 
         /// <summary>
+        /// A list of all the hooks registered by this mod. Won't contain hooks loaded by other mods.
+        /// </summary>
+        public List<IModHook> LoadedHooks => _loadedHooks;
+        private List<IModHook> _loadedHooks;
+
+        private bool isInitialized;
+
+        /// <summary>
         /// Creates an instance of this class.
         /// </summary>
         public ReloadedMod(IModConfig _config, IReloadedHooks _hooks, ILogger _logger)
         {
+            Logger = new ModLogger(_config, _logger);
             ModConfig = _config;
             Hooks = _hooks;
-            Logger = new ModLogger(_config, _logger);
+            Initialize();
+        }
+
+        /// <summary>
+        /// Creates an instance of this class.
+        /// </summary>
+        public ReloadedMod(IModConfig _config, IReloadedHooks _hooks, IModLogger _logger)
+        {
+            Logger = _logger;
+            ModConfig = _config;
+            Hooks = _hooks;
+            Initialize();
+        }
+
+        /// <summary>
+        /// Initialize this mod. Can only be called once.
+        /// </summary>
+        protected virtual void Initialize()
+        {
+            if (isInitialized)
+                return;
 
             Logger.WriteLine("Initializing...");
 
@@ -60,6 +90,7 @@ namespace Reloaded.ModHelper
 
             InitHarmony();
             RegisterHooks();
+            isInitialized = true;
         }
 
         /// <summary>
@@ -105,8 +136,8 @@ namespace Reloaded.ModHelper
         {
             var hookLoader = new HookLoader(this);
 
-            bool foundHooks = hookLoader.RegisterHooks();
-            string message = foundHooks ? "Successfully registered the hooks found in this mod." : "No new hooks were registered by this mod.";
+            _loadedHooks = hookLoader.RegisterHooks();
+            string message = _loadedHooks.Any() ? "Successfully registered the hooks found in this mod." : "No new hooks were registered by this mod.";
             Logger.WriteLine(message);
         }
     }
