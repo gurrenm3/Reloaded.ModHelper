@@ -28,7 +28,6 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="attribute"><inheritdoc/></param>
         public abstract override void OnAttributeLoaded();
 
         /// <summary>

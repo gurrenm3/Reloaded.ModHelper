@@ -16,8 +16,6 @@ namespace Reloaded.ModHelper
         /// </summary>
         const UInt32 WM_KEYDOWN = 0x0100;
 
-
-
         static Keyboard()
         {
 
@@ -41,8 +39,14 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public static bool IsPressed(Key keyToCheck)
         {
-            if (!keyToCheck.IsPressed() || pressedKeys.Contains(keyToCheck))
+            if (!keyToCheck.IsPressed())
+            {
+                
+            }
+            else if (pressedKeys.Contains(keyToCheck)) // it's being held
+            {
                 return false;
+            }
 
             pressedKeys.Add(keyToCheck);
             return true;

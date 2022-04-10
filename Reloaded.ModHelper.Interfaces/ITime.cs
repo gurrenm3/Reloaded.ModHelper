@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Reloaded.ModHelper
+﻿namespace Reloaded.ModHelper
 {
+    /// <summary>
+    /// Provides information about the passage of time within an <see cref="IGameLoop"/>.
+    /// </summary>
     public interface ITime
     {
         /// <summary>

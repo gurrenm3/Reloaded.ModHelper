@@ -3,9 +3,9 @@
 namespace Reloaded.ModHelper
 {
     /// <summary>
-    /// Provides information about Time. Must be connected to a <see cref="GameLoop"/> to function properly.
+    /// Provides information about the passage of time within a <see cref="PseudoGameLoop"/>.
     /// </summary>
-    public class Time : ITime
+    public class PseudoTime : ITime
     {
         /// <summary>
         /// <inheritdoc/>
@@ -43,11 +43,11 @@ namespace Reloaded.ModHelper
         /// Creates an instance of this class with a Gameloop, allowing it to update properly.
         /// </summary>
         /// <param name="gameLoop">The game loop to initialize with, allowing access to Time info about the loop.</param>
-        public Time(IGameLoop gameLoop)
+        public PseudoTime(IGameLoop gameLoop)
         {
             stopwatch = new Stopwatch();
             stopwatch.Start();
-            gameLoop.AddListener(Update);
+            gameLoop.OnUpdate.Prefix += Update;
             isInitialized = true;
         }
 

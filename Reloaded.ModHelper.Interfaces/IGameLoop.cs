@@ -2,8 +2,16 @@
 
 namespace Reloaded.ModHelper
 {
+    /// <summary>
+    /// An interface for making/using Game Loops
+    /// </summary>
     public interface IGameLoop
     {
+        /// <summary>
+        /// Called each time the update loop executes.
+        /// </summary>
+        public IModEventHook OnUpdate { get; set; }
+
         /// <summary>
         /// Contains information about the Time of this Game Loop, for example the time between frames.
         /// </summary>
@@ -19,18 +27,5 @@ namespace Reloaded.ModHelper
         /// do that here.
         /// </summary>
         public abstract IGameLoop Initialize();
-
-        /// <summary>
-        /// Adds an Action to run each time the loop runs.
-        /// </summary>
-        /// <param name="codeToRun"></param>
-        public abstract void AddListener(Action codeToRun);
-
-        /// <summary>
-        /// Removes an Action from the game loop so it no longer runs when the loop does.
-        /// </summary>
-        /// <param name="codeToRun"></param>
-        /// <returns></returns>
-        public abstract bool RemoveListener(Action codeToRun);
     }
 }

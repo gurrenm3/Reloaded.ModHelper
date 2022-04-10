@@ -638,7 +638,7 @@ namespace Reloaded.ModHelper
 		/// <param name="target">The position we are trying to reach.</param>
 		/// <param name="currentVelocity">The current velocity, this value is modified by the function every time you call it.</param>
 		/// <param name="smoothTime">Approximately the time it will take to reach the target. A smaller value will reach the target faster.</param>
-		/// <param name="deltaTime">The time since the last call to this function. Recommended to use <see cref="Time.DeltaTime"/>.</param>
+		/// <param name="deltaTime">The time since the last call to this function. Recommended to use <see cref="PseudoTime.DeltaTime"/>.</param>
 		/// <param name="maxSpeed">Optionally allows you to clamp the maximum speed.</param>
 		/// <returns></returns>
 		public static float SmoothDamp(float current, float target, ref float currentVelocity, float smoothTime, float deltaTime, float maxSpeed = Mathf.Infinity)
@@ -670,7 +670,7 @@ namespace Reloaded.ModHelper
 		/// <param name="target">The position we are trying to reach</param>
 		/// <param name="currentVelocity">The current velocity, this value is modified by the function every time you call it.</param>
 		/// <param name="smoothTime">Approximately the time it will take to reach the target. A smaller value will reach the target faster.</param>
-		/// <param name="deltaTime">The time since the last call to this function. Recommended to use <see cref="Time.DeltaTime"/>.</param>
+		/// <param name="deltaTime">The time since the last call to this function. Recommended to use <see cref="PseudoTime.DeltaTime"/>.</param>
 		/// <param name="maxSpeed">Optionally allows you to clamp the maximum speed.</param>
 		/// <returns></returns>
 		public static float SmoothDampAngle(float current, float target, ref float currentVelocity, float smoothTime, float deltaTime, float maxSpeed = Mathf.Infinity)

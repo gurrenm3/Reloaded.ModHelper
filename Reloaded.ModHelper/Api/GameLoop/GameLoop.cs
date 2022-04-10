@@ -10,6 +10,11 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
+        public IModEventHook OnUpdate { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
         public abstract ITime Time { get; }
 
         /// <summary>
@@ -31,18 +36,5 @@ namespace Reloaded.ModHelper
         /// do that here.
         /// </summary>
         public abstract IGameLoop Initialize();
-
-        /// <summary>
-        /// Adds an Action to run each time the loop runs.
-        /// </summary>
-        /// <param name="codeToRun"></param>
-        public abstract void AddListener(Action codeToRun);
-
-        /// <summary>
-        /// Removes an Action from the game loop so it no longer runs when the loop does.
-        /// </summary>
-        /// <param name="codeToRun"></param>
-        /// <returns></returns>
-        public abstract bool RemoveListener(Action codeToRun);
     }
 }

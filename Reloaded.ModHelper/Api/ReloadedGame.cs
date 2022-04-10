@@ -1,10 +1,13 @@
 ﻿namespace Reloaded.ModHelper
 {
     /// <summary>
-    /// Manages info about the game that's currently being modded.
+    /// <inheritdoc/>
     /// </summary>
-    public class ReloadedGame
+    public class ReloadedGame : IReloadedGame
     {
-        
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public IGameLoop GameLoop { get; protected set; }
     }
 }

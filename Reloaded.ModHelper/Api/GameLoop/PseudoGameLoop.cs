@@ -47,14 +47,16 @@ namespace Reloaded.ModHelper
         {
             if (isLoopCreated) return this;
             
-            _time = new Time(this);
+            _time = new PseudoTime(this);
             loopCancellation = new CancellationTokenSource();
             loopTask = new Task(() =>
             {
                 while (true)
                 {
+                    OnUpdate.Prefix.Invoke();
                     RunLoopInternal();
                     RunLoop();
+                    OnUpdate.Postfix.Invoke();
                     Thread.Sleep(timeBetweenLoops);
                 }
             }, loopCancellation.Token);
@@ -77,7 +79,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Executes the code that is suppose to happen each time the loop runs.
         /// </summary>
-        protected abstract void RunLoop();
+        protected virtual void RunLoop() { }
 
         /// <summary>
         /// Use this to create a <see cref="PseudoGameLoop"/> instance. Using this provides

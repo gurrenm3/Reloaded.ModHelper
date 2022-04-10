@@ -14,14 +14,15 @@ namespace Reloaded.ModHelper
     public class ReloadedMod
     {
         /// <summary>
-        /// Info about this mod.
+        /// Information about this mod.
+        /// <br/>Contains info like Mod Name, Author, Version, etc.
         /// </summary>
         public IModConfig ModConfig { get; set; }
 
         /// <summary>
-        /// The instance of the hook injector.
+        /// The instance of the Reloaded hook injector.
         /// </summary>
-        public IReloadedHooks Hooks { get; set; }
+        public IReloadedHooks ReloadedHooks { get; set; }
 
         /// <summary>
         /// The assembly for this mod.
@@ -29,24 +30,25 @@ namespace Reloaded.ModHelper
         public Assembly ModAssembly { get; private set; }
 
         /// <summary>
-        /// The instance of the logger.
+        /// A Logger for writing messages to the Reloaded Console.
         /// </summary>
         public IModLogger Logger { get; set; }
 
         /// <summary>
-        /// An instance of Harmony, specifically for this mod. Used to HarmonyPatch.
-        /// <br/>This can be used to hook C# functions from any library.
+        /// An instance of Harmony made specifically for this mod.
+        /// <br/>This can be used to hook functions from any C# library.
         /// </summary>
-        public Harmony HarmonyLib { get; protected set; }
+        public Harmony HarmonyLib { get; private set; }
 
         /// <summary>
-        /// A list of any <see cref="ModAttrAttribute"/> that were registered for this mod.
+        /// Contains any <see cref="ModAttrAttribute"/> that were registered for this mod.
+        /// <br/>Will be empty if none were registered by this mod.
         /// </summary>
         public List<ModAttrAttribute> LoadedModAttributes => _loadedModAttributes;
         private List<ModAttrAttribute> _loadedModAttributes;
 
         /// <summary>
-        /// A list of all the hooks registered by this mod. Won't contain hooks loaded by other mods.
+        /// Contains any hooks that were registered by this mod. Will not contain hooks made by other mods.
         /// </summary>
         public List<IModHook> LoadedHooks => _loadedHooks;
         private List<IModHook> _loadedHooks;
@@ -60,7 +62,7 @@ namespace Reloaded.ModHelper
         {
             Logger = new ModLogger(_config, _logger);
             ModConfig = _config;
-            Hooks = _hooks;
+            ReloadedHooks = _hooks;
             Initialize();
         }
 
@@ -71,12 +73,12 @@ namespace Reloaded.ModHelper
         {
             Logger = _logger;
             ModConfig = _config;
-            Hooks = _hooks;
+            ReloadedHooks = _hooks;
             Initialize();
         }
 
         /// <summary>
-        /// Initialize this mod. Can only be called once.
+        /// Initialize this mod. Normally this is automatically called and it can only be called once.
         /// </summary>
         protected virtual void Initialize()
         {
@@ -139,6 +141,28 @@ namespace Reloaded.ModHelper
             _loadedHooks = hookLoader.RegisterHooks();
             string message = _loadedHooks.Any() ? "Successfully registered the hooks found in this mod." : "No new hooks were registered by this mod.";
             Logger.WriteLine(message);
+        }
+
+        /// <summary>
+        /// Attempts to get a <see cref="ModAttrAttribute"/> from the list of loaded mod attributes.
+        /// </summary>
+        /// <typeparam name="T">The type of mod attribute you want to get.</typeparam>
+        /// <param name="result">The resulting mod attribue. If successful, this will be the mod attribute you wanted.</param>
+        /// <returns>If successful, true will be returned. Otherwise false.</returns>
+        public bool TryGetModAttribute<T>(out T result) where T : ModAttrAttribute
+        {
+            result = default(T);
+
+            foreach (var attribute in LoadedModAttributes)
+            {
+                if (!(attribute is T modAttribute))
+                    continue;
+
+                result = modAttribute;
+                return true;
+            }
+
+            return false;
         }
     }
 }

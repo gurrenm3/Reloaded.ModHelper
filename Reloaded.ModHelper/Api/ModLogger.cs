@@ -51,7 +51,7 @@ namespace Reloaded.ModHelper
         /// <param name="writeModName"><inheritdoc/></param>
         public void Write(string message, LogLevel logLevel, bool writeModName = false)
         {
-            Write(message, GetColorFromLogLevel(logLevel), writeModName);
+            Write($"[{logLevel}] {message}", GetColorFromLogLevel(logLevel), writeModName);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Reloaded.ModHelper
         /// <param name="writeModName"><inheritdoc/></param>
         public void Write(object message, LogLevel logLevel, bool writeModName = false)
         {
-            Write(message, GetColorFromLogLevel(logLevel), writeModName);
+            Write($"[{logLevel}] {message}", GetColorFromLogLevel(logLevel), writeModName);
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Reloaded.ModHelper
         /// <param name="writeModName"><inheritdoc/></param>
         public void WriteLine(string message, LogLevel logLevel, bool writeModName = true)
         {
-            WriteLine(message, GetColorFromLogLevel(logLevel), writeModName);
+            WriteLine($"[{logLevel}] {message}", GetColorFromLogLevel(logLevel), writeModName);
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace Reloaded.ModHelper
         /// <param name="writeModName"><inheritdoc/></param>
         public void WriteLine(object message, LogLevel logLevel, bool writeModName = true)
         {
-            WriteLine(message, GetColorFromLogLevel(logLevel), writeModName);
+            WriteLine($"[{logLevel}] {message}", GetColorFromLogLevel(logLevel), writeModName);
         }
 
         /// <summary>
@@ -200,9 +200,9 @@ namespace Reloaded.ModHelper
             switch (logLevel)
             {
                 case LogLevel.Error:
-                    return Color.Yellow;
-                case LogLevel.Warning:
                     return Color.Red;
+                case LogLevel.Warning:
+                    return Color.Yellow;
                 default:
                     return _logger.TextColor;
             }
