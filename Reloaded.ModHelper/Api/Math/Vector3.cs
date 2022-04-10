@@ -547,7 +547,7 @@ namespace Reloaded.ModHelper
         /// <param name="target">The position we are trying to reach.</param>
         /// <param name="currentVelocity">The current velocity, this value is modified by the function every time you call it.</param>
         /// <param name="smoothTime">Approximately the time it will take to reach the target. A smaller value will reach the target faster.</param>
-        /// <param name="deltaTime">The time since the last call to this function. By default Time.deltaTime.</param>
+        /// <param name="deltaTime">The time since the last call to this function. By default <see cref="ITime.DeltaTime"/>.</param>
         /// <param name="maxSpeed">Optionally allows you to clamp the maximum speed.</param>
         /// <returns></returns>
         public static Vector3 SmoothDamp(Vector3 current, Vector3 target, ref Vector3 currentVelocity, float smoothTime, float deltaTime, float maxSpeed = Mathf.Infinity)
