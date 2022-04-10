@@ -41,14 +41,18 @@ namespace Reloaded.ModHelper
         {
             if (!keyToCheck.IsPressed())
             {
-                
+                if (pressedKeys.Contains(keyToCheck)) // It was pressed earlier. Now it's released.
+                    OnKeyReleased(keyToCheck);
+
+                return false;
             }
             else if (pressedKeys.Contains(keyToCheck)) // it's being held
             {
+                OnKeyHeld(keyToCheck);
                 return false;
             }
 
-            pressedKeys.Add(keyToCheck);
+            OnKeyPressed(keyToCheck);
             return true;
         }
 
@@ -61,10 +65,13 @@ namespace Reloaded.ModHelper
         public static bool IsHeld(Key keyToCheck)
         {
             if (keyToCheck.IsPressed())
+            {
+                OnKeyHeld(keyToCheck);
                 return true;
+            }
 
-            if (pressedKeys.Contains(keyToCheck))
-                releasedKeys.Add(keyToCheck);
+            if (pressedKeys.Contains(keyToCheck)) // it was held before
+                OnKeyReleased(keyToCheck);
 
             return false;
         }
@@ -77,13 +84,38 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public static bool IsReleased(Key keyToCheck)
         {
-            if (!releasedKeys.Contains(keyToCheck))
+            if (IsHeld(keyToCheck))
                 return false;
 
+            if (!releasedKeys.Contains(keyToCheck)) // it wasn't released
+                return false;
+
+            OnKeyReleased(keyToCheck);
             releasedKeys.Remove(keyToCheck);
-            pressedKeys.Remove(keyToCheck);
 
             return true;
+        }
+
+        private static void OnKeyPressed(Key key)
+        {
+            if (!pressedKeys.Contains(key))
+                pressedKeys.Add(key);
+
+            releasedKeys.Remove(key);
+        }
+
+        private static void OnKeyHeld(Key key)
+        {
+            if (!pressedKeys.Contains(key))
+                pressedKeys.Add(key);
+
+            releasedKeys.Remove(key);
+        }
+
+        private static void OnKeyReleased(Key key)
+        {
+            releasedKeys.Add(key);
+            pressedKeys.Remove(key);
         }
     }
 }

@@ -69,16 +69,26 @@ namespace Reloaded.ModHelper
 
         /// <summary>
         /// Returns whether or not a <see cref="MouseButton"/> was pressed on this frame.
-        /// <br/>Must be used in a GameLoop to work properly. Does not count if the key is being held.
+        /// <br/>Must be used in a GameLoop to work properly. Does not count if the button is being held.
         /// </summary>
         /// <param name="buttonToCheck"></param>
         /// <returns></returns>
         public static bool IsPressed(MouseButton buttonToCheck)
         {
-            if (!buttonToCheck.IsPressed() || pressedButtons.Contains(buttonToCheck))
-                return false;
+            if (!buttonToCheck.IsPressed())
+            {
+                if (pressedButtons.Contains(buttonToCheck)) // It was pressed earlier. Now it's released.
+                    OnButtonReleased(buttonToCheck);
 
-            pressedButtons.Add(buttonToCheck);
+                return false;
+            }
+            else if (pressedButtons.Contains(buttonToCheck)) // it's being held
+            {
+                OnButtonHeld(buttonToCheck);
+                return false;
+            }
+
+            OnButtonPressed(buttonToCheck);
             return true;
         }
 
@@ -91,10 +101,13 @@ namespace Reloaded.ModHelper
         public static bool IsHeld(MouseButton buttonToCheck)
         {
             if (buttonToCheck.IsPressed())
+            {
+                OnButtonHeld(buttonToCheck);
                 return true;
+            }
 
-            if (pressedButtons.Contains(buttonToCheck))
-                releasedButtons.Add(buttonToCheck);
+            if (pressedButtons.Contains(buttonToCheck)) // it was held before
+                OnButtonReleased(buttonToCheck);
 
             return false;
         }
@@ -107,13 +120,38 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public static bool IsReleased(MouseButton buttonToCheck)
         {
-            if (!releasedButtons.Contains(buttonToCheck))
+            if (IsHeld(buttonToCheck)) // it's being held
                 return false;
 
+            if (!releasedButtons.Contains(buttonToCheck)) // it wasn't released
+                return false;
+
+            OnButtonReleased(buttonToCheck);
             releasedButtons.Remove(buttonToCheck);
-            pressedButtons.Remove(buttonToCheck);
 
             return true;
+        }
+
+        private static void OnButtonPressed(MouseButton button)
+        {
+            if (!pressedButtons.Contains(button))
+                pressedButtons.Add(button);
+
+            releasedButtons.Remove(button);
+        }
+
+        private static void OnButtonHeld(MouseButton button)
+        {
+            if (!pressedButtons.Contains(button))
+                pressedButtons.Add(button);
+
+            releasedButtons.Remove(button);
+        }
+
+        private static void OnButtonReleased(MouseButton button)
+        {
+            releasedButtons.Add(button);
+            pressedButtons.Remove(button);
         }
     }
 }
