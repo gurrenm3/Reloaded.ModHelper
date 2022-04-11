@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Reloaded.ModHelper.Shared\Reloaded.ModHelper.Shared.csproj" />
     <ProjectReference Include="..\Reloaded.ModHelper\Reloaded.ModHelper.csproj" />
   </ItemGroup>
 
