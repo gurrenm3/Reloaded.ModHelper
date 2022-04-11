@@ -9,20 +9,20 @@
     <Description>A utility library for Reloaded2 that makes it significantly easier to create mods. It comes with dozens of tools and utilities to help unify your Reloaded2 projects and helps you make much more powerful mods without extra work.
 
 Some examples of what's included are:
-- ReloadedMod base class for automatically registering all custom Attributes and Hooks.
-- Ability to get keyboard/mouse press info
-- Effortlessly created game loops
-- Mod Events and Hooks that can be shared between multiple mods
-- Beyond simple Signature Scanning
-- Built in support for C# Funciton Hooking through the use of Harmony
-- Much more
+- ReloadedMod base class for initializing your mod and automatically registering all custom Attributes and Hooks.
+- Ability to get keyboard/mouse press info.
+- Effortlessly created game loops that run once per frame.
+- Mod Events and Hooks that can be shared between multiple mods.
+- Beyond simple Signature Scanning.
+- Built in support for C# Function Hooking through the use of Harmony.
+- Much more!
 
-It's made by modders for modders, and is inspired by Unity to be more familiar and easier to understand. It will work for single mods with no dependencies and giant API mods that support many dependent mods.</Description>
+It's made by modders for modders, and is inspired by Unity to be more familiar and easier to understand. It will work for single mods with no dependencies and giant API mods that support many dependent mods.   </Description>
     <RepositoryUrl>https://github.com/gurrenm3/Reloaded.ModHelper</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>..\LICENSE</PackageLicenseFile>
-    <PackageTags>Reloaded, Reloaded2, Mod, Modding, ModHelper, Mod Helper, Memory, Signature, Scan, Scanning, Util, Utility, Hook, Hooks, Hooking, C#, CSharp</PackageTags>
+    <PackageTags>Reloaded; Reloaded2; Mod; Modding; ModHelper; Mod Helper; Memory; Signature; Scan; Scanning; Util; Utility; Hook; Hooks; Hooking; C#; CSharp</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
@@ -36,6 +36,7 @@ It's made by modders for modders, and is inspired by Unity to be more familiar a
     <PropertyGroup>
 	    <PackageLicenseFile>LICENSE</PackageLicenseFile>
 	    <RepositoryType>git</RepositoryType>
+	    <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
