@@ -7,6 +7,11 @@ If you've ever made mods before you've probably trouble reusing code between mod
 ## What features does it have?
 This library has a lot of features already and will only gain more over time. Some of the current features are:
 
+- ``ReloadedMod`` base class for mods to inherit. Doing so makes a significant amount of work happen automatically for the modder.
+   - Automatically registers any hooks and mod attributes
+   - Creates an instance of ``Harmonny`` for C# hooking
+   - Custom Mod Logger
+   - more
 - A simple Signature Scanning class. It's essentially a wrapper around the Reloaded2 SigScanner that does a lot of stuff automatically.
 - Info about the players hardware:
    - Computer screen and resolution
@@ -18,9 +23,11 @@ This library has a lot of features already and will only gain more over time. So
    - A powerful event system that mods can use to easily create and subscribe to any game event. When the game event is called every subscriber will execute. It's based off of Unity's ``UnityEvent`` class.
 - Time management
    - Get info about the passage of time within the game, for example the time between this frame and the last one.
-   - Effectively the same as Unity's Time class.
+   - Effectively the same as Unity's ``Time`` class.
 - Vector2 and Vector3 classes for dealing with 2D and 3D locations.
 - A ThreadSafe Randomizer to guarantee that all of your mods will work even when you use multi-threading
+- Custom ``Attribute`` class called ``ModAttrAttribute`` which can be used for anything. Comes with an autoloader that automatically loads all ``ModAttrAttributes`` from an Assembly.
+- An ``IModHook`` interface for automatically loading all Reloaded Hooks
 - Many helpful extension methods added to general C# classes for ease of use.
 - Much more
 
