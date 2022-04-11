@@ -2,7 +2,7 @@
 A utility library for Reloaded2 that makes it significantly easier to create mods. It comes with dozens of tools and utilities to help unify your Reloaded2 projects and helps you make much more powerful mods without extra work.
 
 ## Why should you use this?
-If you've ever made mods before you've probably trouble reusing code between mods. You'd have to rewrite the same code over and over, possibly introducing bugs and making future improvements impossible. That is inefficient and bad practice. It's much better to have one library with all your reusable code. That's what ``Reloaded.ModHelper`` is. It comes with a ton of optimized code, utilities, and "helper classes" so you can get straight to business making your mods.
+If you've ever made mods before you've probably had trouble reusing code between mods. You'd have to rewrite the same code over and over, possibly introducing bugs and making future improvements impossible. That is inefficient and bad practice. It's much better to have one library with all your reusable code. That's what ``Reloaded.ModHelper`` is. It comes with a ton of optimized code, utilities, and "helper classes" so you can get straight to business making your mods.
 
 ## What features does it have?
 This library has a lot of features already and will only gain more over time. Some of the current features are:
@@ -29,6 +29,6 @@ This library has a lot of features already and will only gain more over time. So
 - Custom ``Attribute`` class called ``ModAttrAttribute`` which can be used for anything. Comes with an autoloader that automatically loads all ``ModAttrAttributes`` from an Assembly.
 - An ``IModHook`` interface for automatically loading all Reloaded Hooks
 - Many helpful extension methods added to general C# classes for ease of use.
-- Much more
+- Much more!
 
 In addition to all of this, ``Reloaded.ModHelper`` is designed to support "one-off" mods that don't have dependent mods, as well as API's for those who are making big modding APIs that are shared amongst many mods.
