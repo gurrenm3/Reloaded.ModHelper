@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Reloaded.ModHelper
@@ -13,6 +14,17 @@ namespace Reloaded.ModHelper
     {
         public override bool CanRead => true;
         public override bool CanWrite => false;
+
+        private IModLogger logger;
+        public ModSettingConverter()
+        {
+
+        }
+
+        public ModSettingConverter(IModLogger logger)
+        {
+            this.logger = logger;
+        }
 
         public override bool CanConvert(Type objectType)
         {
@@ -28,28 +40,40 @@ namespace Reloaded.ModHelper
             var settingType = Type.GetType(typeName);
 
             // Create mod setting.
-            var modSetting = Activator.CreateInstance(settingType);
+            ModSetting modSetting = (ModSetting)Activator.CreateInstance(settingType);
+
+            // get all properties and fields, ignoring duplicates.
+            HashSet<MemberInfo> allValues = new HashSet<MemberInfo>();
+            var fields = settingType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            foreach (var field in fields)
+            {
+                if (!allValues.Any(value => value.Name == field.Name))
+                    allValues.Add(field);
+            }
+
+            var properties = settingType.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+            foreach (var property in properties)
+            {
+                if (!allValues.Any(value => value.Name == property.Name))
+                    allValues.Add(property);
+            }
 
 
             // Set values of the created mod setting to the values from json.
-            List<MemberInfo> allValues = new List<MemberInfo>();
-            allValues.AddRange(settingType.GetProperties());
-            allValues.AddRange(settingType.GetFields());
-
             foreach (var item in allValues)
             {
                 if (token[item.Name] == null)
                     continue;
 
-                if (item is PropertyInfo property && property.SetMethod != null)
-                {
-                    var value = Convert.ChangeType(token[item.Name], property.PropertyType);
-                    property.SetValue(modSetting, value);
-                }
-                else if (item is FieldInfo field)
+                if (item is FieldInfo field)
                 {
                     var value = Convert.ChangeType(token[item.Name], field.FieldType);
                     field.SetValue(modSetting, value);
+                }
+                else if (item is PropertyInfo property && property.SetMethod != null)
+                {
+                    var value = Convert.ChangeType(token[item.Name], property.PropertyType);
+                    property.SetValue(modSetting, value);
                 }
             }
 

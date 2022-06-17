@@ -24,7 +24,7 @@ namespace Reloaded.ModHelper
         public IModEvent<object> OnValueChanged { get; set; }
 
         /// <summary>
-        /// The current value of this setting. Avoid setting directly.
+        /// The current value of this setting.
         /// </summary>
         public virtual object Value
         {
@@ -42,12 +42,24 @@ namespace Reloaded.ModHelper
 
         public ModSetting()
         {
-            
         }
 
+        /// <summary>
+        /// Initializes this mod setting with an initial value.
+        /// </summary>
+        /// <param name="initialValue"></param>
         public ModSetting(object initialValue) : this()
         {
             Value = initialValue;
+        }
+
+        /// <summary>
+        /// Returns whether or not this setting should be displayed in game.
+        /// <br/>Will only work if your game has support for in game settings.
+        /// </summary>
+        public virtual bool ShowInGame()
+        {
+            return true;
         }
 
         /// <summary>

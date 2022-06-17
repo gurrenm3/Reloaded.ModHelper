@@ -3,10 +3,15 @@
 namespace Reloaded.ModHelper
 {
     /// <summary>
-    /// A logger for Reloaded2 Mods. Every write method is async to prevent messages from interrupting each other.
+    /// A logger for Reloaded2 Mods that includes the name of the mod that wrote the message.
     /// </summary>
     public interface IModLogger
     {
+        /// <summary>
+        /// The name of the mod that owns this logger.
+        /// </summary>
+        public string ModName { get; }
+
         /// <summary>
         /// Write additional text to the Console without proceeding to the next line.
         /// </summary>

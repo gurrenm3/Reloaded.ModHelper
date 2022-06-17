@@ -1,19 +1,41 @@
 ﻿using HarmonyLib;
+using Newtonsoft.Json;
 using Reloaded.Hooks.Definitions;
 using Reloaded.Mod.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Reloaded.ModHelper
 {
     /// <summary>
     /// A base class for Reloaded2 mods
     /// </summary>
-    public class ReloadedMod
+    public abstract class ReloadedMod
     {
+        /// <summary>
+        /// Represents the location of the personalized folder for this specific mod.
+        /// Used to help separate different mods and to store importnat assets, setting files, etc.
+        /// <br/><br/>Example: "Actual_Game_Directory/Mods/My Mod"
+        /// </summary>
+        public abstract string MyModFolder { get; }
+
+        /// <summary>
+        /// The path to the settings file.
+        /// </summary>
+        public string SettingsFile => $"{MyModFolder}\\settings.json";
+
+        /// <summary>
+        /// Override this and set it to true if you want to constantly check for changes to your
+        /// settings file and automatically change to them if any are found. Consumes unnesessary resources
+        /// so use only if you need to.
+        /// </summary>
+        public virtual bool ShouldUpdateSettings { get; set; } = false;
+
         /// <summary>
         /// Information about this mod.
         /// <br/>Contains info like Mod Name, Author, Version, etc.
@@ -57,14 +79,19 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Contains any Mod Setting found in this class.
         /// </summary>
-        public List<ModSettingInfo> LoadedModSettings => _loadedModSettings;
-        private List<ModSettingInfo> _loadedModSettings;
+        public List<ModSettingInfo> LoadedModSettings => settingsManager?.LoadedModSettings;
+
+        /// <summary>
+        /// Manager for the settings loaded by this mod.
+        /// </summary>
+        protected ModSettingsManager settingsManager;
 
         /// <summary>
         /// Reflects whether or not this mod has finished initializing.
         /// </summary>
         public bool IsInitialized => _isInitialized;
         private bool _isInitialized;
+
 
         /// <summary>
         /// Creates an instance of this class.
@@ -83,9 +110,25 @@ namespace Reloaded.ModHelper
             ModConfig = _config;
             ReloadedHooks = _hooks;
 
+            Awake();
+
             if (autoInitialize)
                 Initialize();
         }
+
+
+
+        /// <summary>
+        /// Called once when this mod has finished initializing.
+        /// </summary>
+        protected virtual void OnInitialized() { }
+
+        /// <summary>
+        /// Called once before this mod has initialized.
+        /// </summary>
+        protected virtual void Awake() { }
+
+
 
         /// <summary>
         /// Initialize this mod. Normally this is automatically called and it can only be called once.
@@ -103,15 +146,10 @@ namespace Reloaded.ModHelper
             InitHarmony();
             RegisterHooks();
             RegisterModSettings();
-            _isInitialized = true;
 
+            _isInitialized = true;
             OnInitialized();
         }
-
-        /// <summary>
-        /// Called once when this mod has finished initializing.
-        /// </summary>
-        protected virtual void OnInitialized() { }
 
         /// <summary>
         /// Called when this mod's Harmony Instance is created. Override it to change how it's made.
@@ -161,6 +199,18 @@ namespace Reloaded.ModHelper
             Logger.WriteLine(message);
         }
 
+        private void RegisterModSettings()
+        {
+            settingsManager = new ModSettingsManager(this, Logger, SettingsFile, ShouldUpdateSettings);
+            settingsManager.PopulateModSettings();
+            settingsManager.SaveModSettings();// saving json to make sure file exists and is updated.
+
+            string message = settingsManager.HasModSettings ? $"Registered {LoadedModSettings.Count} Mod Settings!"
+                : "No Mod Settings loaded";
+
+            Logger.WriteLine(message);
+        }
+
         /// <summary>
         /// Attempts to get a <see cref="ModAttrAttribute"/> from the list of loaded mod attributes.
         /// </summary>
@@ -181,47 +231,6 @@ namespace Reloaded.ModHelper
             }
 
             return false;
-        }
-
-
-        /// <summary>
-        /// Registers all mod settings in this class.
-        /// </summary>
-        protected virtual void RegisterModSettings()
-        {
-            _loadedModSettings = GetModSettings();
-            bool hasModSettings = _loadedModSettings != null && _loadedModSettings.Count > 0;
-
-            string message = hasModSettings ? $"Registered {_loadedModSettings.Count} Mod Settings!"
-                : "No Mod Settings loaded";
-
-            Logger.WriteLine(message);
-        }
-
-        private List<ModSettingInfo> GetModSettings()
-        {
-            var type = GetType();
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static).ToList();
-
-            List<ModSettingInfo> modSettings = new List<ModSettingInfo>();
-            foreach (var field in fields)
-            {
-                if (field.GetValue(this) is ModSetting setting)
-                {
-                    var modSetting = setting;
-                    /*Logger.WriteLine(field.FieldType.Name);
-                    if (field.FieldType == typeof(ModSettingBool))
-                    {
-                        Logger.WriteLine("Is Bool");
-                        modSetting = (ModSettingBool)setting;
-                    }*/
-                    
-                    var info = new ModSettingInfo(field.Name, modSetting);
-                    modSettings.Add(info);
-                }
-            }
-
-            return modSettings;
         }
     }
 }

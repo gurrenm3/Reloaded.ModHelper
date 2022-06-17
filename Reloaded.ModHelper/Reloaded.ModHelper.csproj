@@ -57,4 +57,9 @@ It's made by modders for modders, and is inspired by Unity to be more familiar a
 	  <ProjectReference Include="..\Reloaded.ModHelper.Shared\Reloaded.ModHelper.Shared.csproj" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <Folder Include="Api\Extensions\" />
+	</ItemGroup>
+
 </Project>

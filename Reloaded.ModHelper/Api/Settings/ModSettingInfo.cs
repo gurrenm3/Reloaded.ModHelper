@@ -1,4 +1,7 @@
-﻿namespace Reloaded.ModHelper
+﻿using System;
+using System.Reflection;
+
+namespace Reloaded.ModHelper
 {
     /// <summary>
     /// Used to track Mod Settings and pair them with their original variable.
@@ -6,9 +9,15 @@
     public class ModSettingInfo
     {
         /// <summary>
+        /// The actual variable for this mod setting.
+        /// </summary>
+        [NonSerialized]
+        public MemberInfo variable;
+
+        /// <summary>
         /// Represents the name of the mod setting variable.
         /// </summary>
-        public string variableName;
+        public readonly string variableName;
 
         /// <summary>
         /// Represents the actual mod setting.

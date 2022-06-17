@@ -10,6 +10,12 @@ namespace Reloaded.ModHelper
     public class ModLogger : IModLogger
     {
         /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public string ModName => _modName;
+        private string _modName;
+
+        /// <summary>
         /// The color that this mod's name should be.
         /// </summary>
         public Color modNameColor = Color.LightGreen;
@@ -33,6 +39,7 @@ namespace Reloaded.ModHelper
         {
             _config = config;
             _logger = logger;
+            _modName = _config.ModName;
         }
 
         /// <summary>
