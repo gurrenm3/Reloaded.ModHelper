@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Reloaded.Hooks.Definitions;
 using Reloaded.Mod.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -53,28 +54,37 @@ namespace Reloaded.ModHelper
         public List<IModHook> LoadedHooks => _loadedHooks;
         private List<IModHook> _loadedHooks;
 
-        private bool isInitialized;
+        /// <summary>
+        /// Contains any Mod Setting found in this class.
+        /// </summary>
+        public List<ModSettingInfo> LoadedModSettings => _loadedModSettings;
+        private List<ModSettingInfo> _loadedModSettings;
+
+        /// <summary>
+        /// Reflects whether or not this mod has finished initializing.
+        /// </summary>
+        public bool IsInitialized => _isInitialized;
+        private bool _isInitialized;
 
         /// <summary>
         /// Creates an instance of this class.
         /// </summary>
-        public ReloadedMod(IModConfig _config, IReloadedHooks _hooks, ILogger _logger)
+        public ReloadedMod(IModConfig _config, IReloadedHooks _hooks, ILogger _logger, bool autoInitialize = true) 
+            : this(_config, _hooks, new ModLogger(_config, _logger), autoInitialize)
         {
-            Logger = new ModLogger(_config, _logger);
-            ModConfig = _config;
-            ReloadedHooks = _hooks;
-            Initialize();
         }
 
         /// <summary>
         /// Creates an instance of this class.
         /// </summary>
-        public ReloadedMod(IModConfig _config, IReloadedHooks _hooks, IModLogger _logger)
+        public ReloadedMod(IModConfig _config, IReloadedHooks _hooks, IModLogger _logger, bool autoInitialize = true)
         {
             Logger = _logger;
             ModConfig = _config;
             ReloadedHooks = _hooks;
-            Initialize();
+
+            if (autoInitialize)
+                Initialize();
         }
 
         /// <summary>
@@ -82,18 +92,26 @@ namespace Reloaded.ModHelper
         /// </summary>
         protected virtual void Initialize()
         {
-            if (isInitialized)
+            if (_isInitialized)
                 return;
 
             Logger.WriteLine("Initializing...");
 
-            ModAssembly = AssemblyUtils.GetCallingAssembly();
+            ModAssembly = AssemblyUtils.GetCallingAssembly();            
             ModAttributeLoader.LoadAllFromAssembly(ModAssembly, out _loadedModAttributes);
 
             InitHarmony();
             RegisterHooks();
-            isInitialized = true;
+            RegisterModSettings();
+            _isInitialized = true;
+
+            OnInitialized();
         }
+
+        /// <summary>
+        /// Called once when this mod has finished initializing.
+        /// </summary>
+        protected virtual void OnInitialized() { }
 
         /// <summary>
         /// Called when this mod's Harmony Instance is created. Override it to change how it's made.
@@ -101,7 +119,7 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public virtual Harmony CreateHarmonyInstance()
         {
-            string harmonyId = $"{ModConfig.ModAuthor.Replace(" ", "_")}.{ModConfig.ModName.Replace(" ", "_")}";
+            string harmonyId = $"{ModConfig.ModAuthor}.{ModConfig.ModName}".Replace(" ", "_");
             return new Harmony(harmonyId);
         }
 
@@ -163,6 +181,47 @@ namespace Reloaded.ModHelper
             }
 
             return false;
+        }
+
+
+        /// <summary>
+        /// Registers all mod settings in this class.
+        /// </summary>
+        protected virtual void RegisterModSettings()
+        {
+            _loadedModSettings = GetModSettings();
+            bool hasModSettings = _loadedModSettings != null && _loadedModSettings.Count > 0;
+
+            string message = hasModSettings ? $"Registered {_loadedModSettings.Count} Mod Settings!"
+                : "No Mod Settings loaded";
+
+            Logger.WriteLine(message);
+        }
+
+        private List<ModSettingInfo> GetModSettings()
+        {
+            var type = GetType();
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static).ToList();
+
+            List<ModSettingInfo> modSettings = new List<ModSettingInfo>();
+            foreach (var field in fields)
+            {
+                if (field.GetValue(this) is ModSetting setting)
+                {
+                    var modSetting = setting;
+                    /*Logger.WriteLine(field.FieldType.Name);
+                    if (field.FieldType == typeof(ModSettingBool))
+                    {
+                        Logger.WriteLine("Is Bool");
+                        modSetting = (ModSettingBool)setting;
+                    }*/
+                    
+                    var info = new ModSettingInfo(field.Name, modSetting);
+                    modSettings.Add(info);
+                }
+            }
+
+            return modSettings;
         }
     }
 }

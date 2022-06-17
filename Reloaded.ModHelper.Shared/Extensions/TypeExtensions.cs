@@ -8,6 +8,8 @@ namespace Reloaded.ModHelper
     /// </summary>
     public static class TypeExtensions
     {
+        static Type[] numericTypes = new Type[] { typeof(byte), typeof(int), typeof(long), typeof(float), typeof(double), typeof(decimal), };
+
         /// <summary>
         /// Returns whether or not this type is a Numeric type.
         /// </summary>
@@ -15,7 +17,6 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public static bool IsNumeric(this Type type)
         {
-            var numericTypes = new Type[] { typeof(byte), typeof(int), typeof(long), typeof(float), typeof(double), typeof(decimal), };
             return numericTypes.Contains(type);
         }
     }

@@ -114,6 +114,8 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
         /// </summary>
+        /// <param name="useOnFinishedInvoking">Specify whether or not <see cref="OnFinishedInvoking"/>
+        /// will be used and therefore should be initialized.</param>
         public ModEvent(bool useOnFinishedInvoking = true)
         {
             if (useOnFinishedInvoking)
@@ -202,6 +204,8 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
         /// </summary>
+        /// <param name="useOnFinishedInvoking">Specify whether or not <see cref="OnFinishedInvoking"/>
+        /// will be used and therefore should be initialized.</param>
         public ModEvent(bool useOnFinishedInvoking = true)
         {
             if (useOnFinishedInvoking)
@@ -289,6 +293,8 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
         /// </summary>
+        /// <param name="useOnFinishedInvoking">Specify whether or not <see cref="OnFinishedInvoking"/>
+        /// will be used and therefore should be initialized.</param>
         public ModEvent(bool useOnFinishedInvoking = true)
         {
             if (useOnFinishedInvoking)
@@ -377,6 +383,8 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
         /// </summary>
+        /// <param name="useOnFinishedInvoking">Specify whether or not <see cref="OnFinishedInvoking"/>
+        /// will be used and therefore should be initialized.</param>
         public ModEvent(bool useOnFinishedInvoking = true)
         {
             if (useOnFinishedInvoking)
@@ -464,6 +472,8 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Creates an instance of <see cref="ModEvent"/>.
         /// </summary>
+        /// <param name="useOnFinishedInvoking">Specify whether or not <see cref="OnFinishedInvoking"/>
+        /// will be used and therefore should be initialized.</param>
         public ModEvent(bool useOnFinishedInvoking = true)
         {
             if (useOnFinishedInvoking)
