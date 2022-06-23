@@ -1,4 +1,6 @@
-﻿namespace Reloaded.ModHelper
+﻿using Reloaded.ModHelper;
+
+namespace Reloaded.ModHelper
 {
     /// <summary>
     /// A wrapper class for ModEvent parameters. This is used by ModEventHooks to let you change hook arguments in

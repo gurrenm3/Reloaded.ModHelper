@@ -55,7 +55,7 @@ namespace Reloaded.ModHelper
         /// <param name="add0x">Should 0x be added to the beginning of each byte? Ex: 0x8</param>
         /// <param name="separateBySpace">Should each byte be separated by a space?</param>
         /// <returns></returns>
-        public static string ToHex(this string input, bool add0x = false, bool separateBySpace =false)
+        public static string ToHex(this string input, bool add0x = false, bool separateBySpace = false)
         {
             StringBuilder sb = new StringBuilder();
             foreach (char c in input)

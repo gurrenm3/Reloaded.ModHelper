@@ -18,6 +18,11 @@
         /// <summary>
         /// Treat this message as a warning.
         /// </summary>
-        Warning
+        Warning, 
+
+        /// <summary>
+        /// Post this as a "For Cheat Engine Users" notification.
+        /// </summary>
+        CheatEngine
     }
 }

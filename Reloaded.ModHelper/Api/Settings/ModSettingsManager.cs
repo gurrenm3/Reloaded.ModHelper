@@ -34,6 +34,7 @@ namespace Reloaded.ModHelper
         private IModLogger logger;
         private object owner;
         private bool useSettingsWatcher;
+        private FileInfo settingsFileInfo;
 
         /// <summary>
         /// Creates an instance of this manager.
@@ -49,6 +50,10 @@ namespace Reloaded.ModHelper
             this.settingsFile = settingsFile;
             owner = settingsOwer;
             this.useSettingsWatcher = useSettingsWatcher;
+
+            var fileInfo = new FileInfo(settingsFile);
+            if (!fileInfo.Directory.Exists)
+                fileInfo.Directory.Create();
 
             if (useSettingsWatcher)
                 InitSettingsWatcher();
@@ -81,7 +86,25 @@ namespace Reloaded.ModHelper
         /// </summary>
         public void SaveModSettings()
         {
-            string json = JsonConvert.SerializeObject(_loadedModSettings, Formatting.Indented);;
+            // TODO. Don't save settings file if there are no loaded settings and delete if file exists
+            /*if (_loadedModSettings == null || !_loadedModSettings.Any())
+            {
+                bool directoryNotExist = !settingsFileInfo.Directory.Exists;
+                if (directoryNotExist)
+                    return;
+
+                var files = settingsFileInfo.Directory.GetFiles();
+                bool noFilesFound = files.Length == 0;
+                if (noFilesFound)
+                {
+                    logger.WriteLine("Personal ");
+                    settingsFileInfo.Directory.Delete();
+                }
+
+                bool onlySettngsFile = files.Length == 1 && files[0].FullName == settingsFileInfo.FullName;
+            }*/
+
+            string json = JsonConvert.SerializeObject(_loadedModSettings, Formatting.Indented);
             if (!File.Exists(settingsFile) || File.ReadAllText(settingsFile) != json)
                 File.WriteAllText(settingsFile, json);
         }

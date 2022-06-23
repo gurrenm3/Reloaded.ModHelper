@@ -1,14 +1,10 @@
 ﻿using HarmonyLib;
-using Newtonsoft.Json;
 using Reloaded.Hooks.Definitions;
 using Reloaded.Mod.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace Reloaded.ModHelper
 {
@@ -110,6 +106,11 @@ namespace Reloaded.ModHelper
             ModConfig = _config;
             ReloadedHooks = _hooks;
 
+            Logger.WriteLine("------ Mod Info ------");
+            Logger.WriteLine($"{_config.ModName} v{_config.ModVersion}");
+            Logger.WriteLine($"by {_config.ModAuthor}");
+            Logger.WriteLine("----------------------");
+
             Awake();
 
             if (autoInitialize)
@@ -124,7 +125,7 @@ namespace Reloaded.ModHelper
         protected virtual void OnInitialized() { }
 
         /// <summary>
-        /// Called once before this mod has initialized.
+        /// Called once before this mod has initialized; after the logger, config, and hook instance have been set.
         /// </summary>
         protected virtual void Awake() { }
 
@@ -174,8 +175,7 @@ namespace Reloaded.ModHelper
             {
                 HarmonyLib.PatchAll(this.ModAssembly);
                 Logger.Write("Harmony instance created with id:  ", writeModName: true);
-                Logger.Write($"\"{HarmonyLib.Id}\"", Color.RosyBrown);
-                Logger.Write($"\n");
+                Logger.WriteLine($"\"{HarmonyLib.Id}\"", Color.RosyBrown, writeModName: false);
             }
             catch (System.Exception ex)
             {

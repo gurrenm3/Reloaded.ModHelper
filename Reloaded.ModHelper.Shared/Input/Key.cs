@@ -559,6 +559,92 @@
         /// <Summary>
         /// Right Menu Key
         /// </Summary>
-        RMenu = 0xa5
+        RMenu = 0xa5,
+
+
+        /// <Summary>
+        /// : Kkey
+        /// </Summary>
+        Colon = 0xBA,
+
+        /// <Summary>
+        /// ; Key
+        /// </Summary>
+        Semicolon = 0xBA,
+
+        /// <summary>
+        /// + Key
+        /// </summary>
+        Plus = 0xBB,
+
+        /// <summary>
+        /// , Key
+        /// </summary>
+        Comma = 0xBC,
+
+        /// <summary>
+        /// - Key
+        /// </summary>
+        Minus = 0xBD,
+
+        /// <summary>
+        /// . Key
+        /// </summary>
+        Period = 0xBE,
+
+        /// <Summary>
+        /// / Key
+        /// </Summary>
+        Slash = 0xBF,
+
+        /// <Summary>
+        /// ? Key
+        /// </Summary>
+        Question = 0xBF,
+
+        /// <Summary>
+        /// ~ Key
+        /// </Summary>
+        Tilde = 0xC0,
+
+        /// <Summary>
+        /// ` Key
+        /// </Summary>
+        Backquote = 0xC0,
+
+        /// <Summary>
+        /// [ Key
+        /// </Summary>
+        LeftBracket = 0xDB,
+
+        /// <Summary>
+        /// { Key
+        /// </Summary>
+        LeftCurlyBracket = 0xDB,
+
+        /// <Summary>
+        /// \ Key
+        /// </Summary>
+        Backslash = 0xDC,
+
+        /// <Summary>
+        /// ] Key
+        /// </Summary>
+        RightBracket = 0xDD,
+
+        /// <Summary>
+        /// } Key
+        /// </Summary>
+        RightCurlyBracket = 0xDD,
+
+        /// <Summary>
+        /// ' Key
+        /// </Summary>
+        Quote = 0xDE,
+
+        /// <Summary>
+        /// " Key
+        /// </Summary>
+        DoubleQuote = 0xDE,
     }
 }

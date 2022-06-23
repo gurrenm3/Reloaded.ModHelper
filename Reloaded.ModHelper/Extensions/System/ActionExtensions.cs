@@ -16,7 +16,14 @@ namespace Reloaded.ModHelper
         {
             for (int i = 0; i < actions.Count; i++)
             {
-                actions[i].Invoke();
+                try
+                {
+                    actions[i].Invoke();
+                }
+                catch (Exception ex)
+                {
+                    ConsoleUtil.LogError(ex.Message);
+                }
             }
         }
 
@@ -30,7 +37,14 @@ namespace Reloaded.ModHelper
         {
             for (int i = 0; i < actions.Count; i++)
             {
-                actions[i].Invoke(argument);
+                try
+                {
+                    actions[i].Invoke(argument);
+                }
+                catch (Exception ex)
+                {
+                    ConsoleUtil.LogError(ex.Message);
+                }
             }
         }
 
@@ -46,7 +60,14 @@ namespace Reloaded.ModHelper
         {
             for (int i = 0; i < actions.Count; i++)
             {
-                actions[i].Invoke(argument1, argument2);
+                try
+                {
+                    actions[i].Invoke(argument1, argument2);
+                }
+                catch (Exception ex)
+                {
+                    ConsoleUtil.LogError(ex.Message);
+                }
             }
         }
 
@@ -64,7 +85,14 @@ namespace Reloaded.ModHelper
         {
             for (int i = 0; i < actions.Count; i++)
             {
-                actions[i].Invoke(argument1, argument2, argument3);
+                try
+                {
+                    actions[i].Invoke(argument1, argument2, argument3);
+                }
+                catch (Exception ex)
+                {
+                    ConsoleUtil.LogError(ex.Message);
+                }
             }
         }
 
@@ -84,7 +112,14 @@ namespace Reloaded.ModHelper
         {
             for (int i = 0; i < actions.Count; i++)
             {
-                actions[i].Invoke(argument1, argument2, argument3, argument4);
+                try
+                {
+                    actions[i].Invoke(argument1, argument2, argument3, argument4);
+                }
+                catch (Exception ex)
+                {
+                    ConsoleUtil.LogError(ex.Message);
+                }
             }
         }
 
@@ -105,8 +140,15 @@ namespace Reloaded.ModHelper
         public static void InvokeAll<T1, T2, T3, T4, T5>(this List<Action<T1, T2, T3, T4, T5>> actions, T1 argument1, T2 argument2, T3 argument3, T4 argument4, T5 argument5)
         {
             for (int i = 0; i < actions.Count; i++)
-            {
-                actions[i].Invoke(argument1, argument2, argument3, argument4, argument5);
+            {               
+                try
+                {
+                    actions[i].Invoke(argument1, argument2, argument3, argument4, argument5);
+                }
+                catch (Exception ex)
+                {
+                    ConsoleUtil.LogError(ex.Message);
+                }
             }
         }
     }

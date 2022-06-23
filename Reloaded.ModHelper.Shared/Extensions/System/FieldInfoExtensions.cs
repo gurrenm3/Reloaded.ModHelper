@@ -18,9 +18,9 @@ namespace Reloaded.ModHelper
         {
             var value = instance.GetValue(obj);
             if (value == null)
-                return default(T);
+                return default;
 
-            return (value == null) ? default(T) : (T)value;
+            return value == null ? default : (T)value;
         }
     }
 }
