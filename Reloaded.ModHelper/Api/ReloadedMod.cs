@@ -18,12 +18,12 @@ namespace Reloaded.ModHelper
         /// Used to help separate different mods and to store importnat assets, setting files, etc.
         /// <br/><br/>Example: "Actual_Game_Directory/Mods/My Mod"
         /// </summary>
-        public abstract string MyModFolder { get; }
+        public virtual string MyModFolder { get; }
 
         /// <summary>
         /// The path to the settings file.
         /// </summary>
-        public string SettingsFile => $"{MyModFolder}\\settings.json";
+        public virtual string SettingsFile => $"{MyModFolder}\\settings.json";
 
         /// <summary>
         /// Override this and set it to true if you want to constantly check for changes to your
@@ -106,10 +106,10 @@ namespace Reloaded.ModHelper
             ModConfig = _config;
             ReloadedHooks = _hooks;
 
-            Logger.WriteLine("------ Mod Info ------");
+            Logger.WriteLine("-------- Mod Info --------");
             Logger.WriteLine($"{_config.ModName} v{_config.ModVersion}");
             Logger.WriteLine($"by {_config.ModAuthor}");
-            Logger.WriteLine("----------------------");
+            Logger.WriteLine("--------------------------");
 
             Awake();
 
@@ -201,6 +201,14 @@ namespace Reloaded.ModHelper
 
         private void RegisterModSettings()
         {
+            if (string.IsNullOrEmpty(MyModFolder))
+            {
+                Logger.WriteLine($"{nameof(MyModFolder)} was not set. This isn't bad," +
+                    $" but you won't be able to add custom assets or mod settings until" +
+                    $" you set this.");
+                return;
+            }
+
             settingsManager = new ModSettingsManager(this, Logger, SettingsFile, ShouldUpdateSettings);
             settingsManager.PopulateModSettings();
             settingsManager.SaveModSettings();// saving json to make sure file exists and is updated.

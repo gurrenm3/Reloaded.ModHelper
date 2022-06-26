@@ -46,6 +46,12 @@ namespace Reloaded.ModHelper
         /// constantly watched for any changes.</param>
         public ModSettingsManager(object settingsOwer, IModLogger logger, string settingsFile, bool useSettingsWatcher = false)
         {
+            if (string.IsNullOrEmpty(settingsFile))
+            {
+                logger.WriteLine($"Cannot manage settings file because the path was invalid!", LogLevel.Error);
+                return;
+            }
+
             this.logger = logger;
             this.settingsFile = settingsFile;
             owner = settingsOwer;

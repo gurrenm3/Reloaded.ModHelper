@@ -31,8 +31,15 @@ namespace Reloaded.ModHelper
         {
             if (address != IntPtr.Zero)
             {
-                var convertedString = Marshal.PtrToStringAnsi(address);
-                return convertedString;
+                try
+                {
+                    var convertedString = Marshal.PtrToStringAnsi(address);
+                    return convertedString;
+                }
+                catch (Exception ex)
+                {
+                    
+                }
             }
             return null;
         }

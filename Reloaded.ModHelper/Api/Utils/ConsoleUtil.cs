@@ -11,8 +11,10 @@ namespace Reloaded.ModHelper
         public static void LogError(string message)
         {
             var originalColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($"[{DateTime.Now.ToString("HH:mm:ss")}]");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write("[Exception occured]");
+            Console.Write(" [Exception occured]");
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($" {message}");
             Console.ForegroundColor = originalColor;
