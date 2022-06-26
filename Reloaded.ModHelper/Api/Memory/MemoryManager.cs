@@ -10,7 +10,8 @@ namespace Reloaded.ModHelper.Api
     /// </summary>
     public class MemoryManager
     {
-        private static HashSet<IMemoryConverter> staticConverters = new HashSet<IMemoryConverter>()
+        private static HashSet<IMemoryConverter> alwaysRemoveConverters = new HashSet<IMemoryConverter>();
+        private static HashSet<IMemoryConverter> alwaysAddConverters = new HashSet<IMemoryConverter>()
         {
             new PrimitiveConverter(),
             new EnumConverter()
@@ -23,14 +24,23 @@ namespace Reloaded.ModHelper.Api
         /// </summary>
         public MemoryManager()
         {
-            RegisterStaticConverters();
+            AddStaticConverters();
+            RemoveConvertersToIgnore();
         }
 
-        private void RegisterStaticConverters()
+        private void AddStaticConverters()
         {
-            foreach (var item in staticConverters)
-                RegisterConverter(item);
+            foreach (var item in alwaysAddConverters)
+                AddConverter(item);
         }
+
+        private void RemoveConvertersToIgnore()
+        {
+            foreach (var item in alwaysRemoveConverters)
+                RemoveConverter(item);
+        }
+
+
 
         /// <summary>
         /// Reads an object in memory.
@@ -130,16 +140,30 @@ namespace Reloaded.ModHelper.Api
         }
 
         /// <summary>
-        /// Registers a new converter to this manager.
+        /// Creates a new converter and registers it with this manager.
         /// <br/>Will not allow duplicates.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="alwaysRegister">Whether or not this converter should always automatically be registered for new
         /// instances of Memory Managers.></param>
-        public void RegisterConverter<T>(bool alwaysRegister = false) where T : IMemoryConverter, new()
+        public void AddConverter<T>(bool alwaysRegister = false) where T : IMemoryConverter
         {
-            var converter = new T();
-            RegisterConverter(converter);
+            AddConverter(typeof(T), alwaysRegister);
+        }
+
+        /// <summary>
+        /// Creates a new converter and registers it with this manager.
+        /// <br/>Will not allow duplicates.
+        /// </summary>
+        /// <param name="converterType"></param>
+        /// <param name="alwaysRegister"></param>
+        public void AddConverter(Type converterType, bool alwaysRegister = false)
+        {
+            if (!converterType.IsAssignableTo(typeof(IMemoryConverter)))
+                throw new Exception("Tried adding a converter that is not a MemoryConverter");
+
+            var converter = (IMemoryConverter)Activator.CreateInstance(converterType);
+            AddConverter(converter, alwaysRegister);
         }
 
         /// <summary>
@@ -150,15 +174,59 @@ namespace Reloaded.ModHelper.Api
         /// <param name="converterToAdd"></param>
         /// <param name="alwaysRegister">Whether or not this converter should always automatically be registered for new
         /// instances of Memory Managers.</param>
-        public void RegisterConverter<T>(T converterToAdd, bool alwaysRegister = false) where T : IMemoryConverter
+        public void AddConverter<T>(T converterToAdd, bool alwaysRegister = false) where T : IMemoryConverter
         {
-            if (alwaysRegister && !staticConverters.Any(c => c.GetType() == typeof(T)))
-                staticConverters.Add(converterToAdd);
+            if (alwaysRegister && !alwaysAddConverters.Any(c => c.GetType() == typeof(T)))
+                alwaysAddConverters.Add(converterToAdd);
 
-            if (IsRegistered<T>())
+            // it's already here or should be ignored
+            if (IsRegistered<T>() || alwaysRemoveConverters.Contains(converterToAdd))
                 return;
 
             converters.Add(converterToAdd);
+        }
+
+        /// <summary>
+        /// Remove a converter so objects of this type are no longer converted this way.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="alwaysRemove">Should this converter always be removed?</param>
+        /// <returns></returns>
+        public bool RemoveConverter<T>(bool alwaysRemove = false)
+        {
+            return RemoveConverter(typeof(T), alwaysRemove);
+        }
+
+        /// <summary>
+        /// Remove a converter so objects of this type are no longer converted this way.
+        /// </summary>
+        /// <param name="converterType"></param>
+        /// <param name="alwaysRemove">Should this converter always be removed?</param>
+        /// <returns></returns>
+        public bool RemoveConverter(Type converterType, bool alwaysRemove = false)
+        {
+            var converterToRemove = converters.FirstOrDefault(c => c.GetType() == converterType);
+            return RemoveConverter(converterToRemove, alwaysRemove);
+        }
+
+        /// <summary>
+        /// Remove a converter so objects of this type are no longer converted this way.
+        /// </summary>
+        /// <param name="converterToRemove"></param>
+        /// <param name="alwaysRemove">Should this converter always be removed?</param>
+        /// <returns></returns>
+        public bool RemoveConverter(IMemoryConverter converterToRemove, bool alwaysRemove = false)
+        {
+            if (converterToRemove == null || !converters.Remove(converterToRemove)) // nothing removed.
+                return false;
+
+            if (alwaysRemove)
+            {
+                alwaysRemoveConverters.Add(converterToRemove);
+                alwaysAddConverters.Remove(converterToRemove);
+            }
+            
+            return true;
         }
     }
 }
