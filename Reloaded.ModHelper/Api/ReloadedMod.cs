@@ -1,5 +1,4 @@
-﻿using HarmonyLib;
-using Reloaded.Hooks.Definitions;
+﻿using Reloaded.Hooks.Definitions;
 using Reloaded.Mod.Interfaces;
 using System.Collections.Generic;
 using System.Drawing;
@@ -52,12 +51,6 @@ namespace Reloaded.ModHelper
         /// A Logger for writing messages to the Reloaded Console.
         /// </summary>
         public IModLogger Logger { get; set; }
-
-        /// <summary>
-        /// An instance of Harmony made specifically for this mod.
-        /// <br/>This can be used to hook functions from any C# library.
-        /// </summary>
-        public Harmony HarmonyLib { get; private set; }
 
         /// <summary>
         /// Contains any <see cref="ModAttrAttribute"/> that were registered for this mod.
@@ -144,52 +137,12 @@ namespace Reloaded.ModHelper
             ModAssembly = AssemblyUtils.GetCallingAssembly();            
             ModAttributeLoader.LoadAllFromAssembly(ModAssembly, out _loadedModAttributes);
 
-            InitHarmony();
             RegisterHooks();
             RegisterModSettings();
 
             _isInitialized = true;
             OnInitialized();
         }
-
-        /// <summary>
-        /// Called when this mod's Harmony Instance is created. Override it to change how it's made.
-        /// </summary>
-        /// <returns></returns>
-        public virtual Harmony CreateHarmonyInstance()
-        {
-            string harmonyId = $"{ModConfig.ModAuthor}.{ModConfig.ModName}".Replace(" ", "_");
-            return new Harmony(harmonyId);
-        }
-
-        /// <summary>
-        /// Initializes Harmony with this mod.
-        /// <br/>Harmony is a very powerful tool that allows mod makers to hook C# functions.
-        /// It's unlikely that many modders will use it, however it's a nice convenience to have already in place.
-        /// </summary>
-        private void InitHarmony()
-        {
-            HarmonyLib = CreateHarmonyInstance();
-
-            try
-            {
-                HarmonyLib.PatchAll(this.ModAssembly);
-                Logger.Write("Harmony instance created with id:  ", writeModName: true);
-                Logger.WriteLine($"\"{HarmonyLib.Id}\"", Color.RosyBrown, writeModName: false);
-            }
-            catch (System.Exception ex)
-            {
-                if (ex.Message == "A non-collectible assembly may not reference a collectible assembly.")
-                {
-                    throw new System.Exception($"Failed to load Harmony. Cannot use Class Attributs with dependencies from other projects/Assemblies." +
-                        $" Check all of your Classes and make sure that none of them are using an Attribute or {nameof(ModAttrAttribute)} that" +
-                        $" references a Type from another mod/Assembly.");
-                }
-                throw;
-            }
-            
-        }
-
         private void RegisterHooks()
         {
             var hookLoader = new HookLoader(this);
