@@ -43,7 +43,7 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.LogError(ex.Message);
+                    ConsoleUtil.LogException(ex);
                 }
             }
         }
@@ -66,7 +66,7 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.LogError(ex.Message);
+                    ConsoleUtil.LogException(ex);
                 }
             }
         }
@@ -91,7 +91,7 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.LogError(ex.Message);
+                    ConsoleUtil.LogException(ex);
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.LogError(ex.Message);
+                    ConsoleUtil.LogException(ex);
                 }
             }
         }
@@ -147,7 +147,7 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.LogError(ex.Message);
+                    ConsoleUtil.LogException(ex);
                 }
             }
         }

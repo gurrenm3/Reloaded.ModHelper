@@ -14,6 +14,9 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public bool CanConvert(Type typeToCheck)
         {
+            if (typeToCheck == null)
+                return false;
+
             return typeToCheck.IsPrimitive || typeToCheck == typeof(decimal);
         }
 
@@ -85,36 +88,36 @@ namespace Reloaded.ModHelper
 
             if (valueType == typeof(bool))
                 *(bool*)address = (bool)valueToSet;
-            if (valueType == typeof(byte))
+            else if (valueType == typeof(byte))
                 *(byte*)address = (byte)valueToSet;
-            if (valueType == typeof(sbyte))
+            else if (valueType == typeof(sbyte))
                 *(sbyte*)address = (sbyte)valueToSet;
-            if (valueType == typeof(Int16))
+            else if (valueType == typeof(Int16))
                 *(Int16*)address = (Int16)valueToSet;
-            if (valueType == typeof(UInt16))
+            else if (valueType == typeof(UInt16))
                 *(UInt16*)address = (UInt16)valueToSet;
-            if (valueType == typeof(Int32))
+            else if (valueType == typeof(Int32))
                 *(Int32*)address = (Int32)valueToSet;
-            if (valueType == typeof(UInt32))
+            else if (valueType == typeof(UInt32))
                 *(UInt32*)address = (UInt32)valueToSet;
-            if (valueType == typeof(Int64))
+            else if (valueType == typeof(Int64))
                 *(Int64*)address = (Int64)valueToSet;
-            if (valueType == typeof(UInt64))
+            else if (valueType == typeof(UInt64))
                 *(UInt64*)address = (UInt64)valueToSet;
-            if (valueType == typeof(IntPtr))
+            else if (valueType == typeof(IntPtr))
                 *(IntPtr*)address = (IntPtr)valueToSet;
-            if (valueType == typeof(UIntPtr))
+            else if (valueType == typeof(UIntPtr))
                 *(UIntPtr*)address = (UIntPtr)valueToSet;
-            if (valueType == typeof(char))
+            else if (valueType == typeof(char))
                 *(char*)address = (char)valueToSet;
-            if (valueType == typeof(decimal))
+            else if (valueType == typeof(decimal))
                 *(decimal*)address = (decimal)valueToSet;
-            if (valueType == typeof(double))
+            else if (valueType == typeof(double))
                 *(double*)address = (double)valueToSet;
-            if (valueType == typeof(Single))
+            else if (valueType == typeof(Single))
                 *(Single*)address = (Single)valueToSet;
-
-            throw new NotSupportedException("Converter is not capable of setting this value type in memory.");
+            else
+                throw new NotSupportedException($"Primitives Converter is not capable of setting the type {valueType.Name} in memory.");
         }
     }
 }

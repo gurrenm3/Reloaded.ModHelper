@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Reloaded.ModHelper.Api
+namespace Reloaded.ModHelper
 {
     /// <summary>
     /// A universtal reader/writer for objects in memory. Can create custom converters to define how new objects
     /// should be handled.
     /// </summary>
-    public class MemoryManager
+    public class MemoryManager : IMemoryManager
     {
         private static HashSet<IMemoryConverter> alwaysRemoveConverters = new HashSet<IMemoryConverter>();
         private static HashSet<IMemoryConverter> alwaysAddConverters = new HashSet<IMemoryConverter>()
         {
             new PrimitiveConverter(),
-            new EnumConverter()
+            new StringConverter()
         };
 
         private HashSet<IMemoryConverter> converters = new HashSet<IMemoryConverter>();
@@ -24,44 +24,30 @@ namespace Reloaded.ModHelper.Api
         /// </summary>
         public MemoryManager()
         {
+            AddInstanceConverters();
             AddStaticConverters();
             RemoveConvertersToIgnore();
         }
 
-        private void AddStaticConverters()
-        {
-            foreach (var item in alwaysAddConverters)
-                AddConverter(item);
-        }
-
-        private void RemoveConvertersToIgnore()
-        {
-            foreach (var item in alwaysRemoveConverters)
-                RemoveConverter(item);
-        }
-
-
-
         /// <summary>
-        /// Reads an object in memory.
+        /// <inheritdoc/>
         /// </summary>
-        /// <typeparam name="T">The type of object to be read.</typeparam>
-        /// <param name="address">The base address of this object.</param>
-        /// <returns></returns>
-        public T GetObject<T>(long address)
+        /// <typeparam name="T"><inheritdoc/></typeparam>
+        /// <param name="address"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        public T GetValue<T>(long address)
         {
-            var value = GetObject(typeof(T), address);
+            var value = GetValue(typeof(T), address);
             return value == null ? default(T) : (T)value;
         }
 
         /// <summary>
-        /// Reads an object in memory.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="objectType">The type of object to be read.</param>
-        /// <param name="address">The base address of this object.</param>
-        /// <returns></returns>
-        /// <exception cref="NotSupportedException"></exception>
-        public object GetObject(Type objectType, long address)
+        /// <param name="objectType"><inheritdoc/></param>
+        /// <param name="address"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
+        public object GetValue(Type objectType, long address)
         {
             var converter = GetConverter(objectType);
             if (converter == null)
@@ -72,11 +58,11 @@ namespace Reloaded.ModHelper.Api
         }
 
         /// <summary>
-        /// Sets an object in memory at the provided address.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="address">The base address of the object.</param>
-        /// <param name="valueToSet">The new value to set at the address.</param>
-        public void SetObject(long address, object valueToSet)
+        /// <param name="address"><inheritdoc/></param>
+        /// <param name="valueToSet"><inheritdoc/></param>
+        public void SetValue(long address, object valueToSet)
         {
             var converter = GetConverter(valueToSet.GetType());
             if (converter == null)
@@ -88,41 +74,40 @@ namespace Reloaded.ModHelper.Api
 
 
         /// <summary>
-        /// Returns the converter that can convert an object of type T.
+        /// <inheritdoc/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T"><inheritdoc/></typeparam>
+        /// <returns><inheritdoc/></returns>
         public IMemoryConverter GetConverter<T>()
         {
             return GetConverter(typeof(T));
         }
 
         /// <summary>
-        /// Returns the converter that can convert an object of the provided type.
-        /// Will return null if converter does not exist.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="converterType"></param>
-        /// <returns></returns>
+        /// <param name="converterType"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public IMemoryConverter GetConverter(Type converterType)
         {
             return converters.FirstOrDefault(c => c.CanConvert(converterType));
         }
 
         /// <summary>
-        /// Returns whether or not this type of object can be converted.
+        /// <inheritdoc/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T"><inheritdoc/></typeparam>
+        /// <returns><inheritdoc/></returns>
         public bool CanConvert<T>()
         {
             return CanConvert(typeof(T));
         }
 
         /// <summary>
-        /// Returns whether or not this type of object can be converted.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="objectType"></param>
-        /// <returns></returns>
+        /// <param name="objectType"><inheritdoc/></param>
+        /// <returns><inheritdoc/></returns>
         public bool CanConvert(Type objectType)
         {
             return GetConverter(objectType) != null;
@@ -130,33 +115,30 @@ namespace Reloaded.ModHelper.Api
 
 
         /// <summary>
-        /// Returns whether or not this converter is already registered.
+        /// <inheritdoc/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T"><inheritdoc/></typeparam>
+        /// <returns><inheritdoc/></returns>
         public bool IsRegistered<T>()
         {
             return converters.Any(converter => converter.GetType() == typeof(T));
         }
 
         /// <summary>
-        /// Creates a new converter and registers it with this manager.
-        /// <br/>Will not allow duplicates.
+        /// <inheritdoc/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="alwaysRegister">Whether or not this converter should always automatically be registered for new
-        /// instances of Memory Managers.></param>
+        /// <typeparam name="T"><inheritdoc/></typeparam>
+        /// <param name="alwaysRegister"><inheritdoc/></param>
         public void AddConverter<T>(bool alwaysRegister = false) where T : IMemoryConverter
         {
             AddConverter(typeof(T), alwaysRegister);
         }
 
         /// <summary>
-        /// Creates a new converter and registers it with this manager.
-        /// <br/>Will not allow duplicates.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="converterType"></param>
-        /// <param name="alwaysRegister"></param>
+        /// <param name="converterType"><inheritdoc/></param>
+        /// <param name="alwaysRegister"><inheritdoc/></param>
         public void AddConverter(Type converterType, bool alwaysRegister = false)
         {
             if (!converterType.IsAssignableTo(typeof(IMemoryConverter)))
@@ -167,13 +149,11 @@ namespace Reloaded.ModHelper.Api
         }
 
         /// <summary>
-        /// Registers the provided converter to this manager.
-        /// <br/>Will not allow duplicates.
+        /// <inheritdoc/>
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="converterToAdd"></param>
-        /// <param name="alwaysRegister">Whether or not this converter should always automatically be registered for new
-        /// instances of Memory Managers.</param>
+        /// <typeparam name="T"><inheritdoc/></typeparam>
+        /// <param name="converterToAdd"><inheritdoc/></param>
+        /// <param name="alwaysRegister"><inheritdoc/></param>
         public void AddConverter<T>(T converterToAdd, bool alwaysRegister = false) where T : IMemoryConverter
         {
             if (alwaysRegister && !alwaysAddConverters.Any(c => c.GetType() == typeof(T)))
@@ -187,10 +167,10 @@ namespace Reloaded.ModHelper.Api
         }
 
         /// <summary>
-        /// Remove a converter so objects of this type are no longer converted this way.
+        /// <inheritdoc/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="alwaysRemove">Should this converter always be removed?</param>
+        /// <param name="alwaysRemove"><inheritdoc/></param>
         /// <returns></returns>
         public bool RemoveConverter<T>(bool alwaysRemove = false)
         {
@@ -198,10 +178,10 @@ namespace Reloaded.ModHelper.Api
         }
 
         /// <summary>
-        /// Remove a converter so objects of this type are no longer converted this way.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="converterType"></param>
-        /// <param name="alwaysRemove">Should this converter always be removed?</param>
+        /// <param name="converterType"><inheritdoc/></param>
+        /// <param name="alwaysRemove"><inheritdoc/></param>
         /// <returns></returns>
         public bool RemoveConverter(Type converterType, bool alwaysRemove = false)
         {
@@ -210,10 +190,10 @@ namespace Reloaded.ModHelper.Api
         }
 
         /// <summary>
-        /// Remove a converter so objects of this type are no longer converted this way.
+        /// <inheritdoc/>
         /// </summary>
-        /// <param name="converterToRemove"></param>
-        /// <param name="alwaysRemove">Should this converter always be removed?</param>
+        /// <param name="converterToRemove"><inheritdoc/></param>
+        /// <param name="alwaysRemove"><inheritdoc/></param>
         /// <returns></returns>
         public bool RemoveConverter(IMemoryConverter converterToRemove, bool alwaysRemove = false)
         {
@@ -227,6 +207,24 @@ namespace Reloaded.ModHelper.Api
             }
             
             return true;
+        }
+
+        private void AddInstanceConverters()
+        {
+            if (!alwaysAddConverters.Any(c => c.GetType() == typeof(EnumConverter)))
+                alwaysAddConverters.Add(new EnumConverter(this));
+        }
+
+        private void AddStaticConverters()
+        {
+            foreach (var item in alwaysAddConverters)
+                AddConverter(item);
+        }
+
+        private void RemoveConvertersToIgnore()
+        {
+            foreach (var item in alwaysRemoveConverters)
+                RemoveConverter(item);
         }
     }
 }

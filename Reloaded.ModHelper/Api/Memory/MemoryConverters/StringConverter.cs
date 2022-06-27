@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Reloaded.ModHelper.Api
+namespace Reloaded.ModHelper
 {
     /// <summary>
-    /// Used to convert strings and char*.
+    /// Used to convert strings and char pointers.
     /// </summary>
     public unsafe class StringConverter : IMemoryConverter
     {
