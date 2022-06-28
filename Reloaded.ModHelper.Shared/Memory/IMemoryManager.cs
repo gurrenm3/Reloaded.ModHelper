@@ -28,6 +28,32 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public object GetValue(Type objectType, long address);
 
+        /// <summary>
+        /// Reads an object in memory on a separate thread and returns when its done.
+        /// Use this for big objects so you don't lock the game.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public Task<T> GetValueAsync<T>(long address);
+
+        /// <summary>
+        /// Reads an object in memory on a separate thread and returns when its done.
+        /// Use this for big objects so you don't lock the game.
+        /// </summary>
+        /// <param name="valueType"></param>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public Task<object> GetValueAsync(Type valueType, long address);
+
+        /// <summary>
+        /// Sets an object in memory at the provided address on a separate thread and returns when its done.
+        /// Use this for big objects so you don't lock the game.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="valueToSet"></param>
+        /// <returns></returns>
+        public Task SetValueAsync(long address, object valueToSet);
 
         /// <summary>
         /// Sets an object in memory at the provided address.

@@ -69,7 +69,7 @@ namespace Reloaded.ModHelper
             if (valueType == typeof(Single))
                 return *(Single*)address;
 
-            throw new NotSupportedException("Converter is not capable of reading this value type in memory.");
+            throw new NotSupportedException($"Primitives Converter is not capable of getting the type {valueType.Name} in memory.");
         }
 
         public T GetValue<T>(long address)

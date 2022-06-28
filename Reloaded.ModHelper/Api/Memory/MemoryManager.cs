@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Reloaded.ModHelper
 {
@@ -39,6 +40,52 @@ namespace Reloaded.ModHelper
         {
             var value = GetValue(typeof(T), address);
             return value == null ? default(T) : (T)value;
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public async Task<T> GetValueAsync<T>(long address)
+        {
+            try
+            {
+                var value = await GetValueAsync(typeof(T), address);
+                return value == null ? default(T) : (T)value;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="valueType"></param>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public async Task<object> GetValueAsync(Type valueType, long address)
+        {
+            try { return await Task.Run(() => GetValue(valueType, address)); }
+            catch (Exception ex) { throw ex; }
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="valueToSet"></param>
+        /// <returns></returns>
+        public async Task SetValueAsync(long address, object valueToSet)
+        {
+            try
+            {
+                await Task.Run(() =>
+                {
+                    SetValue(address, valueToSet);
+                });
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         /// <summary>
