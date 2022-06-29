@@ -11,6 +11,10 @@ namespace Reloaded.ModHelper
 
         public EnumConverter(IMemoryManager manager)
         {
+            if (manager == null)
+                throw new NullReferenceException($"Can't create {nameof(EnumConverter)} because the provided" +
+                    $" {nameof(MemoryManager)} was null!");
+
             this.manager = manager;
         }
 
@@ -21,7 +25,7 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public bool CanConvert(Type typeToCheck)
         {
-            return typeToCheck.IsEnum;
+            return typeToCheck != null && typeToCheck.IsEnum;
         }
 
         /// <summary>
@@ -55,18 +59,6 @@ namespace Reloaded.ModHelper
             }
 
             return null;
-
-            /*var values = Enum.GetValues(enumType);
-            if (values == null)
-                throw new Exception($"Failed to get values for the enum \"{enumType.Name}\"");
-
-            int enumId = *(int*)(address);
-            //var value = values.GetValue(enumId);
-            var value = Convert.ChangeType(enumId, enumType);
-            if (value == null)
-                throw new Exception($"Failed to read value for the enum \"{enumType.Name}\"." +
-                    $" Enum does not have any values with an ID of {enumId}");
-            return value;*/
         }
 
         /// <summary>

@@ -17,8 +17,10 @@ namespace Reloaded.ModHelper
             new PrimitiveConverter(),
             new StringConverter()
         };
+        private static HashSet<Type> alwaysIgnoreList = new HashSet<Type>();
 
         private HashSet<IMemoryConverter> converters = new HashSet<IMemoryConverter>();
+        private HashSet<Type> ignoreList = new HashSet<Type>();
 
         /// <summary>
         /// Creates an instance of this memory manager.
@@ -29,6 +31,44 @@ namespace Reloaded.ModHelper
             AddStaticConverters();
             RemoveConvertersToIgnore();
         }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="alwaysIgnore"><inheritdoc/></param>
+        public void IgnoreType<T>(bool alwaysIgnore = false) => IgnoreType(typeof(T), alwaysIgnore);
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="typeToIgnore"></param>
+        /// <param name="alwaysIgnore"><inheritdoc/></param>
+        public void IgnoreType(Type typeToIgnore, bool alwaysIgnore = false)
+        {
+            if (alwaysIgnore)
+                alwaysIgnoreList.Add(typeToIgnore);
+
+            ignoreList.Add(typeToIgnore);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public bool ShouldIgnoreType<T>() => ShouldIgnoreType(typeof(T));
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="typeToCheck"></param>
+        /// <returns></returns>
+        public bool ShouldIgnoreType(Type typeToCheck)
+        {
+            return ignoreList.Contains(typeToCheck) || alwaysIgnoreList.Contains(typeToCheck);
+        }
+
 
         /// <summary>
         /// <inheritdoc/>
@@ -96,6 +136,12 @@ namespace Reloaded.ModHelper
         /// <returns><inheritdoc/></returns>
         public object GetValue(Type objectType, long address)
         {
+            if (objectType == null)
+                return null;
+
+            if (ShouldIgnoreType(objectType))
+                return null;
+
             var converter = GetConverter(objectType);
             if (converter == null)
                 throw new NotSupportedException($"Cannot convert object of type {objectType.Name}. Type is not supported." +
@@ -111,10 +157,16 @@ namespace Reloaded.ModHelper
         /// <param name="valueToSet"><inheritdoc/></param>
         public void SetValue(long address, object valueToSet)
         {
+            if (valueToSet == null)
+                return;
+
+            if (ShouldIgnoreType(valueToSet.GetType()))
+                return;
+
             var converter = GetConverter(valueToSet.GetType());
             if (converter == null)
                 throw new NotSupportedException($"Cannot convert object of type {valueToSet.GetType().Name}. Type is not supported." +
-                    $" Consider creating your own {nameof(IMemoryConverter)} to add support for this.");
+                        $" Consider creating your own {nameof(IMemoryConverter)} to add support for this.");
 
             converter.SetValue(address, valueToSet);
         }
@@ -137,6 +189,12 @@ namespace Reloaded.ModHelper
         /// <returns><inheritdoc/></returns>
         public IMemoryConverter GetConverter(Type converterType)
         {
+            if (converterType == null)
+                return null;
+
+            if (ShouldIgnoreType(converterType))
+                return null;
+
             return converters.FirstOrDefault(c => c.CanConvert(converterType));
         }
 
@@ -157,6 +215,9 @@ namespace Reloaded.ModHelper
         /// <returns><inheritdoc/></returns>
         public bool CanConvert(Type objectType)
         {
+            if (objectType == null)
+                return false;
+
             return GetConverter(objectType) != null;
         }
 

@@ -15,7 +15,7 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public bool CanConvert(Type typeToCheck)
         {
-            return typeToCheck == typeof(string) || typeToCheck == typeof(char*);
+            return typeToCheck != null && (typeToCheck == typeof(string) || typeToCheck == typeof(char*));
         }
 
         /// <summary>

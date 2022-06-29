@@ -38,6 +38,10 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public object GetValue(Type valueType, long address)
         {
+            if (valueType == null)
+                throw new NullReferenceException("Can't get value because the provided type is null!");
+
+
             if (valueType == typeof(bool))
                 return *(bool*)address;
             if (valueType == typeof(byte))
@@ -74,7 +78,8 @@ namespace Reloaded.ModHelper
 
         public T GetValue<T>(long address)
         {
-            return (T)GetValue(typeof(T), address);
+            var value = GetValue(typeof(T), address);
+            return value == null ? default(T) : (T)value;
         }
 
         /// <summary>

@@ -13,6 +13,36 @@ namespace Reloaded.ModHelper
     public interface IMemoryManager
     {
         /// <summary>
+        /// Add a type to the Ignore list. Will not convert any objects of this type if found.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="alwaysIgnore">Indicates whether or not this type should be always be ignored,
+        /// including on new Memory Managers. If set to false then it will only be ignored on this Manager.</param>
+        public void IgnoreType<T>(bool alwaysIgnore = false);
+
+        /// <summary>
+        /// Add a type to the Ignore list. Will not convert any objects of this type if found.
+        /// </summary>
+        /// <param name="typeToIgnore"></param>
+        /// <param name="alwaysIgnore">Indicates whether or not this type should be always be ignored,
+        /// including on new Memory Managers. If set to false then it will only be ignored on this Manager.</param>
+        public void IgnoreType(Type typeToIgnore, bool alwaysIgnore = false);
+
+        /// <summary>
+        /// Returns whether or not this type is in the list of types to ignore.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public bool ShouldIgnoreType<T>();
+
+        /// <summary>
+        /// Returns whether or not this type is in the list of types to ignore.
+        /// </summary>
+        /// <param name="typeToCheck"></param>
+        /// <returns></returns>
+        public bool ShouldIgnoreType(Type typeToCheck);
+
+        /// <summary>
         /// Reads an object in memory.
         /// </summary>
         /// <typeparam name="T">The type of object to be read.</typeparam>
