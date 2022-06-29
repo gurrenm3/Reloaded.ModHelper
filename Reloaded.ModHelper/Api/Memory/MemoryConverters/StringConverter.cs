@@ -15,7 +15,13 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public bool CanConvert(Type typeToCheck)
         {
-            return typeToCheck != null && (typeToCheck == typeof(string) || typeToCheck == typeof(char*));
+            if (typeToCheck == null)
+            {
+                ConsoleUtil.LogError($"{nameof(StringConverter)}: Unable to check if type is convertable because it's null.");
+                return false;
+            }
+
+            return typeToCheck == typeof(string) || typeToCheck == typeof(char*);
         }
 
         /// <summary>
@@ -35,8 +41,20 @@ namespace Reloaded.ModHelper
         /// <param name="valueType"></param>
         /// <param name="address"></param>
         /// <returns></returns>
-        public object GetValue(Type valueType, long address)
+        public object GetValue(long address, Type valueType)
         {
+            if (address <= 0)
+            {
+                ConsoleUtil.LogError($"{nameof(StringConverter)}: Can't get string value because address" +
+                    $" was {address} and is not valid");
+                return null;
+            }
+            if (valueType == null)
+            {
+                ConsoleUtil.LogError($"{nameof(StringConverter)}: Can't get string value because the provided type is null!");
+                return null;
+            }
+
             return Strings.ToString(address);
         }
 
@@ -48,7 +66,7 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public T GetValue<T>(long address)
         {
-            return (T)GetValue(typeof(T), address);
+            return (T)GetValue(address, typeof(T));
         }
 
         /// <summary>
@@ -58,7 +76,15 @@ namespace Reloaded.ModHelper
         /// <param name="valueToSet"></param>
         public void SetValue(long address, object valueToSet)
         {
-            long valueAddress = (long)Marshal.StringToHGlobalAnsi(valueToSet.ToString());
+            if (address <= 0)
+            {
+                ConsoleUtil.LogError($"{nameof(StringConverter)}: Can't set string value because address" +
+                    $" was {address} and is not valid");
+                return;
+            }
+
+            string value = valueToSet == null ? "" : valueToSet.ToString();
+            long valueAddress = (long)Marshal.StringToHGlobalAnsi(value);
             *(char*)address = *(char*)valueAddress;
         }
     }

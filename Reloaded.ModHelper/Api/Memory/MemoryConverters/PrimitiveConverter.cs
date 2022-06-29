@@ -15,7 +15,10 @@ namespace Reloaded.ModHelper
         public bool CanConvert(Type typeToCheck)
         {
             if (typeToCheck == null)
+            {
+                ConsoleUtil.LogError($"{nameof(PrimitiveConverter)}: Unable to check if type is convertable because it's null.");
                 return false;
+            }
 
             return typeToCheck.IsPrimitive || typeToCheck == typeof(decimal);
         }
@@ -36,12 +39,21 @@ namespace Reloaded.ModHelper
         /// <param name="valueType"></param>
         /// <param name="address"></param>
         /// <returns></returns>
-        public object GetValue(Type valueType, long address)
+        public object GetValue(long address, Type valueType)
         {
+            if (address <= 0)
+            {
+                ConsoleUtil.LogError($"{nameof(PrimitiveConverter)}: Can't get primitive value because address" +
+                    $" was {address} and is not valid");
+                return null;
+            }
             if (valueType == null)
-                throw new NullReferenceException("Can't get value because the provided type is null!");
+            {
+                ConsoleUtil.LogError($"{nameof(PrimitiveConverter)}: Can't get primitive value because the provided type is null!");
+                return null;
+            }
 
-
+            // everything should be good, we can convert.
             if (valueType == typeof(bool))
                 return *(bool*)address;
             if (valueType == typeof(byte))
@@ -73,12 +85,19 @@ namespace Reloaded.ModHelper
             if (valueType == typeof(Single))
                 return *(Single*)address;
 
-            throw new NotSupportedException($"Primitives Converter is not capable of getting the type {valueType.Name} in memory.");
+            ConsoleUtil.LogError($"{nameof(PrimitiveConverter)}: Not capable of getting the type {valueType.Name} in memory.");
+            return null;
         }
 
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="address"></param>
+        /// <returns></returns>
         public T GetValue<T>(long address)
         {
-            var value = GetValue(typeof(T), address);
+            var value = GetValue(address, typeof(T));
             return value == null ? default(T) : (T)value;
         }
 
@@ -89,6 +108,18 @@ namespace Reloaded.ModHelper
         /// <param name="valueToSet"></param>
         public void SetValue(long address, object valueToSet)
         {
+            if (address <= 0)
+            {
+                ConsoleUtil.LogError($"{nameof(PrimitiveConverter)}: Can't set primitive value because address" +
+                    $" was {address} and is not valid");
+                return;
+            }
+            if (valueToSet == null)
+            {
+                ConsoleUtil.LogError($"{nameof(PrimitiveConverter)}: Can't set primitive because it's null");
+                return;
+            }
+
             var valueType = valueToSet.GetType();
 
             if (valueType == typeof(bool))
@@ -122,7 +153,11 @@ namespace Reloaded.ModHelper
             else if (valueType == typeof(Single))
                 *(Single*)address = (Single)valueToSet;
             else
-                throw new NotSupportedException($"Primitives Converter is not capable of setting the type {valueType.Name} in memory.");
+            {
+                ConsoleUtil.LogError($"{nameof(PrimitiveConverter)}: Not capable of setting the type {valueType.Name} in memory.");
+                return;
+            }
+
         }
     }
 }

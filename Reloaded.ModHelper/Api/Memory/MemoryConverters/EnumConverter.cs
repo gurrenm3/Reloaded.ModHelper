@@ -9,6 +9,10 @@ namespace Reloaded.ModHelper
     {
         IMemoryManager manager;
 
+        /// <summary>
+        /// Creates this object with a memory manager.
+        /// </summary>
+        /// <param name="manager"></param>
         public EnumConverter(IMemoryManager manager)
         {
             if (manager == null)
@@ -25,7 +29,13 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public bool CanConvert(Type typeToCheck)
         {
-            return typeToCheck != null && typeToCheck.IsEnum;
+            if (typeToCheck == null)
+            {
+                ConsoleUtil.LogError($"{nameof(EnumConverter)}: Unable to check if type is convertable because it is null");
+                return false;
+            }
+
+            return typeToCheck.IsEnum;
         }
 
         /// <summary>
@@ -44,10 +54,21 @@ namespace Reloaded.ModHelper
         /// <param name="enumType"></param>
         /// <param name="address"></param>
         /// <returns></returns>
-        public object GetValue(Type enumType, long address)
+        public object GetValue(long address, Type enumType)
         {
+            if (address <= 0)
+            {
+                ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't get enum value because address was {address} and is not valid");
+                return null;
+            }
+            if (enumType == null)
+            {
+                ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't get enum value because provided type is null");
+                return null;
+            }
+
             var underlyingType = Enum.GetUnderlyingType(enumType); // this is the datatype, ex: int, uint, etc
-            var enumId = manager.GetValue(underlyingType, address);
+            var enumId = manager.GetValue(address, underlyingType);
 
             foreach (var enumValue in Enum.GetValues(enumType))
             {
@@ -69,7 +90,7 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public T GetValue<T>(long address)
         {
-            var value = GetValue(typeof(T), address);
+            var value = GetValue(address, typeof(T));
             return value == null ? default(T) : (T)value;
         }
 
@@ -80,6 +101,17 @@ namespace Reloaded.ModHelper
         /// <param name="valueToSet"></param>
         public void SetValue(long address, object valueToSet)
         {
+            if (address <= 0)
+            {
+                ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't set enum value because address was {address} and is not valid");
+                return;
+            }
+            if (valueToSet == null)
+            {
+                ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't set enum value. Provided object is null");
+                return;
+            }
+
             int enumId = (int)valueToSet;
             *(int*)(address) = enumId;
         }

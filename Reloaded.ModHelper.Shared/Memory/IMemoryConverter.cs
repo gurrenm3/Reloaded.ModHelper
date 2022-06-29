@@ -27,7 +27,7 @@ namespace Reloaded.ModHelper
         /// <param name="valueType"></param>
         /// <param name="address"></param>
         /// <returns></returns>
-        public object GetValue(Type valueType, long address);
+        public object GetValue(long address, Type valueType);
 
         /// <summary>
         /// Returns the value stored at the provided address

@@ -11,6 +11,7 @@ namespace Reloaded.ModHelper
     /// </summary>
     public class MemoryManager : IMemoryManager
     {
+        private static HashSet<IMemoryConverter> alwaysAddPriorityConverters = new HashSet<IMemoryConverter>();
         private static HashSet<IMemoryConverter> alwaysRemoveConverters = new HashSet<IMemoryConverter>();
         private static HashSet<IMemoryConverter> alwaysAddConverters = new HashSet<IMemoryConverter>()
         {
@@ -19,6 +20,7 @@ namespace Reloaded.ModHelper
         };
         private static HashSet<Type> alwaysIgnoreList = new HashSet<Type>();
 
+        private HashSet<IMemoryConverter> priorityConverters = new HashSet<IMemoryConverter>();
         private HashSet<IMemoryConverter> converters = new HashSet<IMemoryConverter>();
         private HashSet<Type> ignoreList = new HashSet<Type>();
 
@@ -46,6 +48,12 @@ namespace Reloaded.ModHelper
         /// <param name="alwaysIgnore"><inheritdoc/></param>
         public void IgnoreType(Type typeToIgnore, bool alwaysIgnore = false)
         {
+            if (typeToIgnore == null)
+            {
+                ConsoleUtil.LogError("Can't add type fo ignore list. Type is null");
+                return;
+            }
+
             if (alwaysIgnore)
                 alwaysIgnoreList.Add(typeToIgnore);
 
@@ -66,6 +74,12 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public bool ShouldIgnoreType(Type typeToCheck)
         {
+            if (typeToCheck == null)
+            {
+                ConsoleUtil.LogError("Can't check if Type should be ignored because it is null");
+                return false;
+            }
+
             return ignoreList.Contains(typeToCheck) || alwaysIgnoreList.Contains(typeToCheck);
         }
 
@@ -78,7 +92,7 @@ namespace Reloaded.ModHelper
         /// <returns><inheritdoc/></returns>
         public T GetValue<T>(long address)
         {
-            var value = GetValue(typeof(T), address);
+            var value = GetValue(address, typeof(T));
             return value == null ? default(T) : (T)value;
         }
 
@@ -92,7 +106,7 @@ namespace Reloaded.ModHelper
         {
             try
             {
-                var value = await GetValueAsync(typeof(T), address);
+                var value = await GetValueAsync(address, typeof(T));
                 return value == null ? default(T) : (T)value;
             }
             catch (Exception ex) { throw ex; }
@@ -104,9 +118,9 @@ namespace Reloaded.ModHelper
         /// <param name="valueType"></param>
         /// <param name="address"></param>
         /// <returns></returns>
-        public async Task<object> GetValueAsync(Type valueType, long address)
+        public async Task<object> GetValueAsync(long address, Type valueType)
         {
-            try { return await Task.Run(() => GetValue(valueType, address)); }
+            try { return await Task.Run(() => GetValue(address, valueType)); }
             catch (Exception ex) { throw ex; }
         }
 
@@ -134,20 +148,26 @@ namespace Reloaded.ModHelper
         /// <param name="objectType"><inheritdoc/></param>
         /// <param name="address"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public object GetValue(Type objectType, long address)
+        public object GetValue(long address, Type objectType)
         {
             if (objectType == null)
+            {
+                ConsoleUtil.LogError("Get get value because type is null");
                 return null;
+            }
 
             if (ShouldIgnoreType(objectType))
                 return null;
 
-            var converter = GetConverter(objectType);
+            var converter = GetObjectConverter(objectType);
             if (converter == null)
-                throw new NotSupportedException($"Cannot convert object of type {objectType.Name}. Type is not supported." +
+            {
+                ConsoleUtil.LogError($"Cannot convert object of type {objectType.Name}. Type is not supported." +
                     $" Consider creating your own {nameof(IMemoryConverter)} to add support for this.");
+                return null;
+            }
 
-            return converter.GetValue(objectType, address);
+            return converter.GetValue(address, objectType);
         }
 
         /// <summary>
@@ -158,15 +178,21 @@ namespace Reloaded.ModHelper
         public void SetValue(long address, object valueToSet)
         {
             if (valueToSet == null)
+            {
+                ConsoleUtil.LogError("Can't set value because it is null");
                 return;
+            }
 
             if (ShouldIgnoreType(valueToSet.GetType()))
                 return;
 
-            var converter = GetConverter(valueToSet.GetType());
+            var converter = GetObjectConverter(valueToSet.GetType());
             if (converter == null)
-                throw new NotSupportedException($"Cannot convert object of type {valueToSet.GetType().Name}. Type is not supported." +
+            {
+                ConsoleUtil.LogError($"Cannot convert object of type {valueToSet.GetType().Name}. Type is not supported." +
                         $" Consider creating your own {nameof(IMemoryConverter)} to add support for this.");
+                return;
+            }
 
             converter.SetValue(address, valueToSet);
         }
@@ -175,11 +201,42 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <typeparam name="T"><inheritdoc/></typeparam>
-        /// <returns><inheritdoc/></returns>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public IMemoryConverter GetConverter<T>()
         {
-            return GetConverter(typeof(T));
+            return GetObjectConverter(typeof(T));
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="converterType"></param>
+        /// <returns></returns>
+        public IMemoryConverter GetConverter(Type converterType)
+        {
+            if (converterType == null)
+            {
+                ConsoleUtil.LogError("Can't get converter because the provided type is null");
+                return null;
+            }
+
+            var priorityConverter = priorityConverters.FirstOrDefault(c => c.CanConvert(converterType));
+            if (priorityConverter != null)
+                return priorityConverter;
+
+            return converters.FirstOrDefault(c => c.GetType() == converterType);
+        }
+
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="T"><inheritdoc/></typeparam>
+        /// <returns><inheritdoc/></returns>
+        public IMemoryConverter GetObjectConverter<T>()
+        {
+            return GetObjectConverter(typeof(T));
         }
 
         /// <summary>
@@ -187,13 +244,20 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="converterType"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public IMemoryConverter GetConverter(Type converterType)
+        public IMemoryConverter GetObjectConverter(Type converterType)
         {
             if (converterType == null)
+            {
+                ConsoleUtil.LogError("Can't get object converter because provided type is null");
                 return null;
+            }
 
             if (ShouldIgnoreType(converterType))
                 return null;
+
+            var priorityConverter = priorityConverters.FirstOrDefault(c => c.CanConvert(converterType));
+            if (priorityConverter != null)
+                return priorityConverter;
 
             return converters.FirstOrDefault(c => c.CanConvert(converterType));
         }
@@ -216,9 +280,12 @@ namespace Reloaded.ModHelper
         public bool CanConvert(Type objectType)
         {
             if (objectType == null)
+            {
+                ConsoleUtil.LogError("Unable to check if type is convertable. Provided type is null");
                 return false;
+            }
 
-            return GetConverter(objectType) != null;
+            return GetObjectConverter(objectType) != null;
         }
 
 
@@ -229,7 +296,9 @@ namespace Reloaded.ModHelper
         /// <returns><inheritdoc/></returns>
         public bool IsRegistered<T>()
         {
-            return converters.Any(converter => converter.GetType() == typeof(T));
+            bool isPriorityConverter = priorityConverters.Any(converter => converter.GetType() == typeof(T));
+            bool isRegularConverter = converters.Any(converter => converter.GetType() == typeof(T));
+            return isPriorityConverter || isRegularConverter;
         }
 
         /// <summary>
@@ -250,7 +319,10 @@ namespace Reloaded.ModHelper
         public void AddConverter(Type converterType, bool alwaysRegister = false)
         {
             if (!converterType.IsAssignableTo(typeof(IMemoryConverter)))
-                throw new Exception("Tried adding a converter that is not a MemoryConverter");
+            {
+                ConsoleUtil.LogError("Tried adding a converter that is not a MemoryConverter");
+                return;
+            }
 
             var converter = (IMemoryConverter)Activator.CreateInstance(converterType);
             AddConverter(converter, alwaysRegister);
@@ -278,6 +350,52 @@ namespace Reloaded.ModHelper
         /// <inheritdoc/>
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="alwaysRegister"></param>
+        public void AddPriorityConverter<T>(bool alwaysRegister = false) where T : IMemoryConverter
+        {
+            AddPriorityConverter(typeof(T), alwaysRegister);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="priorityType"></param>
+        /// <param name="alwaysRegister"></param>
+        public void AddPriorityConverter(Type priorityType, bool alwaysRegister = false)
+        {
+            if (!priorityType.IsAssignableTo(typeof(IMemoryConverter)))
+            {
+                ConsoleUtil.LogError("Tried adding a priority converter that is not a MemoryConverter");
+                return;
+            }
+
+            var priorityConverter = (IMemoryConverter)Activator.CreateInstance(priorityType);
+            AddPriorityConverter(priorityConverter, alwaysRegister);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="converterToAdd"></param>
+        /// <param name="alwaysRegister"></param>
+        public void AddPriorityConverter<T>(T converterToAdd, bool alwaysRegister = false) where T : IMemoryConverter
+        {
+            if (alwaysRegister && !alwaysAddPriorityConverters.Any(c => c.GetType() == typeof(T)))
+                alwaysAddPriorityConverters.Add(converterToAdd);
+
+            // it's already here or should be ignored
+            if (IsRegistered<T>() || alwaysRemoveConverters.Contains(converterToAdd))
+                return;
+
+            priorityConverters.Add(converterToAdd);
+        }
+
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="alwaysRemove"><inheritdoc/></param>
         /// <returns></returns>
         public bool RemoveConverter<T>(bool alwaysRemove = false)
@@ -293,8 +411,12 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public bool RemoveConverter(Type converterType, bool alwaysRemove = false)
         {
+            var priorityConverter = priorityConverters.FirstOrDefault(c => c.CanConvert(converterType));
+            if (priorityConverter != null)
+                return RemoveConverter(priorityConverter, alwaysRemove);
+
             var converterToRemove = converters.FirstOrDefault(c => c.GetType() == converterType);
-            return RemoveConverter(converterToRemove, alwaysRemove);
+            return RemoveConverter(priorityConverter, alwaysRemove);
         }
 
         /// <summary>
@@ -305,7 +427,7 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public bool RemoveConverter(IMemoryConverter converterToRemove, bool alwaysRemove = false)
         {
-            if (converterToRemove == null || !converters.Remove(converterToRemove)) // nothing removed.
+            if (converterToRemove == null || !priorityConverters.Remove(converterToRemove) || !converters.Remove(converterToRemove)) // nothing removed.
                 return false;
 
             if (alwaysRemove)
