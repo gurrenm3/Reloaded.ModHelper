@@ -47,11 +47,6 @@ namespace Reloaded.ModHelper
                     $" was {address} and is not valid");
                 return null;
             }
-            /*if (valueType == null)
-            {
-                ConsoleUtil.LogError($"{nameof(PrimitiveConverter)}: Can't get primitive value because the provided type is null!");
-                return null;
-            }*/
 
             // everything should be good, we can convert.
 
@@ -119,11 +114,6 @@ namespace Reloaded.ModHelper
                     $" was {address} and is not valid");
                 return;
             }
-            /*if (valueToSet == null)
-            {
-                ConsoleUtil.LogError($"{nameof(PrimitiveConverter)}: Can't set primitive because it's null");
-                return;
-            }*/
 
             var valueType = valueToSet.GetType();
 

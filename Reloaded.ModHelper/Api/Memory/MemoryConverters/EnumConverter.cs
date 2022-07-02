@@ -61,11 +61,6 @@ namespace Reloaded.ModHelper
                 ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't get enum value because address was {address} and is not valid");
                 return null;
             }
-            /*if (enumType == null)
-            {
-                ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't get enum value because provided type is null");
-                return null;
-            }*/
 
             var underlyingType = Enum.GetUnderlyingType(enumType); // this is the datatype, ex: int, uint, etc
             var enumId = manager.GetValue(address, underlyingType); // actual numeric enum value, ex: id = 32
@@ -79,7 +74,8 @@ namespace Reloaded.ModHelper
                 ConsoleUtil.LogError("Faield to get enum bvale");
                 return null;
             }
-
+            
+            // old method
             /*foreach (var enumValue in Enum.GetValues(enumType))
             {
                 var enumAsUnderlyingType = Convert.ChangeType(enumValue, underlyingType);
@@ -87,9 +83,9 @@ namespace Reloaded.ModHelper
                 {
                     return enumValue;
                 }
-            }*/
+            }
 
-            return null;
+            return null;*/
         }
 
         /// <summary>
@@ -122,8 +118,34 @@ namespace Reloaded.ModHelper
                 return;
             }
 
-            int enumId = (int)valueToSet;
-            *(int*)(address) = enumId;
+            var enumType = valueToSet.GetType();
+            var underlyingType = Enum.GetUnderlyingType(enumType);
+
+
+            if (underlyingType == typeof(byte))
+            {
+                byte enumId = (byte)valueToSet;
+                *(byte*)(address) = enumId;
+            }
+            else if (underlyingType == typeof(int))
+            {
+                int enumId = (int)valueToSet;
+                *(int*)(address) = enumId;
+            }
+            else if (underlyingType == typeof(long))
+            {
+                long enumId = (long)valueToSet;
+                *(long*)(address) = enumId;
+            }
+            else if (underlyingType == typeof(ulong))
+            {
+                ulong enumId = (ulong)valueToSet;
+                *(ulong*)(address) = enumId;
+            }
+            else
+            {
+                ConsoleUtil.LogError($"Failed to set enum! Converter doesn't support enums of type: {enumType.Name}");
+            }
         }
     }
 }
