@@ -61,23 +61,33 @@ namespace Reloaded.ModHelper
                 ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't get enum value because address was {address} and is not valid");
                 return null;
             }
-            if (enumType == null)
+            /*if (enumType == null)
             {
                 ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't get enum value because provided type is null");
                 return null;
-            }
+            }*/
 
             var underlyingType = Enum.GetUnderlyingType(enumType); // this is the datatype, ex: int, uint, etc
-            var enumId = manager.GetValue(address, underlyingType);
+            var enumId = manager.GetValue(address, underlyingType); // actual numeric enum value, ex: id = 32
 
-            foreach (var enumValue in Enum.GetValues(enumType))
+            try
+            {
+                return Enum.ToObject(enumType, enumId);
+            }
+            catch (Exception)
+            {
+                ConsoleUtil.LogError("Faield to get enum bvale");
+                return null;
+            }
+
+            /*foreach (var enumValue in Enum.GetValues(enumType))
             {
                 var enumAsUnderlyingType = Convert.ChangeType(enumValue, underlyingType);
                 if (enumAsUnderlyingType.Equals(enumId))
                 {
                     return enumValue;
                 }
-            }
+            }*/
 
             return null;
         }

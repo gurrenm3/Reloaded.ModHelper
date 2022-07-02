@@ -20,6 +20,7 @@ namespace Reloaded.ModHelper
         };
         private static HashSet<Type> alwaysIgnoreList = new HashSet<Type>();
 
+        private Dictionary<Type, IMemoryConverter> converterCache = new Dictionary<Type, IMemoryConverter>();
         private HashSet<IMemoryConverter> priorityConverters = new HashSet<IMemoryConverter>();
         private HashSet<IMemoryConverter> converters = new HashSet<IMemoryConverter>();
         private HashSet<Type> ignoreList = new HashSet<Type>();
@@ -150,6 +151,9 @@ namespace Reloaded.ModHelper
         /// <returns><inheritdoc/></returns>
         public object GetValue(long address, Type objectType)
         {
+            if (converterCache.TryGetValue(objectType, out var converter))
+                return converter.GetValue(address, objectType);
+
             if (objectType == null)
             {
                 ConsoleUtil.LogError("Get get value because type is null");
@@ -159,7 +163,7 @@ namespace Reloaded.ModHelper
             if (ShouldIgnoreType(objectType))
                 return null;
 
-            var converter = GetObjectConverter(objectType);
+            converter = GetObjectConverter(objectType);
             if (converter == null)
             {
                 ConsoleUtil.LogError($"Cannot convert object of type {objectType.Name}. Type is not supported." +
@@ -183,10 +187,16 @@ namespace Reloaded.ModHelper
                 return;
             }
 
+            if (converterCache.TryGetValue(valueToSet.GetType(), out var converter))
+            {
+                converter.SetValue(address, valueToSet);
+                return;
+            }
+
             if (ShouldIgnoreType(valueToSet.GetType()))
                 return;
 
-            var converter = GetObjectConverter(valueToSet.GetType());
+            converter = GetObjectConverter(valueToSet.GetType());
             if (converter == null)
             {
                 ConsoleUtil.LogError($"Cannot convert object of type {valueToSet.GetType().Name}. Type is not supported." +
@@ -215,11 +225,11 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public IMemoryConverter GetConverter(Type converterType)
         {
-            if (converterType == null)
+            /*if (converterType == null)
             {
                 ConsoleUtil.LogError("Can't get converter because the provided type is null");
                 return null;
-            }
+            }*/
 
             var priorityConverter = priorityConverters.FirstOrDefault(c => c.CanConvert(converterType));
             if (priorityConverter != null)
@@ -246,20 +256,29 @@ namespace Reloaded.ModHelper
         /// <returns><inheritdoc/></returns>
         public IMemoryConverter GetObjectConverter(Type converterType)
         {
-            if (converterType == null)
+            if (converterCache.TryGetValue(converterType, out var converter))
+                return converter;
+
+            /*if (converterType == null)
             {
                 ConsoleUtil.LogError("Can't get object converter because provided type is null");
                 return null;
-            }
+            }*/
 
             if (ShouldIgnoreType(converterType))
                 return null;
 
             var priorityConverter = priorityConverters.FirstOrDefault(c => c.CanConvert(converterType));
             if (priorityConverter != null)
+            {
+                converterCache.Add(converterType, priorityConverter);
                 return priorityConverter;
+            }
 
-            return converters.FirstOrDefault(c => c.CanConvert(converterType));
+            converter = converters.FirstOrDefault(c => c.CanConvert(converterType));
+            if (converter != null)
+                converterCache.Add(converterType, converter);
+            return converter;
         }
 
         /// <summary>
