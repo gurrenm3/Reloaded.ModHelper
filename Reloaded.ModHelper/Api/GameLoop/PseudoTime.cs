@@ -10,8 +10,8 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public double DeltaTime => _deltaTime;
-        private double _deltaTime;
+        public float DeltaTime => _deltaTime;
+        private float _deltaTime;
 
         /// <summary>
         /// <inheritdoc/>
@@ -32,7 +32,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// The last time the stopwatch was used for checking time. Stores the total elapsed time.
         /// </summary>
-        protected long lastElapsedTime;
+        protected double lastElapsedTime;
 
         /// <summary>
         /// Has this object already been initialized?
@@ -64,9 +64,9 @@ namespace Reloaded.ModHelper
         /// Used to calculate the time since the last loop iteration, otherwise known as delta time.
         /// </summary>
         /// <returns>The time since the last loop iteration, known as delta time.</returns>
-        protected virtual double CalcDeltaTime()
+        protected virtual float CalcDeltaTime()
         {
-            double deltaTime = (TotalMilliseconds - (double)lastElapsedTime) / 1000; // dividing by 1000 because ther are 1000 ms in 1 second
+            float deltaTime = ((float)TotalMilliseconds - (float)lastElapsedTime) / 1000; // dividing by 1000 because ther are 1000 ms in 1 second
             lastElapsedTime = stopwatch.ElapsedMilliseconds;
             return deltaTime;
         }

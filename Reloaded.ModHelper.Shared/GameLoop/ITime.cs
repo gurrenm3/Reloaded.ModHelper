@@ -8,7 +8,7 @@
         /// <summary>
         /// How much time has passed, in seconds, between the last GameLoop iteration and the current one.
         /// </summary>
-        public double DeltaTime { get; }
+        public float DeltaTime { get; }
 
         /// <summary>
         /// The total number of milliseconds that have passed since initialization.

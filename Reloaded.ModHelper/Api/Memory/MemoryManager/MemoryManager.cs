@@ -151,8 +151,9 @@ namespace Reloaded.ModHelper
         /// <returns><inheritdoc/></returns>
         public object GetValue(long address, Type objectType)
         {
-            if (converterCache.TryGetValue(objectType, out var converter))
-                return converter.GetValue(address, objectType);
+            IMemoryConverter converter;
+            /*if (converterCache.TryGetValue(objectType, out converter))
+                return converter.GetValue(address, objectType);*/
 
             if (objectType == null)
             {
@@ -187,11 +188,12 @@ namespace Reloaded.ModHelper
                 return;
             }
 
-            if (converterCache.TryGetValue(valueToSet.GetType(), out var converter))
+            IMemoryConverter converter;
+            /*if (converterCache.TryGetValue(valueToSet.GetType(), out converter))
             {
                 converter.SetValue(address, valueToSet);
                 return;
-            }
+            }*/
 
             if (ShouldIgnoreType(valueToSet.GetType()))
                 return;
@@ -256,14 +258,10 @@ namespace Reloaded.ModHelper
         /// <returns><inheritdoc/></returns>
         public IMemoryConverter GetObjectConverter(Type converterType)
         {
-            if (converterCache.TryGetValue(converterType, out var converter))
-                return converter;
+            IMemoryConverter converter;
+            /*if (converterCache.TryGetValue(converterType, out converter))
+                return converter;*/
 
-            /*if (converterType == null)
-            {
-                ConsoleUtil.LogError("Can't get object converter because provided type is null");
-                return null;
-            }*/
 
             if (ShouldIgnoreType(converterType))
                 return null;
@@ -271,13 +269,23 @@ namespace Reloaded.ModHelper
             var priorityConverter = priorityConverters.FirstOrDefault(c => c.CanConvert(converterType));
             if (priorityConverter != null)
             {
-                converterCache.Add(converterType, priorityConverter);
+                /*//converterCache.Add(converterType, priorityConverter);
+                lock (converterCache)
+                {
+                    converterCache.Add(converterType, priorityConverter);
+                }*/
                 return priorityConverter;
             }
 
             converter = converters.FirstOrDefault(c => c.CanConvert(converterType));
-            if (converter != null)
-                converterCache.Add(converterType, converter);
+            /*if (converter != null)
+            {
+                //converterCache.Add(converterType, converter);
+                lock (converterCache)
+                {
+                    converterCache.Add(converterType, converter);
+                }
+            }*/
             return converter;
         }
 

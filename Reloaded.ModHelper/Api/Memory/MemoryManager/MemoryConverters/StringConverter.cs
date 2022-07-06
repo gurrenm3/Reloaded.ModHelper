@@ -43,7 +43,7 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public object GetValue(long address, Type valueType)
         {
-            if (address <= 0)
+            /*if (address <= 0)
             {
                 ConsoleUtil.LogError($"{nameof(StringConverter)}: Can't get string value because address" +
                     $" was {address} and is not valid");
@@ -53,7 +53,7 @@ namespace Reloaded.ModHelper
             {
                 ConsoleUtil.LogError($"{nameof(StringConverter)}: Can't get string value because the provided type is null!");
                 return null;
-            }
+            }*/
 
             return Strings.ToString(address);
         }
@@ -76,12 +76,12 @@ namespace Reloaded.ModHelper
         /// <param name="valueToSet"></param>
         public void SetValue(long address, object valueToSet)
         {
-            if (address <= 0)
+            /*if (address <= 0)
             {
                 ConsoleUtil.LogError($"{nameof(StringConverter)}: Can't set string value because address" +
                     $" was {address} and is not valid");
                 return;
-            }
+            }*/
 
             string value = valueToSet == null ? "" : valueToSet.ToString();
             long valueAddress = (long)Marshal.StringToHGlobalAnsi(value);

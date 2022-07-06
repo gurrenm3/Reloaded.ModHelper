@@ -41,12 +41,12 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public object GetValue(long address, Type valueType)
         {
-            if (address <= 0)
+            /*if (address <= 0)
             {
                 ConsoleUtil.LogError($"{nameof(PrimitiveConverter)}: Can't get primitive value because address" +
                     $" was {address} and is not valid");
                 return null;
-            }
+            }*/
 
             // everything should be good, we can convert.
 
@@ -108,12 +108,12 @@ namespace Reloaded.ModHelper
         /// <param name="valueToSet"></param>
         public void SetValue(long address, object valueToSet)
         {
-            if (address <= 0)
+            /*if (address <= 0)
             {
                 ConsoleUtil.LogError($"{nameof(PrimitiveConverter)}: Can't set primitive value because address" +
                     $" was {address} and is not valid");
                 return;
-            }
+            }*/
 
             var valueType = valueToSet.GetType();
 

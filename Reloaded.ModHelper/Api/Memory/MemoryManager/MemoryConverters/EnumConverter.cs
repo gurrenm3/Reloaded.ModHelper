@@ -56,11 +56,11 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public object GetValue(long address, Type enumType)
         {
-            if (address <= 0)
+            /*if (address <= 0)
             {
                 ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't get enum value because address was {address} and is not valid");
                 return null;
-            }
+            }*/
 
             var underlyingType = Enum.GetUnderlyingType(enumType); // this is the datatype, ex: int, uint, etc
             var enumId = manager.GetValue(address, underlyingType); // actual numeric enum value, ex: id = 32
@@ -71,7 +71,7 @@ namespace Reloaded.ModHelper
             }
             catch (Exception)
             {
-                ConsoleUtil.LogError("Faield to get enum bvale");
+                ConsoleUtil.LogError("Faield to get enum value");
                 return null;
             }
             
@@ -107,7 +107,7 @@ namespace Reloaded.ModHelper
         /// <param name="valueToSet"></param>
         public void SetValue(long address, object valueToSet)
         {
-            if (address <= 0)
+            /*if (address <= 0)
             {
                 ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't set enum value because address was {address} and is not valid");
                 return;
@@ -116,21 +116,31 @@ namespace Reloaded.ModHelper
             {
                 ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't set enum value. Provided object is null");
                 return;
-            }
+            }*/
 
             var enumType = valueToSet.GetType();
             var underlyingType = Enum.GetUnderlyingType(enumType);
 
 
-            if (underlyingType == typeof(byte))
+            if (underlyingType == typeof(int))
+            {
+                int enumId = (int)valueToSet;
+                *(int*)(address) = enumId;
+            }
+            else if (underlyingType == typeof(uint))
+            {
+                uint enumId = (uint)valueToSet;
+                *(uint*)(address) = enumId;
+            }
+            else if (underlyingType == typeof(byte))
             {
                 byte enumId = (byte)valueToSet;
                 *(byte*)(address) = enumId;
             }
-            else if (underlyingType == typeof(int))
+            else if (underlyingType == typeof(sbyte))
             {
-                int enumId = (int)valueToSet;
-                *(int*)(address) = enumId;
+                sbyte enumId = (sbyte)valueToSet;
+                *(sbyte*)(address) = enumId;
             }
             else if (underlyingType == typeof(long))
             {
@@ -141,6 +151,16 @@ namespace Reloaded.ModHelper
             {
                 ulong enumId = (ulong)valueToSet;
                 *(ulong*)(address) = enumId;
+            }
+            else if (underlyingType == typeof(short))
+            {
+                short enumId = (short)valueToSet;
+                *(short*)(address) = enumId;
+            }
+            else if (underlyingType == typeof(ushort))
+            {
+                ushort enumId = (ushort)valueToSet;
+                *(ushort*)(address) = enumId;
             }
             else
             {

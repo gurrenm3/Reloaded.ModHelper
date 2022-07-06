@@ -21,7 +21,7 @@ namespace Reloaded.ModHelper
         public static ThreadSafeRandom Global { get; } = new ThreadSafeRandom();
 
         // Thread local Random is safe to use on that thread.
-        private readonly ThreadLocal<System.Random> _threadLocalRandom;
+        private ThreadLocal<System.Random> _threadLocalRandom;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ThreadSafeRandom"/> class.
@@ -30,6 +30,15 @@ namespace Reloaded.ModHelper
         public ThreadSafeRandom(int? seed = null)
         {
             _threadLocalRandom = new ThreadLocal<System.Random>(() => seed != null ? new System.Random(seed.Value) : new System.Random());
+        }
+
+        /// <summary>
+        /// Initializes the random number generator state with a seed.
+        /// </summary>
+        /// <param name="seed"></param>
+        public void InitSeed(int seed)
+        {
+            _threadLocalRandom = new ThreadLocal<System.Random>(() => new System.Random(seed));
         }
 
         /// <inheritdoc />

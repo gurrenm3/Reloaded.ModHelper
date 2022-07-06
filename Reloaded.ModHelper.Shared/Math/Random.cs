@@ -13,8 +13,16 @@ namespace Reloaded.ModHelper
         public static ThreadSafeRandom _random { get => ThreadSafeRandom.Global; }
 
         /// <summary>
-        /// Returns a random number between <paramref name="min"/> and <paramref name="max"/>.
-        /// <br/><br/>Both the lower and upper bounds are inclusive.
+        /// Initializes the random number generator state with a seed.
+        /// </summary>
+        /// <param name="seed"></param>
+        public static void InitSeed(int seed)
+        {
+            _random.InitSeed(seed);
+        }
+
+        /// <summary>
+        /// Returns a random number between min (inclusive) and max (exclusive).
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
@@ -25,8 +33,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Returns a random number between <paramref name="min"/> and <paramref name="max"/>.
-        /// <br/><br/>Both the lower and upper bounds are inclusive.
+        /// Returns a random number between min (inclusive) and max (exclusive).
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
@@ -35,6 +42,30 @@ namespace Reloaded.ModHelper
         {
             return (float)_random.NextDouble(min, max);
         }
+
+        /// <summary>
+        /// Returns a random long from min (inclusive) to max (exclusive)
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static long Range(long min, long max)
+        {
+            return _random.NextLong(min, max);
+        }
+
+        /// <summary>
+        /// Returns a random unsigned long (ulong) from min (inclusive) to max (exclusive)
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static ulong Range(ulong min, ulong max)
+        {
+            return _random.NextULong(min, max);
+        }
+        
+
 
         /// <summary>
         /// TODO
