@@ -1,7 +1,7 @@
 ﻿using Reloaded.Hooks.Definitions;
 using Reloaded.Mod.Interfaces;
 using System.Collections.Generic;
-using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -81,6 +81,10 @@ namespace Reloaded.ModHelper
         public bool IsInitialized => _isInitialized;
         private bool _isInitialized;
 
+        /// <summary>
+        /// The directory for this mod in the Reloaded2 Mod Manager.
+        /// </summary>
+        public string ReloadedModDirectory { get; private set; }
 
         /// <summary>
         /// Creates an instance of this class.
@@ -102,6 +106,10 @@ namespace Reloaded.ModHelper
             Logger.WriteLine("-------- Mod Info --------");
             Logger.WriteLine($"{_config.ModName} v{_config.ModVersion}");
             Logger.WriteLine($"by {_config.ModAuthor}");
+
+            if (!string.IsNullOrEmpty(_config.ModDescription))
+                Logger.WriteLine($"{_config.ModDescription}");
+
             Logger.WriteLine("--------------------------");
 
             Awake();
@@ -134,7 +142,8 @@ namespace Reloaded.ModHelper
 
             Logger.WriteLine("Initializing...");
 
-            ModAssembly = AssemblyUtils.GetCallingAssembly();            
+            ModAssembly = AssemblyUtils.GetCallingAssembly();
+            ReloadedModDirectory = Path.GetDirectoryName(ModAssembly.Location);
             ModAttributeLoader.LoadAllFromAssembly(ModAssembly, out _loadedModAttributes);
 
             RegisterHooks();

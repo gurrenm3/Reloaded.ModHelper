@@ -106,5 +106,33 @@ namespace Reloaded.ModHelper
         {
             throw new NotImplementedException();
         }
+
+
+        /// <summary>
+        /// Returns a random enum value from the provided enum.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T GetEnum<T>()
+        {
+            return (T)GetEnum(typeof(T));
+        }
+
+
+        /// <summary>
+        /// Returns a random enum value from the provided enum.
+        /// </summary>
+        /// <returns></returns>
+        public static object GetEnum(Type enumType)
+        {
+            if (!enumType.IsEnum)
+                throw new ArgumentException("Can't get random enum value because provided type is not an enum.");
+
+            var values = Enum.GetValues(enumType);
+            int maxRandomNumber = values.Length;
+
+            int randomNumber = Random.Range(0, maxRandomNumber);
+            return Convert.ChangeType(values.GetValue(randomNumber), enumType);
+        }
     }
 }

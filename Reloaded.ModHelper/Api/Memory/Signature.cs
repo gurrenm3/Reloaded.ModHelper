@@ -1,5 +1,6 @@
 ﻿using Reloaded.Memory.Sigscan;
 using Reloaded.Memory.Sigscan.Structs;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Reloaded.ModHelper
@@ -16,7 +17,7 @@ namespace Reloaded.ModHelper
         private static Scanner scanner;
 
         /// <summary>
-        /// The original pattern this <see cref="Signature"/> was created with.
+        /// A cleaned version of the original pattern this <see cref="Signature"/> was created with.
         /// </summary>
         public readonly string sigPattern;
         private long cachedScanAddress = -1;
@@ -50,6 +51,28 @@ namespace Reloaded.ModHelper
             var searchResult = scanner.FindPattern(sigPattern);
             var scanAddress = baseAddress + searchResult.Offset;
             return cacheResult ? cachedScanAddress = scanAddress : scanAddress;
+        }
+
+        /// <summary>
+        /// Performs the scan to search for this pattern in Memory. Returns every address that matches this pattern.
+        /// </summary>
+        /// <returns></returns>
+        public List<long> ScanAll()
+        {
+            var results = new List<long>();
+
+            var lastOffset = -1;
+            while (true)
+            {
+                lastOffset = scanner.FindPattern(sigPattern, lastOffset + 1).Offset;
+                if (lastOffset == -1)
+                    break;
+
+                long functionAddress = (long)gameProc.MainModule.BaseAddress + lastOffset;
+                results.Add(functionAddress);
+            }
+
+            return results;
         }
 
         /// <summary>
