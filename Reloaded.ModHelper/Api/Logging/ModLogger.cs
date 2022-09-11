@@ -13,8 +13,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public string ModName => _modName;
-        private string _modName;
+        public string ModName { get; init; }
 
         /// <summary>
         /// The color that this mod's name should be.
@@ -29,14 +28,19 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Instance of the logger.
         /// </summary>
-        protected ILogger _logger;
+        public ILogger LoggerInstance { get; init; }
 
         /// <summary>
         /// Info about this mod.
         /// </summary>
-        protected IModConfigV1 _config;
+        public IModConfigV1 Config { get; init; }
 
         private bool isNewLine = true;
+
+        public ModLogger()
+        {
+
+        }
 
         /// <summary>
         /// Initializes a <see cref="ModLogger"/> with info about this mod and an instance of the Reloaded Logger.
@@ -45,9 +49,9 @@ namespace Reloaded.ModHelper
         /// <param name="logger"></param>
         public ModLogger(IModConfigV1 config, ILogger logger)
         {
-            _config = config;
-            _logger = logger;
-            _modName = _config.ModName;
+            Config = config;
+            LoggerInstance = logger;
+            ModName = Config.ModName;
         }
 
         /// <summary>
@@ -55,7 +59,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         protected void WriteModName()
         {
-            _logger.WriteAsync($"[{_config.ModName}] ", modNameColor);
+            LoggerInstance.WriteAsync($"[{Config.ModName}] ", modNameColor);
         }
 
         /// <summary>
@@ -91,12 +95,12 @@ namespace Reloaded.ModHelper
         public void Write(string message, Color color, bool writeModName = false)
         {
             if (isNewLine)
-                _logger.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
+                LoggerInstance.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
 
             if (writeModName)
                 WriteModName();
 
-            _logger.WriteAsync(message, color);
+            LoggerInstance.WriteAsync(message, color);
             isNewLine = false;
         }
 
@@ -109,12 +113,12 @@ namespace Reloaded.ModHelper
         public void Write(object message, Color color, bool writeModName = false)
         {
             if (isNewLine)
-                _logger.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
+                LoggerInstance.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
 
             if (writeModName)
                 WriteModName();
 
-            _logger.WriteAsync(message.ToString(), color);
+            LoggerInstance.WriteAsync(message.ToString(), color);
             isNewLine = false;
         }
 
@@ -126,12 +130,12 @@ namespace Reloaded.ModHelper
         public void Write(string message, bool writeModName = false)
         {
             if (isNewLine)
-                _logger.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
+                LoggerInstance.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
 
             if (writeModName)
                 WriteModName();
 
-            _logger.WriteAsync(message);
+            LoggerInstance.WriteAsync(message);
             isNewLine = false;
         }
 
@@ -143,12 +147,12 @@ namespace Reloaded.ModHelper
         public void Write(object message, bool writeModName = false)
         {
             if (isNewLine)
-                _logger.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
+                LoggerInstance.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
 
             if (writeModName)
                 WriteModName();
 
-            _logger.WriteAsync(message.ToString());
+            LoggerInstance.WriteAsync(message.ToString());
             isNewLine = false;
         }
 
@@ -160,8 +164,9 @@ namespace Reloaded.ModHelper
         /// <param name="writeModName"><inheritdoc/></param>
         public void WriteLine(string message, LogLevel logLevel, bool writeModName = true)
         {
-            string logLevelMsg = logLevel != LogLevel.CheatEngine ? logLevel.ToString() : "For CheatEngine Users";
-            WriteLine($"[{logLevelMsg}] {message}", GetColorFromLogLevel(logLevel), writeModName);
+            string logLevelMsg = logLevel != LogLevel.CheatEngine ? $"[{logLevel}] " : "[For CheatEngine Users] ";
+            logLevelMsg = logLevel == LogLevel.Normal ? "" : logLevelMsg;
+            WriteLine($"{logLevelMsg}{message}", GetColorFromLogLevel(logLevel), writeModName);
         }
 
         /// <summary>
@@ -185,12 +190,12 @@ namespace Reloaded.ModHelper
         public void WriteLine(string message, Color color, bool writeModName = true)
         {
             if (isNewLine)
-                _logger.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
+                LoggerInstance.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
 
             if (writeModName)
                 WriteModName();
 
-            _logger.WriteLineAsync(message, color);
+            LoggerInstance.WriteLineAsync(message, color);
             isNewLine = true;
         }
 
@@ -205,12 +210,12 @@ namespace Reloaded.ModHelper
             string msgToPrint = message.ToString();
 
             if (isNewLine)
-                _logger.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
+                LoggerInstance.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
 
             if (writeModName)
                 WriteModName();
 
-            _logger.WriteLineAsync(msgToPrint, color);
+            LoggerInstance.WriteLineAsync(msgToPrint, color);
             isNewLine = true;
         }
 
@@ -222,12 +227,12 @@ namespace Reloaded.ModHelper
         public void WriteLine(string message, bool writeModName = true)
         {
             if (isNewLine)
-                _logger.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
+                LoggerInstance.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
 
             if (writeModName)
                 WriteModName();
 
-            _logger.WriteLineAsync(message);
+            LoggerInstance.WriteLineAsync(message);
             isNewLine = true;
         }
 
@@ -241,12 +246,12 @@ namespace Reloaded.ModHelper
             string msgToPrint = message.ToString();
 
             if (isNewLine)
-                _logger.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
+                LoggerInstance.WriteAsync($"[{DateTime.Now.ToString("HH:mm:ss")}] ", timeColor);
 
             if (writeModName)
                 WriteModName();
 
-            _logger.WriteLineAsync(msgToPrint);
+            LoggerInstance.WriteLineAsync(msgToPrint);
             isNewLine = true;
         }
 
@@ -259,7 +264,7 @@ namespace Reloaded.ModHelper
                 case LogLevel.Warning:
                     return Color.Yellow;
                 default:
-                    return _logger.TextColor;
+                    return LoggerInstance.TextColor;
             }
         }
     }

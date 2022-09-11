@@ -14,15 +14,15 @@ namespace Reloaded.ModHelper
     {
         /// <summary>
         /// Represents the location of the personalized folder for this specific mod.
-        /// Used to help separate different mods and to store importnat assets, setting files, etc.
+        /// Used to help separate different mods and to store important assets, setting files, etc.
         /// <br/><br/>Example: "Actual_Game_Directory/Mods/My Mod"
         /// </summary>
-        public virtual string MyModFolder { get; }
+        public virtual string MyModDirectory { get; }
 
         /// <summary>
         /// The path to the settings file.
         /// </summary>
-        public virtual string SettingsFile => $"{MyModFolder}\\settings.json";
+        public virtual string SettingsFile => $"{MyModDirectory}\\settings.json";
 
         /// <summary>
         /// Override this and set it to true if you want to constantly check for changes to your
@@ -163,9 +163,9 @@ namespace Reloaded.ModHelper
 
         private void RegisterModSettings()
         {
-            if (string.IsNullOrEmpty(MyModFolder))
+            if (string.IsNullOrEmpty(MyModDirectory))
             {
-                Logger.WriteLine($"{nameof(MyModFolder)} was not set. This isn't bad," +
+                Logger.WriteLine($"{nameof(MyModDirectory)} was not set. This isn't bad," +
                     $" but you won't be able to add custom assets or mod settings until" +
                     $" you set this.");
                 return;
