@@ -1,5 +1,6 @@
 ﻿using Reloaded.Memory.Sigscan;
 using Reloaded.Memory.Sigscan.Structs;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
