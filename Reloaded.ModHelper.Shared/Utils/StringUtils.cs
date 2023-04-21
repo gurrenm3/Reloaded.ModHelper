@@ -4,10 +4,51 @@ using System.Runtime.InteropServices;
 namespace Reloaded.ModHelper
 {
     /// <summary>
-    /// Utility methods for Strings
+    /// Provides some utility methods for strings.
     /// </summary>
-    public static unsafe class Strings
+    public static unsafe class StringUtils
     {
+        /// <summary>
+        /// Returns whether or not the provided type is a string.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool IsString<T>() => IsString(typeof(T));
+
+        /// <summary>
+        /// Returns whether or not the provided type is a string.
+        /// </summary>
+        /// <param name="typeToCheck"></param>
+        /// <returns></returns>
+        public static bool IsString(Type typeToCheck)
+        {
+            return typeToCheck == typeof(string) || typeToCheck == typeof(char*);
+        }
+
+        /// <summary>
+        /// Returns the value held at the provided address.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        public static string GetValue(long address)
+        {
+            return ToString(address);
+        }
+
+        /// <summary>
+        /// Sets the value at <paramref name="address"/> to <paramref name="valueToSet"/>.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <param name="valueToSet"></param>
+        public static void SetValue(long address, object valueToSet)
+        {
+            string value = valueToSet == null ? "" : valueToSet.ToString();
+            long valueAddress = (long)Marshal.StringToHGlobalAnsi(value);
+
+            *(char*)address = *(char*)valueAddress;
+        }
+
+
         /// <summary>
         /// Attempt to convert a void pointer to a string. Will only work if the void pointer already represents a string
         /// </summary>
@@ -38,7 +79,7 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    
+
                 }
             }
             return null;

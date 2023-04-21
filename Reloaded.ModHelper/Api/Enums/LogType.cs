@@ -6,17 +6,17 @@
     public enum LogType
     {
         /// <summary>
-        /// Log this message as a normal message.
+        /// WriteLine this message as a normal message.
         /// </summary>
         Normal,
 
         /// <summary>
-        /// Log this message as a warning.
+        /// WriteLine this message as a warning.
         /// </summary>
         Warning,
 
         /// <summary>
-        /// Log this message as an error.
+        /// WriteLine this message as an error.
         /// </summary>
         Error
     }

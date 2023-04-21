@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Reloaded.ModHelper
 {
@@ -10,19 +11,22 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public float DeltaTime => _deltaTime;
-        private float _deltaTime;
+        public float DeltaTime { get; private set; }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public double TotalMilliseconds => _totalMilliseconds;
-        private double _totalMilliseconds;
+        public double TotalMilliseconds { get; private set; }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public double TotalSeconds => TotalMilliseconds * 1000;
+        public DateTime Now => DateTime.Now;
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public double TotalSeconds => TotalMilliseconds / 1000;
 
         /// <summary>
         /// Used to track time between update calls.
@@ -47,7 +51,7 @@ namespace Reloaded.ModHelper
         {
             stopwatch = new Stopwatch();
             stopwatch.Start();
-            gameLoop.OnUpdate.Prefix += Update;
+            gameLoop.OnUpdate.Before += Update;
             isInitialized = true;
         }
 
@@ -56,8 +60,8 @@ namespace Reloaded.ModHelper
         /// </summary>
         protected virtual void Update()
         {
-            _totalMilliseconds = stopwatch.ElapsedMilliseconds;
-            _deltaTime = CalcDeltaTime();
+            TotalMilliseconds = stopwatch.ElapsedMilliseconds;
+            DeltaTime = CalcDeltaTime();
         }
 
         /// <summary>

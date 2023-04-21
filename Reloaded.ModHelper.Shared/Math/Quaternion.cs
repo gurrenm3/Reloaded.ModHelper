@@ -26,17 +26,17 @@ namespace Reloaded.ModHelper
 		/// <summary>
 		/// 
 		/// </summary>
-        public float X { get; private set; }
+        public float x { get; private set; }
 
 		/// <summary>
 		/// 
 		/// </summary>
-        public float Y { get; private set; }
+        public float y { get; private set; }
 
 		/// <summary>
 		/// 
 		/// </summary>
-        public float Z { get; private set; }
+        public float z { get; private set; }
 
 		/// <summary>
 		/// 
@@ -46,9 +46,9 @@ namespace Reloaded.ModHelper
 		/// <summary>
 		/// 
 		/// </summary>
-        public Quaternion normalized
+        public Quaternion NewNormalized
 		{
-			get => Quaternion.Normalize(this);
+			get => Quaternion.NewNormalized(this);
 		}
 
         #endregion
@@ -59,13 +59,13 @@ namespace Reloaded.ModHelper
 
 		public Quaternion(float x, float y, float z, float w)
 		{
-			this.X = x;
-			this.Y = y;
-			this.Z = z;
+			this.x = x;
+			this.y = y;
+			this.z = z;
 			this.W = w;
 		}
 
-		public static Quaternion FromToRotation(Vector3 fromDirection, Vector3 toDirection)
+		public static Quaternion FromToRotation(Vector3f fromDirection, Vector3f toDirection)
 		{
 			Quaternion result;
 			Quaternion.FromToRotation_Injected(ref fromDirection, ref toDirection, out result);
@@ -107,42 +107,42 @@ namespace Reloaded.ModHelper
 			return result;
 		}
 
-		private static Quaternion Internal_FromEulerRad(Vector3 euler)
+		private static Quaternion Internal_FromEulerRad(Vector3f euler)
 		{
 			Quaternion result;
 			Quaternion.Internal_FromEulerRad_Injected(ref euler, out result);
 			return result;
 		}
 
-		private static Vector3 Internal_ToEulerRad(Quaternion rotation)
+		private static Vector3f Internal_ToEulerRad(Quaternion rotation)
 		{
-			Vector3 result;
+			Vector3f result;
 			Quaternion.Internal_ToEulerRad_Injected(ref rotation, out result);
 			return result;
 		}
 
-		private static void Internal_ToAxisAngleRad(Quaternion q, out Vector3 axis, out float angle)
+		private static void Internal_ToAxisAngleRad(Quaternion q, out Vector3f axis, out float angle)
 		{
 			Quaternion.Internal_ToAxisAngleRad_Injected(ref q, out axis, out angle);
 		}
 
-		public static Quaternion AngleAxis(float angle, Vector3 axis)
+		public static Quaternion AngleAxis(float angle, Vector3f axis)
 		{
 			Quaternion result;
 			Quaternion.AngleAxis_Injected(angle, ref axis, out result);
 			return result;
 		}
 
-		public static Quaternion LookRotation(Vector3 forward, Vector3 upwards)
+		public static Quaternion LookRotation(Vector3f forward, Vector3f upwards)
 		{
 			Quaternion result;
 			Quaternion.LookRotation_Injected(ref forward, ref upwards, out result);
 			return result;
 		}
 
-		public static Quaternion LookRotation(Vector3 forward)
+		public static Quaternion LookRotation(Vector3f forward)
 		{
-			return Quaternion.LookRotation(forward, Vector3.Up);
+			return Quaternion.LookRotation(forward, Vector3f.Up);
 		}
 
 		/// <summary>
@@ -157,11 +157,11 @@ namespace Reloaded.ModHelper
 				switch (index)
 				{
 					case 0:
-						return this.X;
+						return this.x;
 					case 1:
-						return this.Y;
+						return this.y;
 					case 2:
-						return this.Z;
+						return this.z;
 					case 3:
 						return this.W;
 					default:
@@ -173,13 +173,13 @@ namespace Reloaded.ModHelper
 				switch (index)
 				{
 					case 0:
-						this.X = value;
+						this.x = value;
 						break;
 					case 1:
-						this.Y = value;
+						this.y = value;
 						break;
 					case 2:
-						this.Z = value;
+						this.z = value;
 						break;
 					case 3:
 						this.W = value;
@@ -192,47 +192,47 @@ namespace Reloaded.ModHelper
 
 		public void Set(float newX, float newY, float newZ, float newW)
 		{
-			this.X = newX;
-			this.Y = newY;
-			this.Z = newZ;
+			this.x = newX;
+			this.y = newY;
+			this.z = newZ;
 			this.W = newW;
 		}
 
-		public void SetLookRotation(Vector3 view)
+		public void SetLookRotation(Vector3f view)
 		{
-			Vector3 up = Vector3.Up;
+			Vector3f up = Vector3f.Up;
 			this.SetLookRotation(view, up);
 		}
 
-		public void SetLookRotation(Vector3 view, Vector3 up)
+		public void SetLookRotation(Vector3f view, Vector3f up)
 		{
 			this = Quaternion.LookRotation(view, up);
 		}
 
 		public static Quaternion operator *(Quaternion lhs, Quaternion rhs)
 		{
-			return new Quaternion(lhs.W * rhs.X + lhs.X * rhs.W + lhs.Y * rhs.Z - lhs.Z * rhs.Y, lhs.W * rhs.Y + lhs.Y * rhs.W + lhs.Z * rhs.X - lhs.X * rhs.Z, lhs.W * rhs.Z + lhs.Z * rhs.W + lhs.X * rhs.Y - lhs.Y * rhs.X, lhs.W * rhs.W - lhs.X * rhs.X - lhs.Y * rhs.Y - lhs.Z * rhs.Z);
+			return new Quaternion(lhs.W * rhs.x + lhs.x * rhs.W + lhs.y * rhs.z - lhs.z * rhs.y, lhs.W * rhs.y + lhs.y * rhs.W + lhs.z * rhs.x - lhs.x * rhs.z, lhs.W * rhs.z + lhs.z * rhs.W + lhs.x * rhs.y - lhs.y * rhs.x, lhs.W * rhs.W - lhs.x * rhs.x - lhs.y * rhs.y - lhs.z * rhs.z);
 		}
 
-		public static Vector3 operator *(Quaternion rotation, Vector3 point)
+		public static Vector3f operator *(Quaternion rotation, Vector3f point)
 		{
-			float num = rotation.X * 2f;
-			float num2 = rotation.Y * 2f;
-			float num3 = rotation.Z * 2f;
-			float num4 = rotation.X * num;
-			float num5 = rotation.Y * num2;
-			float num6 = rotation.Z * num3;
-			float num7 = rotation.X * num2;
-			float num8 = rotation.X * num3;
-			float num9 = rotation.Y * num3;
+			float num = rotation.x * 2f;
+			float num2 = rotation.y * 2f;
+			float num3 = rotation.z * 2f;
+			float num4 = rotation.x * num;
+			float num5 = rotation.y * num2;
+			float num6 = rotation.z * num3;
+			float num7 = rotation.x * num2;
+			float num8 = rotation.x * num3;
+			float num9 = rotation.y * num3;
 			float num10 = rotation.W * num;
 			float num11 = rotation.W * num2;
 			float num12 = rotation.W * num3;
 			
-			float x = (1f - (num5 + num6)) * point.X + (num7 - num12) * point.Y + (num8 + num11) * point.Z;
-			float y = (num7 + num12) * point.X + (1f - (num4 + num6)) * point.Y + (num9 - num10) * point.Z;
-			float z = (num8 - num11) * point.X + (num9 + num10) * point.Y + (1f - (num4 + num5)) * point.Z;
-			return new Vector3(x, y, z);
+			float x = (1f - (num5 + num6)) * point.x + (num7 - num12) * point.y + (num8 + num11) * point.z;
+			float y = (num7 + num12) * point.x + (1f - (num4 + num6)) * point.y + (num9 - num10) * point.z;
+			float z = (num8 - num11) * point.x + (num9 + num10) * point.y + (1f - (num4 + num5)) * point.z;
+			return new Vector3f(x, y, z);
 		}
 
 		private static bool IsEqualUsingDot(float dot)
@@ -252,7 +252,7 @@ namespace Reloaded.ModHelper
 
 		public static float Dot(Quaternion a, Quaternion b)
 		{
-			return a.X * b.X + a.Y * b.Y + a.Z * b.Z + a.W * b.W;
+			return a.x * b.x + a.y * b.y + a.z * b.z + a.W * b.W;
 		}
 
 		public static float Angle(Quaternion a, Quaternion b)
@@ -261,34 +261,34 @@ namespace Reloaded.ModHelper
 			return (!Quaternion.IsEqualUsingDot(num)) ? (Mathf.Acos(Mathf.Min(Mathf.Abs(num), 1f)) * 2f * 57.29578f) : 0f;
 		}
 
-		private static Vector3 Internal_MakePositive(Vector3 euler)
+		private static Vector3f Internal_MakePositive(Vector3f euler)
 		{
 			float num = -0.005729578f;
 			float num2 = 360f + num;
 
-			float newX = euler.X;
-			float newY = euler.Y;
-			float newZ = euler.Z;
+			float newX = euler.x;
+			float newY = euler.y;
+			float newZ = euler.z;
 
-			if (euler.X < num)
+			if (euler.x < num)
 				newX += 360f;
-			else if (euler.X > num2)
+			else if (euler.x > num2)
 				newX -= 360f;
 
-			if (euler.Y < num)
+			if (euler.y < num)
 				newY += 360f;
-			else if (euler.Y > num2)
+			else if (euler.y > num2)
 				newY -= 360f;
 
-			if (euler.Z < num)
+			if (euler.z < num)
 				newZ += 360f;
-			else if (euler.Z > num2)
+			else if (euler.z > num2)
 				newZ -= 360f;
 
 			return euler.Set(newX, newY, newZ);
 		}
 
-		public Vector3 eulerAngles
+		public Vector3f eulerAngles
 		{
 			get
 			{
@@ -302,21 +302,21 @@ namespace Reloaded.ModHelper
 
 		public static Quaternion Euler(float x, float y, float z)
 		{
-			return Quaternion.Internal_FromEulerRad(new Vector3(x, y, z) * 0.0174532924f);
+			return Quaternion.Internal_FromEulerRad(new Vector3f(x, y, z) * 0.0174532924f);
 		}
 
-		public static Quaternion Euler(Vector3 euler)
+		public static Quaternion Euler(Vector3f euler)
 		{
 			return Quaternion.Internal_FromEulerRad(euler * 0.0174532924f);
 		}
 
-		public void ToAngleAxis(out float angle, out Vector3 axis)
+		public void ToAngleAxis(out float angle, out Vector3f axis)
 		{
 			Quaternion.Internal_ToAxisAngleRad(this, out axis, out angle);
 			angle *= 57.29578f;
 		}
 
-		public void SetFromToRotation(Vector3 fromDirection, Vector3 toDirection)
+		public void SetFromToRotation(Vector3f fromDirection, Vector3f toDirection)
 		{
 			this = Quaternion.FromToRotation(fromDirection, toDirection);
 		}
@@ -336,7 +336,7 @@ namespace Reloaded.ModHelper
 			return result;
 		}
 
-		public static Quaternion Normalize(Quaternion q)
+		public static Quaternion NewNormalized(Quaternion q)
 		{
 			float num = Mathf.Sqrt(Quaternion.Dot(q, q));
 			Quaternion result;
@@ -346,19 +346,19 @@ namespace Reloaded.ModHelper
 			}
 			else
 			{
-				result = new Quaternion(q.X / num, q.Y / num, q.Z / num, q.W / num);
+				result = new Quaternion(q.x / num, q.y / num, q.z / num, q.W / num);
 			}
 			return result;
 		}
 
-		public void Normalize()
+		public void NewNormalized()
 		{
-			this = Quaternion.Normalize(this);
+			this = Quaternion.NewNormalized(this);
 		}
 
 		public override int GetHashCode()
 		{
-			return this.X.GetHashCode() ^ this.Y.GetHashCode() << 2 ^ this.Z.GetHashCode() >> 2 ^ this.W.GetHashCode() >> 1;
+			return this.x.GetHashCode() ^ this.y.GetHashCode() << 2 ^ this.z.GetHashCode() >> 2 ^ this.W.GetHashCode() >> 1;
 		}
 
 		public override bool Equals(object other)
@@ -368,12 +368,12 @@ namespace Reloaded.ModHelper
 
 		public bool Equals(Quaternion other)
 		{
-			return this.X.Equals(other.X) && this.Y.Equals(other.Y) && this.Z.Equals(other.Z) && this.W.Equals(other.W);
+			return this.x.Equals(other.x) && this.y.Equals(other.y) && this.z.Equals(other.z) && this.W.Equals(other.W);
 		}
 
 		public override string ToString()
 		{
-			return $"({X}, {Y}, {Z}, {W})";
+			return $"({x}, {y}, {z}, {W})";
 		}
 	}
 }

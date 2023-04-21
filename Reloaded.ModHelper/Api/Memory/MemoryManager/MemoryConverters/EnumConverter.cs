@@ -31,11 +31,11 @@ namespace Reloaded.ModHelper
         {
             if (typeToCheck == null)
             {
-                ConsoleUtil.LogError($"{nameof(EnumConverter)}: Unable to check if type is convertable because it is null");
+                ConsoleUtils.WriteError($"{nameof(EnumConverter)}: Unable to check if type is convertable because it is null");
                 return false;
             }
 
-            return typeToCheck.IsEnum;
+            return EnumUtils.IsEnum(typeToCheck);
         }
 
         /// <summary>
@@ -56,13 +56,9 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public object GetValue(long address, Type enumType)
         {
-            /*if (address <= 0)
-            {
-                ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't get enum value because address was {address} and is not valid");
-                return null;
-            }*/
+            return EnumUtils.GetValue(enumType, address);
 
-            var underlyingType = Enum.GetUnderlyingType(enumType); // this is the datatype, ex: int, uint, etc
+            /*var underlyingType = Enum.GetUnderlyingType(enumType); // this is the datatype, ex: int, uint, etc
             var enumId = manager.GetValue(address, underlyingType); // actual numeric enum value, ex: id = 32
 
             try
@@ -71,21 +67,9 @@ namespace Reloaded.ModHelper
             }
             catch (Exception)
             {
-                ConsoleUtil.LogError("Faield to get enum value");
+                ConsoleUtils.WriteError("Faield to get enum value");
                 return null;
-            }
-            
-            // old method
-            /*foreach (var enumValue in Enum.GetValues(enumType))
-            {
-                var enumAsUnderlyingType = Convert.ChangeType(enumValue, underlyingType);
-                if (enumAsUnderlyingType.Equals(enumId))
-                {
-                    return enumValue;
-                }
-            }
-
-            return null;*/
+            }*/
         }
 
         /// <summary>
@@ -107,18 +91,9 @@ namespace Reloaded.ModHelper
         /// <param name="valueToSet"></param>
         public void SetValue(long address, object valueToSet)
         {
-            /*if (address <= 0)
-            {
-                ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't set enum value because address was {address} and is not valid");
-                return;
-            }
-            if (valueToSet == null)
-            {
-                ConsoleUtil.LogError($"{nameof(EnumConverter)}: Can't set enum value. Provided object is null");
-                return;
-            }*/
+            EnumUtils.SetValue(address, valueToSet);
 
-            var enumType = valueToSet.GetType();
+            /*var enumType = valueToSet.GetType();
             var underlyingType = Enum.GetUnderlyingType(enumType);
 
 
@@ -164,8 +139,8 @@ namespace Reloaded.ModHelper
             }
             else
             {
-                ConsoleUtil.LogError($"Failed to set enum! Converter doesn't support enums of type: {enumType.Name}");
-            }
+                ConsoleUtils.WriteError($"Failed to set enum! Converter doesn't support enums of type: {enumType.Name}");
+            }*/
         }
     }
 }

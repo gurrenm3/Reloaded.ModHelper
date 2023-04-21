@@ -10,12 +10,12 @@
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public bool Contains(Vector2 point);
+        public bool Contains(Vector2f point);
 
         /// <summary>
         /// Returns a random point from this 2D Shape.
         /// </summary>
         /// <returns></returns>
-        public Vector2 GetRandomPoint();
+        public Vector2f GetRandomPoint();
     }
 }

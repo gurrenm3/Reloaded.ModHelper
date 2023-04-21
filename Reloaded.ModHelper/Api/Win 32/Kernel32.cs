@@ -8,6 +8,9 @@ namespace Reloaded.ModHelper
     /// </summary>
     public static class Kernel32
     {
+        [DllImport("kernel32.dll")]
+        public static extern bool IsBadReadPtr(IntPtr lp, int ucb);
+
         /// <summary>
         /// Retrieves the calling thread's last-error code value. The last-error code is maintained on a per-thread basis. Multiple threads do not overwrite each other's last-error code.
         /// </summary>

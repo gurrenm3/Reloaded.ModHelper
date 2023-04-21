@@ -10,12 +10,12 @@
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public bool Contains(Vector3 point);
+        public bool Contains(Vector3f point);
 
         /// <summary>
         /// Returns a random point from this 3D Shape.
         /// </summary>
         /// <returns></returns>
-        public Vector3 GetRandomPoint();
+        public Vector3f GetRandomPoint();
     }
 }

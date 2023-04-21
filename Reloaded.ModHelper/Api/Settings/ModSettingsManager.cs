@@ -164,9 +164,8 @@ namespace Reloaded.ModHelper
         {
             var type = owner.GetType();
 
-            // Get all possible variables
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
-                .Where(field => field.FieldType.IsAssignableTo(typeof(ModSetting)));
+                    .Where(field => field.FieldType.IsAssignableTo(typeof(ModSetting))); ;
 
             // not used for now because of issue where properties are duplicated.
             /*var properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)

@@ -34,7 +34,7 @@ namespace Reloaded.ModHelper
                 if (value != _value)
                 {
                     _value = value;
-                    OnValueChanged?.Invoke(_value);
+                    OnValueChanged?.Run(_value);
                 }
             }
         }

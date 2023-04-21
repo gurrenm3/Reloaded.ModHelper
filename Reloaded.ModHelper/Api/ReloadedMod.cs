@@ -1,6 +1,7 @@
 ﻿using Reloaded.Hooks.Definitions;
 using Reloaded.Mod.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -62,8 +63,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Contains any hooks that were registered by this mod. Will not contain hooks made by other mods.
         /// </summary>
-        public List<IModHook> LoadedHooks => _loadedHooks;
-        private List<IModHook> _loadedHooks;
+        public List<IModHook> LoadedHooks { get; private set; }
 
         /// <summary>
         /// Contains any Mod Setting found in this class.
@@ -87,9 +87,24 @@ namespace Reloaded.ModHelper
         public string ReloadedModDirectory { get; private set; }
 
         /// <summary>
+        /// Reflects whether or not the Debugger should be attached.
+        /// <br/>Only runs once in the mod's constructor.
+        /// </summary>
+        protected virtual bool EnableDebugger { get; }
+
+        /// <summary>
         /// Creates an instance of this class.
         /// </summary>
-        public ReloadedMod(IModConfig _config, IReloadedHooks _hooks, ILogger _logger, bool autoInitialize = true) 
+        public ReloadedMod(ModContext context, bool autoInitialize = true) 
+            : this(context.ModConfig, context.Hooks, context.Logger, autoInitialize)
+        {
+            
+        }
+
+        /// <summary>
+        /// Creates an instance of this class.
+        /// </summary>
+        public ReloadedMod(IModConfig _config, IReloadedHooks _hooks, ILogger _logger, bool autoInitialize = true)
             : this(_config, _hooks, new ModLogger(_config, _logger), autoInitialize)
         {
         }
@@ -99,6 +114,9 @@ namespace Reloaded.ModHelper
         /// </summary>
         public ReloadedMod(IModConfig _config, IReloadedHooks _hooks, IModLogger _logger, bool autoInitialize = true)
         {
+            if (EnableDebugger)
+                Debugger.Launch();
+
             Logger = _logger;
             ModConfig = _config;
             ReloadedHooks = _hooks;
@@ -123,7 +141,10 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Called once when this mod has finished initializing.
         /// </summary>
-        protected virtual void OnInitialized() { }
+        protected virtual void OnInitialized()
+        {
+            Logger.WriteLine(GetRegisterHooksMessage());
+        }
 
         /// <summary>
         /// Called once before this mod has initialized; after the logger, config, and hook instance have been set.
@@ -135,7 +156,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Initialize this mod. Normally this is automatically called and it can only be called once.
         /// </summary>
-        protected virtual void Initialize()
+        protected void Initialize()
         {
             if (_isInitialized)
                 return;
@@ -152,13 +173,19 @@ namespace Reloaded.ModHelper
             _isInitialized = true;
             OnInitialized();
         }
+
         private void RegisterHooks()
         {
             var hookLoader = new HookLoader(this);
+            LoadedHooks = hookLoader.RegisterHooks();
+        }
 
-            _loadedHooks = hookLoader.RegisterHooks();
-            string message = _loadedHooks.Any() ? "Successfully registered the hooks found in this mod." : "No new hooks were registered by this mod.";
-            Logger.WriteLine(message);
+        protected virtual string GetRegisterHooksMessage()
+        {
+            if (!LoadedHooks.Any())
+                return "No new hooks were registered by this mod.";
+
+            return $"Successfully registered {(LoadedHooks.Count == 1 ? "one hook" : $"{LoadedHooks.Count} hooks")} found in this mod.";
         }
 
         private void RegisterModSettings()
@@ -202,5 +229,57 @@ namespace Reloaded.ModHelper
 
             return false;
         }
+
+
+        #region Reloaded ModBase stuff
+
+        /// <summary>
+        /// Returns true if the suspend functionality is supported, else false.
+        /// </summary>
+        public virtual bool CanSuspend() => false;
+
+        /// <summary>
+        /// Returns true if the unload functionality is supported, else false.
+        /// </summary>
+        public virtual bool CanUnload() => false;
+
+        /// <summary>
+        /// Suspends your mod, i.e. mod stops performing its functionality but is not unloaded.
+        /// <br/><br/>Some tips if you wish to support this (CanSuspend == true)
+        /// <br/>A. Undo memory modifications.
+        /// <br/>B. Deactivate hooks. (Reloaded.Hooks Supports This!)
+        /// </summary>
+        public virtual void Suspend() { }
+
+        /// <summary>
+        /// Unloads your mod, i.e. mod stops performing its functionality but is not unloaded.
+        /// <br/><br/>Some tips if you wish to support this (CanUnload == true).
+        /// <br/>A. Execute Suspend(). [Suspend should be reusable in this method]
+        /// <br/>B. Release any unmanaged resources, e.g. Native memory.
+        /// </summary>
+        /// <remarks>In most cases, calling suspend here is sufficient.</remarks>
+        public virtual void Unload() { }
+
+        /// <summary>
+        /// Automatically called by the mod loader when the mod is about to be unloaded.
+        /// </summary>
+        public virtual void Disposing() { }
+
+        /// <summary>
+        /// Automatically called by the mod loader when the mod is about to be unloaded.
+        /// <br/><br/>Some tips if you wish to support this (CanSuspend == true)
+        /// <br/>A. Redo memory modifications.
+        /// <br/>B. Re-activate hooks. (Reloaded.Hooks Supports This!)
+        /// </summary>
+        public virtual void Resume() { }
+
+        #endregion
+
+
+        #region For Exports, Serialization etc.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public ReloadedMod() { }
+#pragma warning restore CS8618
+        #endregion
     }
 }

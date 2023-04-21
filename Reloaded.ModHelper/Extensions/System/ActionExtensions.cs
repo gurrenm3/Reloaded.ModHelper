@@ -9,7 +9,7 @@ namespace Reloaded.ModHelper
     public static class ActionExtensions
     {
         /// <summary>
-        /// Invoke all actions in the list.
+        /// Run all actions in the list.
         /// </summary>
         /// <param name="actions">list of actions to invoke</param>
         public static void InvokeAll(this List<Action> actions)
@@ -22,13 +22,13 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.LogError(ex.Message);
+                    ConsoleUtils.WriteError(ex.Message);
                 }
             }
         }
 
         /// <summary>
-        /// Invoke all actions in the list.
+        /// Run all actions in the list.
         /// </summary>
         /// <typeparam name="T">argument type</typeparam>
         /// <param name="actions">list of actions to invoke</param>
@@ -43,13 +43,13 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.LogException(ex);
+                    ConsoleUtils.WriteException(ex);
                 }
             }
         }
 
         /// <summary>
-        /// Invoke all actions in the list.
+        /// Run all actions in the list.
         /// </summary>
         /// <typeparam name="T1">argument type1</typeparam>
         /// <typeparam name="T2">argument type2</typeparam>
@@ -66,13 +66,13 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.LogException(ex);
+                    ConsoleUtils.WriteException(ex);
                 }
             }
         }
 
         /// <summary>
-        /// Invoke all actions in the list.
+        /// Run all actions in the list.
         /// </summary>
         /// <typeparam name="T1">argument type1</typeparam>
         /// <typeparam name="T2">argument type2</typeparam>
@@ -91,13 +91,13 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.LogException(ex);
+                    ConsoleUtils.WriteException(ex);
                 }
             }
         }
 
         /// <summary>
-        /// Invoke all actions in the list.
+        /// Run all actions in the list.
         /// </summary>
         /// <typeparam name="T1">argument type1</typeparam>
         /// <typeparam name="T2">argument type2</typeparam>
@@ -118,13 +118,13 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.LogException(ex);
+                    ConsoleUtils.WriteException(ex);
                 }
             }
         }
 
         /// <summary>
-        /// Invoke all actions in the list.
+        /// Run all actions in the list.
         /// </summary>
         /// <typeparam name="T1">argument type1</typeparam>
         /// <typeparam name="T2">argument type2</typeparam>
@@ -147,7 +147,7 @@ namespace Reloaded.ModHelper
                 }
                 catch (Exception ex)
                 {
-                    ConsoleUtil.LogException(ex);
+                    ConsoleUtils.WriteException(ex);
                 }
             }
         }

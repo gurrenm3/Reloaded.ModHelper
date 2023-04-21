@@ -292,17 +292,17 @@
         W = 0x57,
 
         /// <Summary>
-        /// X Key
+        /// x Key
         /// </Summary>
         X = 0x58,
 
         /// <Summary>
-        /// Y Key
+        /// y Key
         /// </Summary>
         Y = 0x59,
 
         /// <Summary>
-        /// Z Key
+        /// z Key
         /// </Summary>
         Z = 0x5a,
 

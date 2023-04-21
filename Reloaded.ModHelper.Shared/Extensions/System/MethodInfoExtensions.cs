@@ -8,7 +8,7 @@ namespace Reloaded.ModHelper
     public static class MethodInfoExtensions
     {
         /// <summary>
-        /// Invoke this method without providing an instance or any arguments.
+        /// Run this method without providing an instance or any arguments.
         /// <br/>For use with static methods.
         /// </summary>
         /// <param name="instance"></param>
@@ -18,7 +18,7 @@ namespace Reloaded.ModHelper
         }
 
         /// <summary>
-        /// Invoke this method with an object instance but no arguments.
+        /// Run this method with an object instance but no arguments.
         /// </summary>
         /// <param name="methodInfo"></param>
         /// <param name="instance">The instance of the object calling this method</param>

@@ -12,7 +12,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public bool Contains(Vector3 vector)
+        public bool Contains(Vector3f vector)
         {
             throw new NotImplementedException();
         }
@@ -21,9 +21,9 @@ namespace Reloaded.ModHelper
         /// Returns a random point from this Cube.
         /// </summary>
         /// <returns></returns>
-        public Vector3 GetRandomPoint()
+        public Vector3f GetRandomPoint()
         {
-            return Random.GetRandomPoint(this);
+            return Random.GetPoint(this);
         }
     }
 }

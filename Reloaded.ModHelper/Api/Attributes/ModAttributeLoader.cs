@@ -161,7 +161,7 @@ namespace Reloaded.ModHelper
                     if (!(attribute is ModAttrAttribute modAttr) || modAttr.Info.IsAttributeLoaded)
                         continue;
 
-                    ThrowIfMemberNotStatic(targetType, member);
+                    //ThrowIfMemberNotStatic(targetType, member);
 
                     modAttr.Info.TargetClass = targetType;
 

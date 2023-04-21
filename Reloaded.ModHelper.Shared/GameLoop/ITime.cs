@@ -1,4 +1,6 @@
-﻿namespace Reloaded.ModHelper
+﻿using System;
+
+namespace Reloaded.ModHelper
 {
     /// <summary>
     /// Provides information about the passage of time within an <see cref="IGameLoop"/>.
@@ -19,5 +21,10 @@
         /// The total number of seconds that have passed since initialization.
         /// </summary>
         public double TotalSeconds { get; }
+
+        /// <summary>
+        /// Represents the time at this current moment.
+        /// </summary>
+        public DateTime Now { get; }
     }
 }

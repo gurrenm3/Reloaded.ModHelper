@@ -31,5 +31,25 @@ namespace Reloaded.ModHelper
                 codeToRun.Invoke(array.GetValue(i));
             }
         }
+
+        /// <summary>
+        /// Prints this byte array as a string.
+        /// <br/>Example: E8 42 87 8B
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="addSpaces"></param>
+        /// <returns></returns>
+        public static string AsString(this byte[] bytes, bool addSpaces = true)
+        {
+            string str = "";
+            foreach (byte b in bytes)
+            {
+                str += b.ToHex();
+                if (addSpaces)
+                    str += " ";
+            }
+
+            return str;
+        }
     }
 }

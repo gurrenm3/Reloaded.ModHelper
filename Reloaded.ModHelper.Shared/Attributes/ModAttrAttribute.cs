@@ -5,6 +5,7 @@ namespace Reloaded.ModHelper
     /// <summary>
     /// Base class for custom attributes.
     /// </summary>
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     public abstract class ModAttrAttribute : Attribute
     {
         /// <summary>

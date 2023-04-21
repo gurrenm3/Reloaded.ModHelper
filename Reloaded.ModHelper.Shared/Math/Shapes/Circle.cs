@@ -10,7 +10,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// The center point of the circle.
         /// </summary>
-        public Vector2 Center { get; private set; }
+        public Vector2f Center { get; private set; }
 
         /// <summary>
         /// The diameter of the circle.
@@ -24,7 +24,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public bool Contains(Vector2 point)
+        public bool Contains(Vector2f point)
         {
             throw new NotImplementedException();
         }
@@ -33,9 +33,9 @@ namespace Reloaded.ModHelper
         /// Returns a Random point from this Circle.
         /// </summary>
         /// <returns></returns>
-        public Vector2 GetRandomPoint()
+        public Vector2f GetRandomPoint()
         {
-            return Random.GetRandomPoint(this);
+            return Random.GetPoint(this);
         }
     }
 }

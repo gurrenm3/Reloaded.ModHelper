@@ -14,7 +14,7 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public static string ToHex(this decimal instance)
         {
-            return instance.ToString("X");
+            return instance.ToString("x");
         }
     }
 }

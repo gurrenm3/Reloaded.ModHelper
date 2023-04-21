@@ -33,7 +33,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Retrieves the status of the specified virtual key. The status specifies whether the key is up, down, or toggled (on, off—alternating each time the key is pressed).
         /// </summary>
-        /// <param name="keyCode">A virtual key. If the desired virtual key is a letter or digit (A through Z, a through z, or 0 through 9), nVirtKey must be set to the ASCII value of that character. For other keys, it must be a virtual-key code.</param>
+        /// <param name="keyCode">A virtual key. If the desired virtual key is a letter or digit (A through z, a through z, or 0 through 9), nVirtKey must be set to the ASCII value of that character. For other keys, it must be a virtual-key code.</param>
         /// <returns>The return value specifies the status of the specified virtual key, as follows: <br/> If the high-order bit is 1, the key is down; otherwise, it is up.<br/>If the low-order bit is 1, the key is toggled.A key, such as the CAPS LOCK key, is toggled if it is turned on.The key is off and untoggled if the low-order bit is 0. A toggle key's indicator light (if any) on the keyboard will be on when the key is toggled, and off when the key is untoggled.</returns>
         /// <remarks>Documentation: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeystate </remarks>
         [DllImport("user32.dll")]
@@ -42,7 +42,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// Retrieves the status of the specified virtual key. The status specifies whether the key is up, down, or toggled (on, off—alternating each time the key is pressed).
         /// </summary>
-        /// <param name="mouseButton">A virtual key. If the desired virtual key is a letter or digit (A through Z, a through z, or 0 through 9), nVirtKey must be set to the ASCII value of that character. For other keys, it must be a virtual-key code.</param>
+        /// <param name="mouseButton">A virtual key. If the desired virtual key is a letter or digit (A through z, a through z, or 0 through 9), nVirtKey must be set to the ASCII value of that character. For other keys, it must be a virtual-key code.</param>
         /// <returns>The return value specifies the status of the specified virtual key, as follows: <br/> If the high-order bit is 1, the key is down; otherwise, it is up.<br/>If the low-order bit is 1, the key is toggled.A key, such as the CAPS LOCK key, is toggled if it is turned on.The key is off and untoggled if the low-order bit is 0. A toggle key's indicator light (if any) on the keyboard will be on when the key is toggled, and off when the key is untoggled.</returns>
         /// <remarks>Documentation: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getkeystate </remarks>
         [DllImport("user32.dll")]

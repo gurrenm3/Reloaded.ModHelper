@@ -51,7 +51,7 @@ namespace Reloaded.ModHelper
         {
             if (typeToIgnore == null)
             {
-                ConsoleUtil.LogError("Can't add type fo ignore list. Type is null");
+                ConsoleUtils.WriteError("Can't add type fo ignore list. Type is null");
                 return;
             }
 
@@ -77,7 +77,7 @@ namespace Reloaded.ModHelper
         {
             if (typeToCheck == null)
             {
-                ConsoleUtil.LogError("Can't check if Type should be ignored because it is null");
+                ConsoleUtils.WriteError("Can't check if Type should be ignored because it is null");
                 return false;
             }
 
@@ -155,7 +155,7 @@ namespace Reloaded.ModHelper
 
             if (objectType == null)
             {
-                ConsoleUtil.LogError("Get get value because type is null");
+                ConsoleUtils.WriteError("Get get value because type is null");
                 return null;
             }
 
@@ -165,7 +165,7 @@ namespace Reloaded.ModHelper
             converter = GetObjectConverter(objectType);
             if (converter == null)
             {
-                ConsoleUtil.LogError($"Cannot convert object of type {objectType.Name}. Type is not supported." +
+                ConsoleUtils.WriteError($"Cannot convert object of type {objectType.Name}. Type is not supported." +
                     $" Consider creating your own {nameof(IMemoryConverter)} to add support for this.");
                 return null;
             }
@@ -182,7 +182,7 @@ namespace Reloaded.ModHelper
         {
             if (valueToSet == null)
             {
-                ConsoleUtil.LogError("Can't set value because it is null");
+                ConsoleUtils.WriteError("Can't set value because it is null");
                 return;
             }
 
@@ -193,7 +193,7 @@ namespace Reloaded.ModHelper
             converter = GetObjectConverter(valueToSet.GetType());
             if (converter == null)
             {
-                ConsoleUtil.LogError($"Cannot convert object of type {valueToSet.GetType().Name}. Type is not supported." +
+                ConsoleUtils.WriteError($"Cannot convert object of type {valueToSet.GetType().Name}. Type is not supported." +
                         $" Consider creating your own {nameof(IMemoryConverter)} to add support for this.");
                 return;
             }
@@ -279,7 +279,7 @@ namespace Reloaded.ModHelper
         {
             if (objectType == null)
             {
-                ConsoleUtil.LogError("Unable to check if type is convertable. Provided type is null");
+                ConsoleUtils.WriteError("Unable to check if type is convertable. Provided type is null");
                 return false;
             }
 
@@ -318,7 +318,7 @@ namespace Reloaded.ModHelper
         {
             if (!converterType.IsAssignableTo(typeof(IMemoryConverter)))
             {
-                ConsoleUtil.LogError("Tried adding a converter that is not a MemoryConverter");
+                ConsoleUtils.WriteError("Tried adding a converter that is not a MemoryConverter");
                 return;
             }
 
@@ -363,7 +363,7 @@ namespace Reloaded.ModHelper
         {
             if (!priorityType.IsAssignableTo(typeof(IMemoryConverter)))
             {
-                ConsoleUtil.LogError("Tried adding a priority converter that is not a MemoryConverter");
+                ConsoleUtils.WriteError("Tried adding a priority converter that is not a MemoryConverter");
                 return;
             }
 

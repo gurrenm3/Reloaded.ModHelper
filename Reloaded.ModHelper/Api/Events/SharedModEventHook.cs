@@ -14,31 +14,31 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public bool IsFiring => _isFiring;
+        public bool IsRunning => _isFiring;
 
         /// <summary>
-        /// Backing field for <see cref="IsFiring"/>.
+        /// Backing field for <see cref="IsRunning"/>.
         /// </summary>
         protected bool _isFiring = false;
 
         /// <summary>
-        /// Initializes this object and sets up backing field for <see cref="IsFiring"/>.
+        /// Initializes this object and sets up backing field for <see cref="IsRunning"/>.
         /// </summary>
         public SharedModEventHook()
         {
-            Prefix += () => _isFiring = true;
-            Postfix.OnFinishedInvoking += () => _isFiring = false;
+            Before += () => _isFiring = true;
+            After.OnFinishedRunning += () => _isFiring = false;
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent Prefix { get; set; } = new SharedModEvent();
+        public IModEvent Before { get; set; } = new SharedModEvent();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent Postfix { get; set; } = new SharedModEvent();
+        public IModEvent After { get; set; } = new SharedModEvent();
     }
 
 
@@ -51,33 +51,36 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public bool IsFiring => _isFiring;
+        public bool IsRunning => _isFiring;
 
         /// <summary>
-        /// Backing field for <see cref="IsFiring"/>.
+        /// Backing field for <see cref="IsRunning"/>.
         /// </summary>
         protected bool _isFiring = false;
 
         /// <summary>
-        /// Initializes this object and sets up backing field for <see cref="IsFiring"/>.
+        /// Initializes this object and sets up backing field for <see cref="IsRunning"/>.
         /// </summary>
         public SharedModEventHook()
         {
-            Prefix += (a1) => _isFiring = true;
-            Postfix.OnFinishedInvoking += () => _isFiring = false;
+            Before += (a1) => _isFiring = true;
+            After.OnFinishedRunning += () => _isFiring = false;
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<EventParam<T1>> Prefix { get; set; } = new SharedModEvent<EventParam<T1>>();
+        //public IModEvent<EventParam<T1>> Before { get; set; } = new SharedModEvent<EventParam<T1>>();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<EventParam<T1>> Postfix { get; set; } = new SharedModEvent<EventParam<T1>>();
-    }
+        //public IModEvent<EventParam<T1>> After { get; set; } = new SharedModEvent<EventParam<T1>>();
 
+        public IModEvent<T1> Before { get; set; } = new SharedModEvent<T1>();
+        public IModEvent<T1> After { get; set; } = new SharedModEvent<T1>();
+    }
+/*
 
 
     /// <summary>
@@ -88,31 +91,31 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public bool IsFiring => _isFiring;
+        public bool IsRunning => _isFiring;
 
         /// <summary>
-        /// Backing field for <see cref="IsFiring"/>.
+        /// Backing field for <see cref="IsRunning"/>.
         /// </summary>
         protected bool _isFiring = false;
 
         /// <summary>
-        /// Initializes this object and sets up backing field for <see cref="IsFiring"/>.
+        /// Initializes this object and sets up backing field for <see cref="IsRunning"/>.
         /// </summary>
         public SharedModEventHook()
         {
-            Prefix += (a1, a2) => _isFiring = true;
-            Postfix.OnFinishedInvoking += () => _isFiring = false;
+            Before += (a1, a2) => _isFiring = true;
+            After.OnFinishedRunning += () => _isFiring = false;
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<EventParam<T1>, EventParam<T2>> Prefix { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>>();
+        public IModEvent<EventParam<T1>, EventParam<T2>> Before { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>>();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<EventParam<T1>, EventParam<T2>> Postfix { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>>();
+        public IModEvent<EventParam<T1>, EventParam<T2>> After { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>>();
     }
 
 
@@ -125,31 +128,31 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public bool IsFiring => _isFiring;
+        public bool IsRunning => _isFiring;
 
         /// <summary>
-        /// Backing field for <see cref="IsFiring"/>.
+        /// Backing field for <see cref="IsRunning"/>.
         /// </summary>
         protected bool _isFiring = false;
 
         /// <summary>
-        /// Initializes this object and sets up backing field for <see cref="IsFiring"/>.
+        /// Initializes this object and sets up backing field for <see cref="IsRunning"/>.
         /// </summary>
         public SharedModEventHook()
         {
-            Prefix += (a1, a2, a3) => _isFiring = true;
-            Postfix.OnFinishedInvoking += () => _isFiring = false;
+            Before += (a1, a2, a3) => _isFiring = true;
+            After.OnFinishedRunning += () => _isFiring = false;
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>> Prefix { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>>();
+        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>> Before { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>>();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>> Postfix { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>>();
+        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>> After { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>>();
     }
 
 
@@ -162,31 +165,31 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public bool IsFiring => _isFiring;
+        public bool IsRunning => _isFiring;
 
         /// <summary>
-        /// Backing field for <see cref="IsFiring"/>.
+        /// Backing field for <see cref="IsRunning"/>.
         /// </summary>
         protected bool _isFiring = false;
 
         /// <summary>
-        /// Initializes this object and sets up backing field for <see cref="IsFiring"/>.
+        /// Initializes this object and sets up backing field for <see cref="IsRunning"/>.
         /// </summary>
         public SharedModEventHook()
         {
-            Prefix += (a1, a2, a3, a4) => _isFiring = true;
-            Postfix.OnFinishedInvoking += () => _isFiring = false;
+            Before += (a1, a2, a3, a4) => _isFiring = true;
+            After.OnFinishedRunning += () => _isFiring = false;
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>> Prefix { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>>();
+        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>> Before { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>>();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>> Postfix { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>>();
+        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>> After { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>>();
     }
 
 
@@ -211,18 +214,18 @@ namespace Reloaded.ModHelper
         /// </summary>
         public SharedModEventHook()
         {
-            Prefix += (a1, a2, a3, a4, a5) => _isFiring = true;
-            Postfix.OnFinishedInvoking += () => _isFiring = false;
+            Before += (a1, a2, a3, a4, a5) => _isFiring = true;
+            After.OnFinishedRunning += () => _isFiring = false;
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>, EventParam<T5>> Prefix { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>, EventParam<T5>>();
+        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>, EventParam<T5>> Before { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>, EventParam<T5>>();
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>, EventParam<T5>> Postfix { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>, EventParam<T5>>();
-    }
+        public IModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>, EventParam<T5>> After { get; set; } = new SharedModEvent<EventParam<T1>, EventParam<T2>, EventParam<T3>, EventParam<T4>, EventParam<T5>>();
+    }*/
 }

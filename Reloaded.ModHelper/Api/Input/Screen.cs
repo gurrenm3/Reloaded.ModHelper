@@ -13,7 +13,7 @@
         /// <summary>
         /// The position of the center of the screen.
         /// </summary>
-        public static Vector2 centerScreen;
+        public static Vector2f centerScreen;
 
         
         static Screen()

@@ -14,9 +14,9 @@ namespace Reloaded.ModHelper
     public class SharedModEvent : IModEvent
     {
         /// <summary>
-        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// Called automatically once during <see cref="Run"/> once all listeners have finished being invoked.
         /// </summary>
-        public IModEvent OnFinishedInvoking { get; set; }
+        public IModEvent OnFinishedRunning { get; set; }
 
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -29,20 +29,20 @@ namespace Reloaded.ModHelper
         public SharedModEvent(bool useOnFinishedInvoking = true)
         {
             if (useOnFinishedInvoking)
-                OnFinishedInvoking = new SharedModEvent(false);
+                OnFinishedRunning = new SharedModEvent(false);
         }
 
         /// <summary>
         /// <inheritdoc/> Only returns listeners for this mod.
         /// </summary>
         /// <returns></returns>
-        public List<Action> GetListeners()
+        public List<Action> GetRunners()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return null;
 
-            return modEvent.GetListeners();
+            return modEvent.GetRunners();
         }
 
         /// <summary>
@@ -50,11 +50,11 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public void AddListener(Action listener)
+        public void AddRunner(Action listener)
         {
             var modEvent = GetModEvent();
             if (modEvent != null)
-                modEvent.AddListener(listener);
+                modEvent.AddRunner(listener);
         }
 
         /// <summary>
@@ -62,13 +62,13 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="index"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(int index)
+        public bool RemoveRunner(int index)
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return false;
 
-            return modEvent.RemoveListener(index);
+            return modEvent.RemoveRunner(index);
         }
 
         /// <summary>
@@ -76,26 +76,26 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(Action listener)
+        public bool RemoveRunner(Action listener)
         {
             var modEvent = GetModEvent();
-            return modEvent == null ? false : modEvent.RemoveListener(listener);
+            return modEvent == null ? false : modEvent.RemoveRunner(listener);
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke()
+        public void Run()
         {
             if (!modEvents.Any())
                 return;
 
             for (int i = 0; i < modEvents.Count; i++)
             {
-                modEvents.ElementAt(i).Value?.Invoke();
+                modEvents.ElementAt(i).Value?.Run();
             }
 
-            OnFinishedInvoking?.Invoke();
+            OnFinishedRunning?.Run();
         }
 
         /// <summary>
@@ -139,9 +139,9 @@ namespace Reloaded.ModHelper
     public class SharedModEvent<T1> : IModEvent<T1>
     {
         /// <summary>
-        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// Called automatically once during <see cref="Run"/> once all listeners have finished being invoked.
         /// </summary>
-        public IModEvent OnFinishedInvoking { get; set; }
+        public IModEvent OnFinishedRunning { get; set; }
 
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -154,20 +154,20 @@ namespace Reloaded.ModHelper
         public SharedModEvent(bool useOnFinishedInvoking = true)
         {
             if (useOnFinishedInvoking)
-                OnFinishedInvoking = new SharedModEvent(false);
+                OnFinishedRunning = new SharedModEvent(false);
         }
 
         /// <summary>
         /// <inheritdoc/> Only returns listeners for this mod.
         /// </summary>
         /// <returns></returns>
-        public List<Action<T1>> GetListeners()
+        public List<Action<T1>> GetRunners()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return null;
 
-            return modEvent.GetListeners();
+            return modEvent.GetRunners();
         }
 
         /// <summary>
@@ -175,13 +175,26 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public void AddListener(Action<T1> listener)
+        public void AddRunner(Action<T1> listener)
         {
             var modEvent = GetModEvent();
             if (modEvent == null)
                 return;
 
-            modEvent.AddListener(listener);
+            modEvent.AddRunner(listener);
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="action"><inheritdoc/></param>
+        public void AddRunner(ActionRef1<T1> listener)
+        {
+            var modEvent = GetModEvent();
+            if (modEvent == null)
+                return;
+
+            modEvent.AddRunner(listener);
         }
 
         /// <summary>
@@ -189,40 +202,62 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="index"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(int index)
+        public bool RemoveRunner(int index)
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return false;
 
-            return modEvent.RemoveListener(index);
+            return modEvent.RemoveRunner(index);
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        /// <param name="listener"><inheritdoc/></param>
+        /// <param name="codeToRemove"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(Action<T1> listener)
+        public bool RemoveRunner(Action<T1> codeToRemove)
         {
             var modEvent = GetModEvent();
-            return modEvent == null ? false : modEvent.RemoveListener(listener);
+            return modEvent == null ? false : modEvent.RemoveRunner(codeToRemove);
+        }
+
+        public bool RemoveRunner(ActionRef1<T1> codeToRemove)
+        {
+            var modEvent = GetModEvent();
+            return modEvent == null ? false : modEvent.RemoveRunner(codeToRemove);
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(T1 value1)
+        public void Run(T1 value1)
         {
             if (!modEvents.Any())
                 return;
 
             for (int i = 0; i < modEvents.Count; i++)
             {
-                modEvents.ElementAt(i).Value?.Invoke(value1);
+                modEvents.ElementAt(i).Value?.Run(value1);
             }
 
-            OnFinishedInvoking?.Invoke();
+            OnFinishedRunning?.Run();
+        }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public void Run(ref T1 value1)
+        {
+            if (!modEvents.Any())
+                return;
+
+            for (int i = 0; i < modEvents.Count; i++)
+            {
+                modEvents.ElementAt(i).Value?.Run(ref value1);
+            }
+
+            OnFinishedRunning?.Run();
         }
 
         /// <summary>
@@ -266,9 +301,9 @@ namespace Reloaded.ModHelper
     public class SharedModEvent<T1, T2> : IModEvent<T1, T2>
     {
         /// <summary>
-        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// Called automatically once during <see cref="Run"/> once all listeners have finished being invoked.
         /// </summary>
-        public IModEvent OnFinishedInvoking { get; set; }
+        public IModEvent OnFinishedRunning { get; set; }
 
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -281,20 +316,20 @@ namespace Reloaded.ModHelper
         public SharedModEvent(bool useOnFinishedInvoking = true)
         {
             if (useOnFinishedInvoking)
-                OnFinishedInvoking = new SharedModEvent(false);
+                OnFinishedRunning = new SharedModEvent(false);
         }
 
         /// <summary>
         /// <inheritdoc/> Only returns listeners for this mod.
         /// </summary>
         /// <returns></returns>
-        public List<Action<T1, T2>> GetListeners()
+        public List<Action<T1, T2>> GetRunners()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return null;
 
-            return modEvent.GetListeners();
+            return modEvent.GetRunners();
         }
 
         /// <summary>
@@ -302,13 +337,13 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public void AddListener(Action<T1, T2> listener)
+        public void AddRunner(Action<T1, T2> listener)
         {
             var modEvent = GetModEvent();
             if (modEvent == null)
                 return;
 
-            modEvent.AddListener(listener);
+            modEvent.AddRunner(listener);
         }
 
         /// <summary>
@@ -316,13 +351,13 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="index"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(int index)
+        public bool RemoveRunner(int index)
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return false;
 
-            return modEvent.RemoveListener(index);
+            return modEvent.RemoveRunner(index);
         }
 
         /// <summary>
@@ -330,26 +365,26 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(Action<T1, T2> listener)
+        public bool RemoveRunner(Action<T1, T2> listener)
         {
             var modEvent = GetModEvent();
-            return modEvent == null ? false : modEvent.RemoveListener(listener);
+            return modEvent == null ? false : modEvent.RemoveRunner(listener);
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(T1 value1, T2 value2)
+        public void Run(T1 value1, T2 value2)
         {
             if (!modEvents.Any())
                 return;
 
             for (int i = 0; i < modEvents.Count; i++)
             {
-                modEvents.ElementAt(i).Value?.Invoke(value1, value2);
+                modEvents.ElementAt(i).Value?.Run(value1, value2);
             }
 
-            OnFinishedInvoking?.Invoke();
+            OnFinishedRunning?.Run();
         }
 
         /// <summary>
@@ -365,7 +400,8 @@ namespace Reloaded.ModHelper
             if (modEvents.TryGetValue(callingMod, out var modEvent))
                 return modEvent;
 
-            modEvent = new ModEvent<T1, T2>();
+            throw new Exception("FIX THIS ERROR! UNCOMMENT CODE BELOW");
+            //modEvent = new ModEvent<T1, T2>();
             modEvents.Add(callingMod, modEvent);
             return modEvent;
         }
@@ -378,10 +414,40 @@ namespace Reloaded.ModHelper
         {
             return AssemblyUtils.GetCallingAssembly();
         }
+
+        public void AddRunner(ActionRef1<T1, T2> codeToRun)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddRunner(ActionRef2<T1, T2> codeToRun)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveRunner(ActionRef1<T1, T2> codeToRemove)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveRunner(ActionRef2<T1, T2> codeToRemove)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Run(ref T1 value1, T2 value2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Run(ref T1 value1, ref T2 value2)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     #endregion
-
+/*
 
 
     #region Three Parameters
@@ -393,9 +459,9 @@ namespace Reloaded.ModHelper
     public class SharedModEvent<T1, T2, T3> : IModEvent<T1, T2, T3>
     {
         /// <summary>
-        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// Called automatically once during <see cref="Run"/> once all listeners have finished being invoked.
         /// </summary>
-        public IModEvent OnFinishedInvoking { get; set; }
+        public IModEvent OnFinishedRunning { get; set; }
 
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -408,20 +474,20 @@ namespace Reloaded.ModHelper
         public SharedModEvent(bool useOnFinishedInvoking = true)
         {
             if (useOnFinishedInvoking)
-                OnFinishedInvoking = new SharedModEvent(false);
+                OnFinishedRunning = new SharedModEvent(false);
         }
 
         /// <summary>
         /// <inheritdoc/> Only returns listeners for this mod.
         /// </summary>
         /// <returns></returns>
-        public List<Action<T1, T2, T3>> GetListeners()
+        public List<Action<T1, T2, T3>> GetRunners()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return null;
 
-            return modEvent.GetListeners();
+            return modEvent.GetRunners();
         }
 
         /// <summary>
@@ -429,13 +495,13 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public void AddListener(Action<T1, T2, T3> listener)
+        public void AddRunner(Action<T1, T2, T3> listener)
         {
             var modEvent = GetModEvent();
             if (modEvent == null)
                 return;
 
-            modEvent.AddListener(listener);
+            modEvent.AddRunner(listener);
         }
 
         /// <summary>
@@ -443,13 +509,13 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="index"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(int index)
+        public bool RemoveRunner(int index)
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return false;
 
-            return modEvent.RemoveListener(index);
+            return modEvent.RemoveRunner(index);
         }
 
         /// <summary>
@@ -457,26 +523,26 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(Action<T1, T2, T3> listener)
+        public bool RemoveRunner(Action<T1, T2, T3> listener)
         {
             var modEvent = GetModEvent();
-            return modEvent == null ? false : modEvent.RemoveListener(listener);
+            return modEvent == null ? false : modEvent.RemoveRunner(listener);
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(T1 value1, T2 value2, T3 value3)
+        public void Run(T1 value1, T2 value2, T3 value3)
         {
             if (!modEvents.Any())
                 return;
 
             for (int i = 0; i < modEvents.Count; i++)
             {
-                modEvents.ElementAt(i).Value?.Invoke(value1, value2, value3);
+                modEvents.ElementAt(i).Value?.Run(value1, value2, value3);
             }
 
-            OnFinishedInvoking?.Invoke();
+            OnFinishedRunning?.Run();
         }
 
         /// <summary>
@@ -520,9 +586,9 @@ namespace Reloaded.ModHelper
     public class SharedModEvent<T1, T2, T3, T4> : IModEvent<T1, T2, T3, T4>
     {
         /// <summary>
-        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// Called automatically once during <see cref="Run"/> once all listeners have finished being invoked.
         /// </summary>
-        public IModEvent OnFinishedInvoking { get; set; }
+        public IModEvent OnFinishedRunning { get; set; }
 
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -535,20 +601,20 @@ namespace Reloaded.ModHelper
         public SharedModEvent(bool useOnFinishedInvoking = true)
         {
             if (useOnFinishedInvoking)
-                OnFinishedInvoking = new SharedModEvent(false);
+                OnFinishedRunning = new SharedModEvent(false);
         }
 
         /// <summary>
         /// <inheritdoc/> Only returns listeners for this mod.
         /// </summary>
         /// <returns></returns>
-        public List<Action<T1, T2, T3, T4>> GetListeners()
+        public List<Action<T1, T2, T3, T4>> GetRunners()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return null;
 
-            return modEvent.GetListeners();
+            return modEvent.GetRunners();
         }
 
         /// <summary>
@@ -556,13 +622,13 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public void AddListener(Action<T1, T2, T3, T4> listener)
+        public void AddRunner(Action<T1, T2, T3, T4> listener)
         {
             var modEvent = GetModEvent();
             if (modEvent == null)
                 return;
 
-            modEvent.AddListener(listener);
+            modEvent.AddRunner(listener);
         }
 
         /// <summary>
@@ -570,13 +636,13 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="index"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(int index)
+        public bool RemoveRunner(int index)
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return false;
 
-            return modEvent.RemoveListener(index);
+            return modEvent.RemoveRunner(index);
         }
 
         /// <summary>
@@ -584,26 +650,26 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(Action<T1, T2, T3, T4> listener)
+        public bool RemoveRunner(Action<T1, T2, T3, T4> listener)
         {
             var modEvent = GetModEvent();
-            return modEvent == null ? false : modEvent.RemoveListener(listener);
+            return modEvent == null ? false : modEvent.RemoveRunner(listener);
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4)
+        public void Run(T1 value1, T2 value2, T3 value3, T4 value4)
         {
             if (!modEvents.Any())
                 return;
 
             for (int i = 0; i < modEvents.Count; i++)
             {
-                modEvents.ElementAt(i).Value?.Invoke(value1, value2, value3, value4);
+                modEvents.ElementAt(i).Value?.Run(value1, value2, value3, value4);
             }
 
-            OnFinishedInvoking?.Invoke();
+            OnFinishedRunning?.Run();
         }
 
         /// <summary>
@@ -647,9 +713,9 @@ namespace Reloaded.ModHelper
     public class SharedModEvent<T1, T2, T3, T4, T5> : IModEvent<T1, T2, T3, T4, T5>
     {
         /// <summary>
-        /// Called automatically once during <see cref="Invoke"/> once all listeners have finished being invoked.
+        /// Called automatically once during <see cref="Run"/> once all listeners have finished being invoked.
         /// </summary>
-        public IModEvent OnFinishedInvoking { get; set; }
+        public IModEvent OnFinishedRunning { get; set; }
 
         /// <summary>
         /// Contains the <see cref="ModEvent"/> for each mod, separated by the mod's assembly.
@@ -662,20 +728,20 @@ namespace Reloaded.ModHelper
         public SharedModEvent(bool useOnFinishedInvoking = true)
         {
             if (useOnFinishedInvoking)
-                OnFinishedInvoking = new SharedModEvent(false);
+                OnFinishedRunning = new SharedModEvent(false);
         }
 
         /// <summary>
         /// <inheritdoc/> Only returns listeners for this mod.
         /// </summary>
         /// <returns></returns>
-        public List<Action<T1, T2, T3, T4, T5>> GetListeners()
+        public List<Action<T1, T2, T3, T4, T5>> GetRunners()
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return null;
 
-            return modEvent.GetListeners();
+            return modEvent.GetRunners();
         }
 
         /// <summary>
@@ -683,13 +749,13 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public void AddListener(Action<T1, T2, T3, T4, T5> listener)
+        public void AddRunner(Action<T1, T2, T3, T4, T5> listener)
         {
             var modEvent = GetModEvent();
             if (modEvent == null)
                 return;
 
-            modEvent.AddListener(listener);
+            modEvent.AddRunner(listener);
         }
 
         /// <summary>
@@ -697,13 +763,13 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="index"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(int index)
+        public bool RemoveRunner(int index)
         {
             var callingMod = GetCallingMod();
             if (callingMod == null || !modEvents.TryGetValue(callingMod, out var modEvent))
                 return false;
 
-            return modEvent.RemoveListener(index);
+            return modEvent.RemoveRunner(index);
         }
 
         /// <summary>
@@ -711,26 +777,26 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="listener"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public bool RemoveListener(Action<T1, T2, T3, T4, T5> listener)
+        public bool RemoveRunner(Action<T1, T2, T3, T4, T5> listener)
         {
             var modEvent = GetModEvent();
-            return modEvent == null ? false : modEvent.RemoveListener(listener);
+            return modEvent == null ? false : modEvent.RemoveRunner(listener);
         }
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public void Invoke(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
+        public void Run(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
         {
             if (!modEvents.Any())
                 return;
 
             for (int i = 0; i < modEvents.Count; i++)
             {
-                modEvents.ElementAt(i).Value?.Invoke(value1, value2, value3, value4, value5);
+                modEvents.ElementAt(i).Value?.Run(value1, value2, value3, value4, value5);
             }
 
-            OnFinishedInvoking?.Invoke();
+            OnFinishedRunning?.Run();
         }
 
         /// <summary>
@@ -761,5 +827,5 @@ namespace Reloaded.ModHelper
         }
     }
 
-    #endregion
+    #endregion*/
 }

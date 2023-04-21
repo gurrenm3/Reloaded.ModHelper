@@ -17,11 +17,11 @@ namespace Reloaded.ModHelper
         {
             if (typeToCheck == null)
             {
-                ConsoleUtil.LogError($"{nameof(StringConverter)}: Unable to check if type is convertable because it's null.");
+                ConsoleUtils.WriteError($"{nameof(StringConverter)}: Unable to check if type is convertable because it's null.");
                 return false;
             }
 
-            return typeToCheck == typeof(string) || typeToCheck == typeof(char*);
+            return StringUtils.IsString(typeToCheck);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Reloaded.ModHelper
         /// <returns></returns>
         public object GetValue(long address, Type valueType)
         {
-            return Strings.ToString(address);
+            return StringUtils.GetValue(address);
         }
 
         /// <summary>
@@ -64,10 +64,12 @@ namespace Reloaded.ModHelper
         /// <param name="valueToSet"></param>
         public void SetValue(long address, object valueToSet)
         {
-            string value = valueToSet == null ? "" : valueToSet.ToString();
+            StringUtils.SetValue(address, valueToSet);
+
+            /*string value = valueToSet == null ? "" : valueToSet.ToString();
             long valueAddress = (long)Marshal.StringToHGlobalAnsi(value);
 
-            *(char*)address = *(char*)valueAddress;
+            *(char*)address = *(char*)valueAddress;*/
         }
     }
 }

@@ -46,7 +46,7 @@ namespace Reloaded.ModHelper
         /// <summary>
         /// The Center point of this Rect.
         /// </summary>
-        public Vector2 Center { get; private set; }
+        public Vector2f Center { get; private set; }
 
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Reloaded.ModHelper
 
             Width = width;
             Height = height;
-            Center = new Vector2(width / 2, height / 2);
+            Center = new Vector2f(width / 2, height / 2);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Reloaded.ModHelper
 
             Width = width;
             Height = height;
-            Center = new Vector2(width / 2, height / 2);
+            Center = new Vector2f(width / 2, height / 2);
         }
 
         /// <summary>
@@ -95,8 +95,8 @@ namespace Reloaded.ModHelper
         /// is contained within this rect.
         /// </summary>
         /// <param name="vector2">Location to check.</param>
-        /// <returns>True if the Vector2 is contained within the rect, otherwise false.</returns>
-        public bool Contains(Vector2 vector2) => Contains(vector2.X, vector2.Y);
+        /// <returns>True if the Vector2f is contained within the rect, otherwise false.</returns>
+        public bool Contains(Vector2f vector2) => Contains(vector2.x, vector2.y);
 
         /// <summary>
         /// Returns whether or not the provided <paramref name="point"/> 
@@ -107,10 +107,10 @@ namespace Reloaded.ModHelper
         public bool Contains(Point point) => Contains(point.X, point.Y);
 
         /// <summary>
-        /// Returns whether or not the provided X,Y points are contained within this rect.
+        /// Returns whether or not the provided x,y points are contained within this rect.
         /// </summary>
-        /// <param name="x">X Coord.</param>
-        /// <param name="y">Y Coord.</param>
+        /// <param name="x">x Coord.</param>
+        /// <param name="y">y Coord.</param>
         /// <returns>True if the provided points are contained within the rect, otherwise false.</returns>
         public bool Contains(float x, float y)
         {
@@ -123,9 +123,9 @@ namespace Reloaded.ModHelper
         /// Returns a random point from this Rectangle.
         /// </summary>
         /// <returns></returns>
-        public Vector2 GetRandomPoint()
+        public Vector2f GetRandomPoint()
         {
-            return Random.GetRandomPoint(this);
+            return Random.GetPoint(this);
         }
 
         /// <summary>

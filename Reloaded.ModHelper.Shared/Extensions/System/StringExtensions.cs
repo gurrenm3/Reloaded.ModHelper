@@ -63,7 +63,7 @@ namespace Reloaded.ModHelper
                 if (add0x)
                     sb.Append("0x");
 
-                sb.AppendFormat("{0:X}", (int)c);
+                sb.AppendFormat("{0:x}", (int)c);
 
                 if (separateBySpace)
                     sb.Append(" ");

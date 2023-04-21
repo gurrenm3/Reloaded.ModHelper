@@ -53,10 +53,10 @@ namespace Reloaded.ModHelper
             {
                 while (true)
                 {
-                    OnUpdate.Prefix.Invoke();
+                    OnUpdate.Before.Run();
                     RunLoopInternal();
                     RunLoop();
-                    OnUpdate.Postfix.Invoke();
+                    OnUpdate.After.Run();
                     Thread.Sleep(timeBetweenLoops);
                 }
             }, loopCancellation.Token);

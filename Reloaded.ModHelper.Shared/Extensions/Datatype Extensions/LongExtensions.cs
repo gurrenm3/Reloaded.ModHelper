@@ -12,7 +12,7 @@
         /// <returns></returns>
         public static string ToHex(this long instance)
         {
-            return instance.ToString("X");
+            return instance.ToString("x");
         }
     }
 }

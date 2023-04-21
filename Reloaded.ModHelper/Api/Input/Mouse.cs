@@ -16,10 +16,10 @@ namespace Reloaded.ModHelper
         /// Get the position of the cursor in screen coordinates
         /// </summary>
         /// <returns></returns>
-        public static Vector2 GetPosition()
+        public static Vector2f GetPosition()
         {
             User32.GetCursorPos(out Point position);
-            return new Vector2(position);
+            return new Vector2f(position);
         }
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace Reloaded.ModHelper
         /// TODO
         /// </summary>
         /// <param name="position"></param>
-        public static void SetPosition(Vector2 position)
+        public static void SetPosition(Vector2f position)
         {
-            SetPosition(position.X, position.Y);
+            SetPosition(position.x, position.y);
         }
 
         /// <summary>

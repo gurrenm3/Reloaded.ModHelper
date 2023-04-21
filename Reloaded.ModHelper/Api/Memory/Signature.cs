@@ -42,7 +42,7 @@ namespace Reloaded.ModHelper
         /// </summary>
         /// <param name="cacheResult">Should the result be cached so it can be accessed later?</param>
         /// <returns></returns>
-        /// <remarks>Uses Uses to <see cref="Scanner.FindPattern(string)"/> to find the address
+        /// <remarks>Uses to <see cref="Scanner.FindPattern(string)"/> to find the address
         /// and combines it with the baseAddress of the game to get the final address.</remarks>
         public long Scan(bool cacheResult = true)
         {

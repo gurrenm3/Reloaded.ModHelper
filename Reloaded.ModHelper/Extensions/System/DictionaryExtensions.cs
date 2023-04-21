@@ -21,5 +21,23 @@ namespace Reloaded.ModHelper
             if (!dictionary.TryAdd(key, value))
                 dictionary[key] = value;
         }
+
+        /// <summary>
+        /// Gets the value in the dictionary with this key, or if it's not present it will add it.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dictionary"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static TValue GetOrAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        {
+            if(dictionary.TryGetValue(key, out var v))
+                return v;
+
+            dictionary.Add(key, value);
+            return value;
+        }
     }
 }

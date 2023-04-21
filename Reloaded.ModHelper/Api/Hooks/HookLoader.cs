@@ -32,7 +32,10 @@ namespace Reloaded.ModHelper
                     continue;
 
                 IModHook hookInstance = (IModHook)Activator.CreateInstance(hook);
-                hookInstance.InitHook(thisMod.Logger, thisMod.ReloadedHooks);
+                bool initialized = hookInstance.InitHook(thisMod.Logger, thisMod.ReloadedHooks);
+                if (!initialized)
+                    continue;
+
                 loadedHookInstances.Add(hookInstance);
                 loadedHooks.Add(hook);
             }

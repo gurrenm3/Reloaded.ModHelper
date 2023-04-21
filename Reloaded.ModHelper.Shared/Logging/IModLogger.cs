@@ -8,6 +8,11 @@ namespace Reloaded.ModHelper
     public interface IModLogger
     {
         /// <summary>
+        /// The current instance of the logger.
+        /// </summary>
+        public static IModLogger Instance { get; set; }
+
+        /// <summary>
         /// The name of the mod that owns this logger.
         /// </summary>
         public string ModName { get; }
