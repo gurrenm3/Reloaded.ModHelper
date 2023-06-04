@@ -46,6 +46,17 @@ public sealed class Random
     }
 
     /// <summary>
+    /// Returns a random number between min (inclusive) and max (exclusive).
+    /// </summary>
+    /// <param name="min"></param>
+    /// <param name="max"></param>
+    /// <returns></returns>
+    public static double Range(double min, double max)
+    {
+        return _random.NextDouble(min, max);
+    }
+
+    /// <summary>
     /// Returns a random long from min (inclusive) to max (exclusive)
     /// </summary>
     /// <param name="min"></param>

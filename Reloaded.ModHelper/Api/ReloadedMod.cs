@@ -2,16 +2,18 @@
 using Reloaded.Mod.Interfaces;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Reloaded.ModHelper
 {
     /// <summary>
     /// A base class for Reloaded2 mods
     /// </summary>
-    public abstract class ReloadedMod
+    public abstract class ReloadedMod : ModAttributeContainer
     {
         /// <summary>
         /// Represents the location of the personalized folder for this specific mod.
@@ -52,13 +54,6 @@ namespace Reloaded.ModHelper
         /// A Logger for writing messages to the Reloaded Console.
         /// </summary>
         public IModLogger Logger { get; set; }
-
-        /// <summary>
-        /// Contains any <see cref="ModAttrAttribute"/> that were registered for this mod.
-        /// <br/>Will be empty if none were registered by this mod.
-        /// </summary>
-        public List<ModAttrAttribute> LoadedModAttributes => _loadedModAttributes;
-        private List<ModAttrAttribute> _loadedModAttributes;
 
         /// <summary>
         /// Contains any hooks that were registered by this mod. Will not contain hooks made by other mods.
@@ -121,7 +116,7 @@ namespace Reloaded.ModHelper
             ModConfig = _config;
             ReloadedHooks = _hooks;
 
-            Logger.WriteLine("-------- Mod Info --------");
+            Logger.WriteLine("-------- Mod Info --------", Color.LawnGreen);
             Logger.WriteLine($"{_config.ModName} v{_config.ModVersion}");
             Logger.WriteLine($"by {_config.ModAuthor}");
 
@@ -165,13 +160,33 @@ namespace Reloaded.ModHelper
 
             ModAssembly = AssemblyUtils.GetCallingAssembly();
             ReloadedModDirectory = Path.GetDirectoryName(ModAssembly.Location);
-            ModAttributeLoader.LoadAllFromAssembly(ModAssembly, out _loadedModAttributes);
+            Logger.WriteLine($"Mod Directory: {ReloadedModDirectory}");
 
+            LoadModAttributes();
             RegisterHooks();
             RegisterModSettings();
 
             _isInitialized = true;
             OnInitialized();
+        }
+
+        private void LoadModAttributes()
+        {
+            Logger.WriteLine("Loading Mod Attributes...");
+
+            LoadInstanceAttributes();
+            ModAttributeLoader.LoadAllFromAssembly(ModAssembly, out var loadedFromAssembly);
+
+            if (loadedFromAssembly != null)
+                LoadedModAttributes.AddRange(loadedFromAssembly);
+
+            if (LoadedModAttributes == null || !LoadedModAttributes.Any())
+            {
+                Logger.WriteLine("No Mod Attributes were registered by this mod.");
+                return;
+            }
+
+            Logger.WriteLine($"Successfully registered {(LoadedModAttributes.Count == 1 ? "one ModAttribute" : $"{LoadedModAttributes.Count} ModAttributes")} found in this mod.");
         }
 
         private void RegisterHooks()

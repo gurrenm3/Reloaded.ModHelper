@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Reloaded.ModHelper
 {
@@ -30,6 +31,14 @@ namespace Reloaded.ModHelper
             targetAssembly = modAssembly;
         }
 
+        public static void LoadAllFromInstance(object instance, out List<ModAttrAttribute> loadedAttributes)
+        {
+            ModAttributeLoader loader = new ModAttributeLoader(instance.GetType().Assembly);
+            loader.GetModAttributesFromType(instance.GetType(), instance);
+            loader.ProcessLoadedAttrbutes();
+            loadedAttributes = loader.allModAttributes;
+        }
+
         /// <summary>
         /// Loads all <see cref="ModAttrAttribute"/> from the provided Assembly.
         /// </summary>
@@ -39,6 +48,7 @@ namespace Reloaded.ModHelper
         {
             var loader = new ModAttributeLoader(modAssembly);
             loader.LoadAllFromAssembly();
+            loader.ProcessLoadedAttrbutes();
             loadedAttributes = loader.allModAttributes;
         }
 
@@ -50,10 +60,54 @@ namespace Reloaded.ModHelper
         {
             // Get all current ModAttrAttributes.
             allModAttributes.Clear();
-            targetAssembly.GetTypes().ForEach(type => GetModAttributesFromType(type));
+            //targetAssembly.GetTypes().ForEach(type => GetModAttributesFromType(type));
+            Parallel.ForEach(targetAssembly.GetTypes(), type => GetModAttributesFromType(type, null));            
+        }
 
+        private void ProcessLoadedAttrbutes()
+        {
             // load all ModAttrAttributes without dependencies.
-            allModAttributes.ForEach(modAttr =>
+            Parallel.ForEach(allModAttributes, modAttr =>
+            {
+                if (!modAttr.HasDependencies && !modAttr.Info.IsAttributeLoaded)
+                {
+                    modAttr.OnAttributeLoaded();
+                    modAttr.Info.IsAttributeLoaded = true;
+                }
+            });
+
+            // Get list of dependencies from remaining ModAttrAttributes.
+            List<ModAttrAttribute> attributesByDependents = new List<ModAttrAttribute>();
+            Parallel.ForEach(allModAttributes, modAttr =>
+            {
+                var parents = GetParentDependents_Recursive(modAttr);
+                if (parents == null || parents.Count == 0)
+                    return;
+
+                attributesByDependents.AddRange(parents);
+            });
+
+            // We have all of the dependencies. Sort them, remove duplicates, then load them.
+            var orderedParents = attributesByDependents.OrderBy(parent => attributesByDependents.Count(item => item == parent)).Reverse().ToHashSet();
+            Parallel.ForEach(orderedParents, parent =>
+            {
+                if (!parent.Info.IsAttributeLoaded)
+                {
+                    parent.OnAttributeLoaded();
+                    parent.Info.IsAttributeLoaded = true;
+                }
+            });
+
+            Parallel.ForEach(allModAttributes, modAttr =>
+            {
+                if (!modAttr.Info.IsAttributeLoaded)
+                {
+                    modAttr.OnAttributeLoaded();
+                    modAttr.Info.IsAttributeLoaded = true;
+                }
+            });
+
+            /*allModAttributes.ForEach(modAttr =>
             {
                 if (!modAttr.HasDependencies && !modAttr.Info.IsAttributeLoaded)
                 {
@@ -68,7 +122,7 @@ namespace Reloaded.ModHelper
             {
                 var parents = GetParentDependents_Recursive(modAttr);
                 if (parents == null || parents.Count == 0)
-                continue;
+                    continue;
 
                 attributesByDependents.AddRange(parents);
             }
@@ -92,7 +146,7 @@ namespace Reloaded.ModHelper
                     modAttr.OnAttributeLoaded();
                     modAttr.Info.IsAttributeLoaded = true;
                 }
-            });
+            });*/
         }
 
         /// <summary>
@@ -122,11 +176,14 @@ namespace Reloaded.ModHelper
         /// Loads all <see cref="ModAttrAttribute"/> from <paramref name="targetType"/> and adds them to <see cref="allModAttributes"/>.
         /// </summary>
         /// <param name="targetType"></param>
-        private void GetModAttributesFromType(Type targetType)
+        private void GetModAttributesFromType(Type targetType, object instance)
         {
             // Get all mod methods
-            var modAttributes = GetModAttributesFromType(targetType, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
-            modAttributes?.ForEach(modAttr => allModAttributes.Add(modAttr));
+            var modAttributes = GetModAttributesFromType(targetType, instance, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+            modAttributes?.ForEach(modAttr =>
+            {
+                allModAttributes.Add(modAttr);
+            });
         }
 
         /// <summary>
@@ -135,9 +192,12 @@ namespace Reloaded.ModHelper
         /// <param name="targetType"></param>
         /// <param name="flags"></param>
         /// <returns></returns>
-        private List<ModAttrAttribute> GetModAttributesFromType(Type targetType, BindingFlags flags)
+        private List<ModAttrAttribute> GetModAttributesFromType(Type targetType, object instance, BindingFlags flags)
         {
             List<ModAttrAttribute> results = new List<ModAttrAttribute>();
+
+            bool onlyLoadStatic = instance == null;
+            bool onlyLoadInstance = instance != null;
 
             // load all custom attributes attached to targetType
             var classAttributes = TryGetCustomAttributes(targetType);
@@ -145,6 +205,7 @@ namespace Reloaded.ModHelper
             {
                 if ((attribute is ModAttrAttribute modAttr) && !modAttr.Info.IsAttributeLoaded)
                 {
+                    modAttr.ClassInstance = instance;
                     modAttr.Info.TargetClass = targetType;
                     results.Add(modAttr);
                 }
@@ -159,6 +220,23 @@ namespace Reloaded.ModHelper
                 foreach (var attribute in customAttributes)
                 {
                     if (!(attribute is ModAttrAttribute modAttr) || modAttr.Info.IsAttributeLoaded)
+                        continue;
+
+                    if (onlyLoadInstance && member.IsStatic())
+                        continue;
+
+                    if (onlyLoadStatic && !member.IsStatic())
+                        continue;
+
+                    modAttr.ClassInstance = instance;
+
+                    // we found a static one but we're only trying to load instance ones
+                    if (member.IsStatic() && instance != null)
+                        continue;
+
+                    // we found a non-static one but instance is null.
+                    // we're currently only loading static ones.
+                    if (!member.IsStatic() && instance == null)
                         continue;
 
                     //ThrowIfMemberNotStatic(targetType, member);

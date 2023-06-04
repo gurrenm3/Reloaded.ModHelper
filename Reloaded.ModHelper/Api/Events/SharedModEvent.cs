@@ -401,8 +401,9 @@ namespace Reloaded.ModHelper
                 return modEvent;
 
             throw new Exception("FIX THIS ERROR! UNCOMMENT CODE BELOW");
-            //modEvent = new ModEvent<T1, T2>();
-            modEvents.Add(callingMod, modEvent);
+
+            /*modEvent = new ModEvent<T1, T2>();
+            modEvents.Add(callingMod, modEvent);*/
             return modEvent;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace Reloaded.ModHelper
 {
@@ -94,6 +95,47 @@ namespace Reloaded.ModHelper
                 Console.WriteLine($" {message}");
                 Console.ForegroundColor = originalColor;
             }
+        }
+
+        public static void WriteLine(string message, Color color)
+        {
+            if (IModLogger.Instance != null)
+            {
+                IModLogger.Instance.WriteLine(message, color, true);
+                return;
+            }
+            ConsoleColor foregroundColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("[" + DateTime.Now.ToString("HH:mm:ss") + "]");
+            Console.ForegroundColor = ConvertColor(color);
+            Console.WriteLine(" " + message);
+            Console.ForegroundColor = foregroundColor;
+        }
+
+        public static ConsoleColor ConvertColor(Color color)
+        {
+            int closestIndex = 0;
+            double closestDistance = double.MaxValue;
+            foreach (object obj in Enum.GetValues(typeof(ConsoleColor)))
+            {
+                ConsoleColor consoleColor = (ConsoleColor)obj;
+                Color consoleColorRgb = Color.FromName(consoleColor.ToString());
+                double distance = ColorDistance(color, consoleColorRgb);
+                if (distance < closestDistance)
+                {
+                    closestIndex = (int)consoleColor;
+                    closestDistance = distance;
+                }
+            }
+            return (ConsoleColor)closestIndex;
+        }
+
+        private static double ColorDistance(Color color1, Color color2)
+        {
+            double num = (double)(color1.R - color2.R);
+            double greenDifference = (double)(color1.G - color2.G);
+            double blueDifference = (double)(color1.B - color2.B);
+            return Math.Sqrt(num * num + greenDifference * greenDifference + blueDifference * blueDifference);
         }
     }
 }

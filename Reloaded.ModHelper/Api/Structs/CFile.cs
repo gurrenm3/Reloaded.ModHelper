@@ -3,7 +3,7 @@
 namespace Reloaded.ModHelper
 {
     /// <summary>
-    /// Represents a FILE Pointer in the C Programming language. TODO
+    /// Represents a FILE Instance in the C Programming language. TODO
     /// </summary>
     /// <remarks>Documentation: https://codingpointer.com/c-tutorial/file-pointers , and http://tigcc.ticalc.org/doc/stdio.html#FILE </remarks>
     [StructLayout(LayoutKind.Explicit)]
@@ -16,7 +16,7 @@ namespace Reloaded.ModHelper
         public char* currentPos;
 
         /// <summary>
-        /// Pointer to the base of the file.
+        /// Instance to the base of the file.
         /// </summary>
         [FieldOffset(0x0)]
         public void* basePointer;

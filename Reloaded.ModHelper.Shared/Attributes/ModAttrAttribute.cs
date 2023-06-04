@@ -14,6 +14,11 @@ namespace Reloaded.ModHelper
         public ModAttrInfo Info { get; set; }
 
         /// <summary>
+		/// An instance of the class that created this, if it exists and if this <see cref="ModAttrAttribute" /> is NOT static.
+		/// </summary>
+        public object ClassInstance { get; set; }
+
+        /// <summary>
         /// Reflects whether or not this <see cref="ModAttrAttribute"/> has any dependents.
         /// </summary>
         public bool HasDependencies => Info?.dependencies?.Length > 0;
